@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-12-16
  */
 public interface AclRoleService extends IService<AclRole> {
-
+    boolean exists(String id);
 }

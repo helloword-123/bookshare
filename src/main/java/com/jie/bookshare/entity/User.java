@@ -50,5 +50,7 @@ public class User implements Serializable {
 
     private Integer totalUseNum;
 
+    private String avatarUrl;
+
 
 }

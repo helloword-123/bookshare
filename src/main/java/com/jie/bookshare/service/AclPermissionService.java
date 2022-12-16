@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-12-16
  */
 public interface AclPermissionService extends IService<AclPermission> {
-
+    boolean exists(String id);
 }

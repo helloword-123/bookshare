@@ -1,5 +1,6 @@
 package com.jie.bookshare.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jie.bookshare.entity.AclRole;
 import com.jie.bookshare.mapper.AclRoleMapper;
 import com.jie.bookshare.service.AclRoleService;
@@ -16,5 +17,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AclRoleServiceImpl extends ServiceImpl<AclRoleMapper, AclRole> implements AclRoleService {
-
+    /**
+     * 检查ID对应的角色是否存在
+     */
+    @Override
+    public boolean exists(String id) {
+        LambdaQueryWrapper<AclRole> cond = new LambdaQueryWrapper<>();
+        cond.eq(AclRole::getId, id);
+        return baseMapper.selectCount(cond) > 0;
+    }
 }

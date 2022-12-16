@@ -1,5 +1,6 @@
 package com.jie.bookshare.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jie.bookshare.entity.AclPermissionType;
 import com.jie.bookshare.mapper.AclPermissionTypeMapper;
 import com.jie.bookshare.service.AclPermissionTypeService;
@@ -16,5 +17,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AclPermissionTypeServiceImpl extends ServiceImpl<AclPermissionTypeMapper, AclPermissionType> implements AclPermissionTypeService {
-
+    @Override
+    public boolean exists(String id) {
+        LambdaQueryWrapper<AclPermissionType> cond = new LambdaQueryWrapper<>();
+        cond.eq(AclPermissionType::getId, id);
+        return baseMapper.selectCount(cond) > 0;
+    }
 }

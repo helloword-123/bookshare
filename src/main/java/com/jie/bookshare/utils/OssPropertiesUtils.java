@@ -28,11 +28,15 @@ public class OssPropertiesUtils implements InitializingBean {
     @Value("${aliyun.oss.file.bucketname}")
     private String bucketName;
 
+    @Value("${aliyun.oss.file.projectname}")
+    private String projectName;
+
     //公开的静态常量
     public static String END_POINT;
     public static String ACCESS_KEY_ID;
     public static String ACCESS_KEY_SECRET;
     public static String BUCKET_NAME;
+    public static String PROJECT_NAME;
 
     @Override
     public void afterPropertiesSet() {
@@ -40,5 +44,6 @@ public class OssPropertiesUtils implements InitializingBean {
         ACCESS_KEY_ID = keyId;
         ACCESS_KEY_SECRET = keySecret;
         BUCKET_NAME = bucketName;
+        PROJECT_NAME = projectName;
     }
 }

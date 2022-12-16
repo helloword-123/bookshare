@@ -17,8 +17,9 @@ spring:
     time-zone: GMT+8
   # redis账号密码
   redis:
-    host: 112.74.41.146
-    password: h0vnixnqlpGDX@Ue
+    host: 127.0.0.1
+    password:
+    port: 6379
 
 # mybatis-plus配置
 mybatis-plus:
@@ -38,6 +39,7 @@ aliyun:
       keyid: LTAI5tAthXiqzCSghz8EX4VR
       keysecret: kfHG4ibZYv6SXiCRPn9BRy6WVSwa4N
       bucketname: edu-wuhaojie
+      projectname: bookshare
 logging:
   # 日志级别，可以打印sql语句
   level:
