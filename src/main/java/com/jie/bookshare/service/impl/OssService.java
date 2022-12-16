@@ -5,6 +5,8 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.jie.bookshare.service.IOssService;
 import com.jie.bookshare.utils.OssPropertiesUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +22,7 @@ import java.util.UUID;
 
 @Service
 public class OssService implements IOssService {
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Override
     //上传头像
@@ -33,6 +36,8 @@ public class OssService implements IOssService {
 
 
         try {
+            log.info("构造oss实例并开始上传...");
+
             // 创建OSSClient实例。
             OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
 
@@ -52,10 +57,12 @@ public class OssService implements IOssService {
 
             //返回上传文件后的url地址
             String url = "https://" + bucketName + "." + endpoint + "/" + filename;
+
+            log.info("图片上传成功，生成图片url为: {}", url);
             return url;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("图片上传出错！");
             return null;
         }
     }

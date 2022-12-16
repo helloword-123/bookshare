@@ -42,6 +42,7 @@ public class CommonController {
     public Result uploadOssFile(
             @ApiParam("图片文件")
                     MultipartFile file) {
+        log.info("图片上传");
         //获取上传文件
         String url = ossService.uploadFileAvatar(file);
         return Result.ok().data("url", url);
