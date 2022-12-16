@@ -17,18 +17,18 @@ import java.util.Collections;
 @EnableSwagger2
 public class SwaggerConfig {
     @Bean
-    public Docket docket(ApiInfo apiInfo
-                         /**SecurityContext securityContext,
-                         SecurityScheme securityScheme**/) {
+    public Docket docket(ApiInfo apiInfo,
+                         SecurityContext securityContext,
+                         SecurityScheme securityScheme) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
                 .useDefaultResponseMessages(false)
                 .select()
                 .apis(RequestHandlerSelectors
                         .basePackage("com.jie.bookshare.controller"))
-                .build();
-                //.securityContexts(Collections.singletonList(securityContext))
-                //.securitySchemes(Collections.singletonList(securityScheme));
+                .build()
+                .securityContexts(Collections.singletonList(securityContext))
+                .securitySchemes(Collections.singletonList(securityScheme));
     }
 
     @Bean
@@ -43,24 +43,24 @@ public class SwaggerConfig {
                 new ArrayList<>());
     }
 
-//    @Bean
-//    public SecurityContext securityContext(SecurityReference securityReference) {
-//        return SecurityContext
-//                .builder()
-//                .securityReferences(Collections.singletonList(securityReference))
-//                .build();
-//    }
-//
-//    @Bean
-//    public SecurityReference securityReference() {
-//        AuthorizationScope authorizationScope =
-//                new AuthorizationScope("global", "accessEverything");
-//        return new SecurityReference("token",
-//                new AuthorizationScope[]{authorizationScope});
-//    }
-//
-//    @Bean
-//    public SecurityScheme securityScheme() {
-//        return new ApiKey("token", "token", "header");
-//    }
+    @Bean
+    public SecurityContext securityContext(SecurityReference securityReference) {
+        return SecurityContext
+                .builder()
+                .securityReferences(Collections.singletonList(securityReference))
+                .build();
+    }
+
+    @Bean
+    public SecurityReference securityReference() {
+        AuthorizationScope authorizationScope =
+                new AuthorizationScope("global", "accessEverything");
+        return new SecurityReference("token",
+                new AuthorizationScope[]{authorizationScope});
+    }
+
+    @Bean
+    public SecurityScheme securityScheme() {
+        return new ApiKey("token", "token", "header");
+    }
 }
