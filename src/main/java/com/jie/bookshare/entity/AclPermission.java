@@ -1,6 +1,8 @@
 package com.jie.bookshare.entity;
 
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -29,6 +31,7 @@ public class AclPermission implements Serializable {
 
     private String description;
 
+    @TableField("`key`")
     private String key;
 
     private Integer typeId;

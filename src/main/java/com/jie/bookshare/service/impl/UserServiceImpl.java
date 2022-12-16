@@ -88,7 +88,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<Integer> roleIdList = roles
                 .stream().map(AclRole::getId).collect(Collectors.toList());
         QueryWrapper<AclRolePermission> cond2 = new QueryWrapper<>();
-        cond2.in("role_id", roleIdList).select("distinct menu_id");
+        cond2.in("role_id", roleIdList).select("distinct permission_id");
         List<AclRolePermission> menuRoles = aclRolePermissionMapper.selectList(cond2);
 
         LambdaQueryWrapper<AclPermission> cond3 = new LambdaQueryWrapper<>();
@@ -159,10 +159,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         wrapper.eq("c_name",nameConvert);
         User customer = baseMapper.selectOne(wrapper);  //这里默认用户昵称不一样
         if(customer==null){
-            User customer1 = new User();
-            customer1.setUserName(nameConvert);
-            customer1.setAvatarUrl(userVo.getCAvatarUrl());
-            baseMapper.insert(customer1);
+            User user = new User();
+            user.setUserName(nameConvert);
+            user.setAvatarUrl(userVo.getCAvatarUrl());
+            baseMapper.insert(user);
             cId = baseMapper.selectOne(wrapper).getId();
         }else {
             cId = customer.getId();
