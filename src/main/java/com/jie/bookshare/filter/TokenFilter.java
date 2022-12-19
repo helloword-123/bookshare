@@ -49,12 +49,6 @@ public class TokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        //如果用户的ID还没有确认下来，则拒绝请求
-        if (!"/customer/getCustomerId".equals(request.getRequestURI())
-                && userDetails.getUsername() == null) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         //把登陆状态存放到SecurityContext中，以便其他模块获取用户的登陆状态
         SecurityContextHolder.getContext().setAuthentication(

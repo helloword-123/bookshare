@@ -8,8 +8,8 @@ import java.util.Map;
  * 微信开放平台接口调用
  */
 public class WxUtil {
-    private static final String APP_ID = "wx7ea258847009e36b";
-    private static final String APP_SECRET = "6ed95545c1c5d6a0ccfc9d3710d27202";
+    private static final String APP_ID = "wx64e73796f64380c0";
+    private static final String APP_SECRET = "64f86e32405825b44feaa222e0bce6f7";
     private static final String BASE_URL = "https://api.weixin.qq.com/sns/";
 
     /**

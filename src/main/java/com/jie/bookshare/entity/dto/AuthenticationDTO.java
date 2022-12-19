@@ -1,4 +1,4 @@
-package com.jie.bookshare.entity.vo;
+package com.jie.bookshare.entity.dto;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import lombok.Data;
  * @Date 2022/4/23 20:17
  */
 @Data
-public class Authentication {
+public class AuthenticationDTO {
     private String username;
     private String password;
 }

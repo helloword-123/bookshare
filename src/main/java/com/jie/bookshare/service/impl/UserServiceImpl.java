@@ -6,7 +6,7 @@ import com.jie.bookshare.entity.*;
 import com.jie.bookshare.entity.security.AppGrantedAuthority;
 import com.jie.bookshare.entity.security.AppUserDetails;
 import com.jie.bookshare.entity.security.UserType;
-import com.jie.bookshare.entity.vo.UserVo;
+import com.jie.bookshare.entity.dto.UserDTO;
 import com.jie.bookshare.mapper.*;
 import com.jie.bookshare.service.IRedisService;
 import com.jie.bookshare.service.UserService;
@@ -14,18 +14,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jie.bookshare.utils.JsonUtil;
 import com.jie.bookshare.utils.JwtUtil;
 import com.vdurmont.emoji.EmojiParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.acl.Acl;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author wuhaojie
@@ -33,6 +34,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -48,10 +51,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private AclPermissionTypeMapper aclPermissionTypeMapper;
     @Autowired
     private AclPermissionMapper aclPermissionMapper;
-    
+
     @Override
     public List<String> login(String username, String password) {
-        //查找用户名和密码，并比对密码
+        // 查找用户名和密码，并比对密码
         LambdaQueryWrapper<User> cond = new LambdaQueryWrapper<>();
         cond.eq(User::getAccount, username);
         User user = baseMapper.selectOne(cond);
@@ -59,12 +62,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         if (!passwordEncoder.matches(password, user.getPassword()))
             return null;
+
+        String token = saveUserAuthorityByUserId(user.getId());
+
+        return Arrays.asList(token, user.getId().toString());
+    }
+
+    /*
+     * @Author Haojie
+     * @Description 根据用户id生成token返回，并且查询该用户的权限信息且保存到redis
+     * @Param
+     * @return
+     **/
+    @Override
+    public String saveUserAuthorityByUserId(Integer userId){
+        String token = null;
+
         //查询权限
-        List<AclRole> roles = findRoleForAdmin(user.getId());
-        UserType userType = UserType.ADMIN;
+        List<AclRole> roles = findRoleForAdmin(userId);
+        UserType userType = UserType.USER;
         for (AclRole role : roles) {
             if ("super_admin".equals(role.getKey())) {
                 userType = UserType.SUPER_ADMIN;
+                break;
+            } else if ("admin".equals(role.getKey())) {
+                userType = UserType.ADMIN;
                 break;
             }
         }
@@ -72,15 +94,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //把登录状态保存到Redis中
         //登录状态保存为hash类型，里面保存token和用户信息
         AppUserDetails userDetails = new AppUserDetails(
-                String.valueOf(user.getId()), null, authorities, userType);
-        String token = JwtUtil.generateToken(String.valueOf(user.getId()));
-        String key = IRedisService.concatKey("user_details", String.valueOf(user.getId()));
+                String.valueOf(userId), null, authorities, userType);
+        token = JwtUtil.generateToken(String.valueOf(userId));
+        String key = IRedisService.concatKey("user_details", String.valueOf(userId));
         Map<String, String> hash = new HashMap<>();
         hash.put("token", token);
         hash.put("user_details", JsonUtil.toJson(userDetails));
         redisService.putAll(key, hash);
         redisService.expire(key, 1, TimeUnit.DAYS);
-        return Arrays.asList(token, user.getId().toString());
+
+        return token;
     }
 
     @Override
@@ -116,7 +139,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getId, aId);
         User admin = baseMapper.selectOne(wrapper);
-        if(admin==null){
+        if (admin == null) {
             return false;
         }
         if (!passwordEncoder.matches(password, admin.getPassword()))
@@ -150,23 +173,40 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Integer getUserIdByLoginInfo(UserVo userVo) {
-        Integer cId = null;
+    public UserDTO getUserInfoByOpenid(String openid) {
+        UserDTO userDTO = new UserDTO();
         //先根据用户名判断该用户存不存在
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        //转换，名字可能包含emoji表情
-        String nameConvert = EmojiParser.parseToAliases(userVo.getCName());
-        wrapper.eq("c_name",nameConvert);
-        User customer = baseMapper.selectOne(wrapper);  //这里默认用户昵称不一样
-        if(customer==null){
-            User user = new User();
-            user.setUserName(nameConvert);
-            user.setAvatarUrl(userVo.getCAvatarUrl());
-            baseMapper.insert(user);
-            cId = baseMapper.selectOne(wrapper).getId();
-        }else {
-            cId = customer.getId();
+        wrapper.eq("openid", openid);
+        User user1 = baseMapper.selectOne(wrapper);
+        if(user1 == null) {
+            // openid不存在时新建用户
+            User user2 = new User();
+            user2.setOpenid(openid);
+            baseMapper.insert(user2);
+            userDTO.setId(user2.getId());
+
+            logger.info("this openid doesn't match any user in database. Create a new user with this openid");
+        } else {
+            userDTO.setId(user1.getId());
+            userDTO.setNickName(user1.getUserName());
+            userDTO.setAvatarUrl(user1.getAvatarUrl());
+
+            logger.info("query userid:{}, username:{}, avatarurl:{}", user1.getId(),user1.getUserName(),user1.getAvatarUrl());
         }
-        return cId;
+
+
+
+        return userDTO;
+
+    }
+
+    @Override
+    public void updateAvatarAndName(UserDTO userDTO) {
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setUserName(userDTO.getNickName());
+        user.setAvatarUrl(userDTO.getAvatarUrl());
+        baseMapper.updateById(user);
     }
 }

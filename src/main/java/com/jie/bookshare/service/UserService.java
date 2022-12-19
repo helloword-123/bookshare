@@ -4,7 +4,7 @@ import com.jie.bookshare.entity.AclRole;
 import com.jie.bookshare.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jie.bookshare.entity.security.AppGrantedAuthority;
-import com.jie.bookshare.entity.vo.UserVo;
+import com.jie.bookshare.entity.dto.UserDTO;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,8 +46,18 @@ public interface UserService extends IService<User> {
     /**
      * 微信授权登录后，根据登录信息返回顾客id
      *
-     * @param customerVo
+     * @param
      * @return Integer
      */
-    Integer getUserIdByLoginInfo(UserVo userVo);
+    UserDTO getUserInfoByOpenid(String openid);
+
+    /*
+     * @Author Haojie
+     * @Description 更新用户头像和昵称
+     * @Param
+     * @return
+     **/
+    void updateAvatarAndName(UserDTO userDTO);
+
+    String saveUserAuthorityByUserId(Integer userId);
 }

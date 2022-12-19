@@ -53,6 +53,8 @@ public class User implements Serializable {
 
     private String avatarUrl;
 
+    private String openid;
+
     @ApiModelProperty(name = "创建时间", example = "2022-03-18 17:45:00")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
