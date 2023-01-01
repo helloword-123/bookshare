@@ -44,5 +44,3 @@ logging:
   # 日志级别，可以打印sql语句
   level:
     com.firstGroup.restaurant: debug
-
-
