@@ -54,6 +54,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public List<String> login(String username, String password) {
+        logger.info("login: username:{}, password:{}", username, password);
+
         // 查找用户名和密码，并比对密码
         LambdaQueryWrapper<User> cond = new LambdaQueryWrapper<>();
         cond.eq(User::getAccount, username);
@@ -186,13 +188,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             baseMapper.insert(user2);
             userDTO.setId(user2.getId());
 
-            logger.info("this openid doesn't match any user in database. Create a new user with this openid");
+            logger.info("getUserInfoByOpenid：this openid doesn't match any user in database. Create a new user with this openid");
         } else {
             userDTO.setId(user1.getId());
             userDTO.setNickName(user1.getUserName());
             userDTO.setAvatarUrl(user1.getAvatarUrl());
 
-            logger.info("query userid:{}, username:{}, avatarurl:{}", user1.getId(),user1.getUserName(),user1.getAvatarUrl());
+            logger.info("getUserInfoByOpenid：query userid:{}, username:{}, avatarurl:{}", user1.getId(),user1.getUserName(),user1.getAvatarUrl());
         }
 
 
@@ -203,6 +205,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void updateAvatarAndName(UserDTO userDTO) {
+        logger.info("updateAvatarAndName： id:{}, userName:{}, avatarUrl:{}", userDTO.getId(), userDTO.getNickName(), userDTO.getAvatarUrl());
         User user = new User();
         user.setId(userDTO.getId());
         user.setUserName(userDTO.getNickName());
