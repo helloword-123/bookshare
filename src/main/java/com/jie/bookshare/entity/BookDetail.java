@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
@@ -29,7 +30,7 @@ public class BookDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private Integer categoryId;
@@ -38,10 +39,12 @@ public class BookDetail implements Serializable {
 
     private String author;
 
-    @ApiModelProperty(value = "图书出版时间")
-    private Date publicationTime;
+    @ApiModelProperty(value = "图书出版时间, String形式")
+    private String publicationTime;
 
-    private String pictiureUrl;
+    private String publishingHouse;
+
+    private String pictureUrl;
 
     private String isbn;
 

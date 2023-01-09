@@ -57,5 +57,5 @@ public class CommonController {
         }
         return Result.ok().data("token", info.get(0)).data("rId",info.get(1));
     }
-    
+
 }

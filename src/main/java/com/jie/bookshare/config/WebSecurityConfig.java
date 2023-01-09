@@ -23,6 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/wxLogin").anonymous()
                 .antMatchers("/user/login").anonymous()
+                .antMatchers("/**").permitAll()
                 .antMatchers("/user/checkToken").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/common/test/getToken").permitAll()
