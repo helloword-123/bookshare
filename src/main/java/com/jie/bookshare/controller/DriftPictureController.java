@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author wuhaojie
- * @since 2022-12-16
+ * @since 2023-01-09
  */
 @RestController
-@RequestMapping("/book-detail")
-public class BookDetailController {
+@RequestMapping("/drift-picture")
+public class DriftPictureController {
 
 }

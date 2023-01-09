@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ public class CodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/bookshare");
+        dsc.setUrl("jdbc:mysql://120.77.76.39:3306/bookshare");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");

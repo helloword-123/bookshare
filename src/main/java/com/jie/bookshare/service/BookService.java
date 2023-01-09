@@ -1,9 +1,7 @@
 package com.jie.bookshare.service;
 
-import com.jie.bookshare.entity.Book;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.Map;
+import com.jie.bookshare.entity.Book;
 
 /**
  * <p>
@@ -15,17 +13,13 @@ import java.util.Map;
  */
 public interface BookService extends IService<Book> {
 
-    /**
-     * 图书共享，保存信息
-     * @param reqBody
-     * @return
-     */
-    Boolean     saveBook(Map<String, Object> reqBody);
+
+
 
     /**
-     * 修改图书状态
-     * @param bookId
-     * @param status
+     * 判断改isbn号的图书是否已经在漂流中
+     * @param isbn
+     * @return
      */
-    Integer changeBookStatus(Integer bookId, Integer status);
+    Boolean checkIsbnIsDrifting(String isbn);
 }

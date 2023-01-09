@@ -1,6 +1,6 @@
 package com.jie.bookshare.service;
 
-import com.jie.bookshare.entity.BookDetail;
+import com.jie.bookshare.entity.BookDriftPicture;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author wuhaojie
- * @since 2022-12-16
+ * @since 2023-01-09
  */
-public interface BookDetailService extends IService<BookDetail> {
+public interface BookDriftPictureService extends IService<BookDriftPicture> {
 
 }
