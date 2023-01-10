@@ -1,7 +1,9 @@
 package com.jie.bookshare.service;
 
-import com.jie.bookshare.entity.BookCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jie.bookshare.entity.BookCategory;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +15,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BookCategoryService extends IService<BookCategory> {
 
+    /**
+     * 获取所有一级目录
+     * @return
+     */
+    List<BookCategory> getTopCategories();
 }

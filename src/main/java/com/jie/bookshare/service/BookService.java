@@ -2,6 +2,9 @@ package com.jie.bookshare.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jie.bookshare.entity.Book;
+import com.jie.bookshare.entity.dto.BookListWithCategoryDTO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -22,4 +25,10 @@ public interface BookService extends IService<Book> {
      * @return
      */
     Boolean checkIsbnIsDrifting(String isbn);
+
+    /**
+     * 小程序首页获取图书数据，根据分类id聚合返回
+     * @return
+     */
+    List<BookListWithCategoryDTO> getListWithCategory();
 }
