@@ -2,4 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jie.bookshare.mapper.BookDriftMapper">
 
+    <select id="getBookFirstDrift" resultType="com.jie.bookshare.entity.BookDrift">
+        select * from book_drift
+        where book_id = 1 and drift_num =(
+            select min(drift_num) from book_drift
+        );
+    </select>
+
+    <select id="getBookLastDrift" resultType="com.jie.bookshare.entity.BookDrift">
+        select * from book_drift
+        where book_id = 1 and drift_num =(
+            select max(drift_num) from book_drift
+        );
+    </select>
+
+    <select id="selectDriftingBooks" resultType="com.jie.bookshare.entity.BookDrift">
+        select * from book_drift where status = 3;
+    </select>
 </mapper>

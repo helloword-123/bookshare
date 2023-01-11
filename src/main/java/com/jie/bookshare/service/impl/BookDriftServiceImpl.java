@@ -92,6 +92,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
                 book.setPublishingHouse((String) reqBody.get("publishing"));
                 book.setPictureUrl((String) reqBody.get("photoUrl"));
                 book.setDescription((String) reqBody.get("description"));
+                book.setCategoryId((Integer) reqBody.get("cascaderValue"));
                 bookMapper.insert(book);
             }
 
@@ -101,6 +102,8 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
             bookDrift.setBookId(book.getId());
             bookDrift.setSharerId((Integer) reqBody.get("userId"));
             bookDrift.setDriftAddress((String) reqBody.get("location"));
+            bookDrift.setSharerName((String) reqBody.get("userName"));
+            bookDrift.setSharerPhone((String) reqBody.get("phoneNumber"));
             bookDrift.setNote((String) reqBody.get("will"));
             bookDrift.setReleaseTime(new Date());
             bookDrift.setStatus(0); // 发布审核

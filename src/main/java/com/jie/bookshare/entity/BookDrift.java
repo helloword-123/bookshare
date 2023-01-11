@@ -34,6 +34,12 @@ public class BookDrift implements Serializable {
 
     private Integer sharerId;
 
+    @ApiModelProperty(value = "分享者填写的昵称")
+    private String sharerName;
+
+    @ApiModelProperty(value = "分享者填写的手机号")
+    private String sharerPhone;
+
     private Integer borrowerId;
 
     private String driftAddress;

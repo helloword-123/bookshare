@@ -2,6 +2,7 @@ package com.jie.bookshare.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jie.bookshare.entity.BookCategory;
+import com.jie.bookshare.entity.dto.BookCategoryCascaderDTO;
 
 import java.util.List;
 
@@ -20,4 +21,10 @@ public interface BookCategoryService extends IService<BookCategory> {
      * @return
      */
     List<BookCategory> getTopCategories();
+
+    /**
+     * 获取一二级图书分类，以级联方式返回
+     * @return
+     */
+    List<BookCategoryCascaderDTO> getCategoryCascader();
 }

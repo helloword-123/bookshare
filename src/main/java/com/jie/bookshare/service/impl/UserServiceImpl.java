@@ -2,18 +2,17 @@ package com.jie.bookshare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jie.bookshare.entity.*;
+import com.jie.bookshare.entity.dto.UserDTO;
 import com.jie.bookshare.entity.security.AppGrantedAuthority;
 import com.jie.bookshare.entity.security.AppUserDetails;
 import com.jie.bookshare.entity.security.UserType;
-import com.jie.bookshare.entity.dto.UserDTO;
 import com.jie.bookshare.mapper.*;
 import com.jie.bookshare.service.IRedisService;
 import com.jie.bookshare.service.UserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jie.bookshare.utils.JsonUtil;
 import com.jie.bookshare.utils.JwtUtil;
-import com.vdurmont.emoji.EmojiParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,6 +192,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             userDTO.setId(user1.getId());
             userDTO.setNickName(user1.getUserName());
             userDTO.setAvatarUrl(user1.getAvatarUrl());
+            userDTO.setPhone(user1.getPhone());
 
             logger.info("getUserInfoByOpenid：query userid:{}, username:{}, avatarurl:{}", user1.getId(),user1.getUserName(),user1.getAvatarUrl());
         }

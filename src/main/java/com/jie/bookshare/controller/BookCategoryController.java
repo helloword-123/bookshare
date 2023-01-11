@@ -3,6 +3,7 @@ package com.jie.bookshare.controller;
 
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.BookCategory;
+import com.jie.bookshare.entity.dto.BookCategoryCascaderDTO;
 import com.jie.bookshare.service.BookCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,10 +31,22 @@ public class BookCategoryController {
      * 获取所有一级目录
      * @return
      */
+    @Deprecated
     @GetMapping("/getTopCategories")
     public Result getTopCategories(){
         List<BookCategory> data = bookCategoryService.getTopCategories();
 
         return Result.ok().data("categories", data);
+    }
+
+    /**
+     * 获取一二级图书分类，以级联方式返回
+     * @return
+     */
+    @GetMapping("/getCategoryCascader")
+    public Result getCategoryCascader(){
+        List<BookCategoryCascaderDTO> options = bookCategoryService.getCategoryCascader();
+
+        return Result.ok().data("options", options);
     }
 }

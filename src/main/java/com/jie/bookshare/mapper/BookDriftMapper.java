@@ -1,8 +1,9 @@
 package com.jie.bookshare.mapper;
 
-import com.jie.bookshare.entity.BookDrift;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Select;
+import com.jie.bookshare.entity.BookDrift;
+
+import java.util.List;
 
 /**
  * <p>
@@ -20,11 +21,6 @@ public interface BookDriftMapper extends BaseMapper<BookDrift> {
      * @param bookId
      * @return
      */
-    @Select("select * from book_drift \n" +
-            "where book_id = 1 and\n" +
-            "drift_num = (\n" +
-            " select min(drift_num) from book_drift\n" +
-            ");")
     BookDrift getBookFirstDrift(Integer bookId);
 
     /**
@@ -32,10 +28,11 @@ public interface BookDriftMapper extends BaseMapper<BookDrift> {
      * @param bookId
      * @return
      */
-    @Select("select * from book_drift \n" +
-            "where book_id = 1 and\n" +
-            "drift_num = (\n" +
-            " select max(drift_num) from book_drift\n" +
-            ");")
     BookDrift getBookLastDrift(Integer bookId);
+
+    /**
+     * 查询正在漂流的图书id
+     * @return
+     */
+    List<BookDrift> selectDriftingBooks();
 }

@@ -1,7 +1,9 @@
 package com.jie.bookshare.mapper;
 
-import com.jie.bookshare.entity.BookCategory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jie.bookshare.entity.BookCategory;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +15,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface BookCategoryMapper extends BaseMapper<BookCategory> {
 
+    /**
+     * 先查一级目录的所有子目录
+     * @param pid
+     * @return
+     */
+    List<Integer> selectSubCategoryIds(Integer pid);
 }
