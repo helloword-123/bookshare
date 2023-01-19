@@ -21,7 +21,6 @@ import java.util.List;
  * @Date 2022/4/17 9:58
  */
 
-@Api(tags = {"公共接口，包括上传图片等"})
 @RestController
 @RequestMapping("/common")
 public class CommonController {

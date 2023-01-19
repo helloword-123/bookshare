@@ -35,4 +35,11 @@ public interface BookDriftMapper extends BaseMapper<BookDrift> {
      * @return
      */
     List<BookDrift> selectDriftingBooks();
+
+    /**
+     * 根据漂流id获取漂流图片
+     * @param driftId
+     * @return
+     */
+    List<String> getDriftPicturesByDriftId(Integer driftId);
 }

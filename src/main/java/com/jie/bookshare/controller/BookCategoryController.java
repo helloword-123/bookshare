@@ -7,6 +7,7 @@ import com.jie.bookshare.entity.dto.BookCategoryCascaderDTO;
 import com.jie.bookshare.service.BookCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,5 +49,17 @@ public class BookCategoryController {
         List<BookCategoryCascaderDTO> options = bookCategoryService.getCategoryCascader();
 
         return Result.ok().data("options", options);
+    }
+
+    /**
+     * 根据id获取分类全名（包括父分类，以"/"分隔）
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/getCategoryFullName/{categoryId}")
+    public Result getCategoryFullName(@PathVariable Integer categoryId) {
+        String categoryFullName = bookCategoryService.getCategoryFullName(categoryId);
+
+        return Result.ok().data("categoryFullName", categoryFullName);
     }
 }

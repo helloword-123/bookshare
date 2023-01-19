@@ -2,6 +2,7 @@ package com.jie.bookshare.controller;
 
 
 import com.jie.bookshare.common.Result;
+import com.jie.bookshare.entity.dto.BookBorrowDTO;
 import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.entity.dto.DriftingBookDTO;
 import com.jie.bookshare.service.BookDriftService;
@@ -28,16 +29,17 @@ public class BookDriftController {
 
     /**
      * 修改图书漂流状态
+     *
      * @param bookId
      * @param status
      * @return
      */
     @PutMapping("/checkBook/{bookId}/{status}")
-    public Result checkBook(@PathVariable Integer bookId, @PathVariable Integer status ){
+    public Result checkBook(@PathVariable Integer bookId, @PathVariable Integer status) {
 
         Integer res = bookDriftService.changeBookStatus(bookId, status);
 
-        if(res == 0){
+        if (res == 0) {
             return Result.error().message("更新图书漂流状态失败！");
         }
         return Result.ok();
@@ -45,15 +47,16 @@ public class BookDriftController {
 
     /**
      * 图书共享，保存信息
+     *
      * @param reqBody
      * @return
      */
     @PostMapping("/shareBook")
-    public Result shareBook(@RequestBody Map<String, Object> reqBody){
+    public Result shareBook(@RequestBody Map<String, Object> reqBody) {
 
         Boolean res = bookDriftService.releaseBook(reqBody);
 
-        if(!res){
+        if (!res) {
             return Result.error().message("发布图书信息失败！");
         }
         return Result.ok();
@@ -61,6 +64,7 @@ public class BookDriftController {
 
     /**
      * 地图搜索页获取正在漂流的图书信息
+     *
      * @return
      */
     @GetMapping("/getDriftingBooks")
@@ -71,6 +75,7 @@ public class BookDriftController {
     }
 
     /**
+     * 根据id获取正在漂流的信息
      *
      * @param id
      * @return
@@ -81,4 +86,18 @@ public class BookDriftController {
 
         return Result.ok().data("bookDrift", bookListDTO);
     }
+
+    /**
+     * 借书
+     *
+     * @param dto
+     * @return
+     */
+    @PostMapping("/borrow")
+    public Result borrowBook(@RequestBody BookBorrowDTO dto) {
+        bookDriftService.borrowBook(dto);
+
+        return Result.ok();
+    }
+
 }

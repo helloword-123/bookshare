@@ -56,7 +56,7 @@ public class BookController {
 
     /**
      * 根据筛选条件返回图书列表
-     * @param category_id
+     * @param categoryId
      * @param sortColumn
      * @param sortOrder
      * @param keyword

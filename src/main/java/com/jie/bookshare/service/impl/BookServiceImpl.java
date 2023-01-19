@@ -117,9 +117,22 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
                     bookListDTO.setName(book.getName());
                     bookListDTO.setAuthor(book.getAuthor());
                     bookListDTO.setPicture_url(book.getPictureUrl());
+                    bookListDTO.setCategoryId(book.getCategoryId());
+                    bookListDTO.setDetail(book.getDescription());
+                    bookListDTO.setPublishingHouse(book.getPublishingHouse());
+                    bookListDTO.setPublishingTime(book.getPublishingTime());
+                    bookListDTO.setIsbn(book.getIsbn());
+
+                    bookListDTO.setDriftId(bookDrift.getId());
                     bookListDTO.setSharerId(bookDrift.getSharerId());
                     bookListDTO.setSharer(user.getUserName());
+                    bookListDTO.setSharerPhone(bookDrift.getSharerPhone());
                     bookListDTO.setLocation(bookDrift.getDriftAddress());
+                    bookListDTO.setLatitude(bookDrift.getLatitude());
+                    bookListDTO.setLongitude(bookDrift.getLongitude());
+                    bookListDTO.setNote(bookDrift.getNote());
+                    bookListDTO.setReleaseTime(bookDrift.getReleaseTime());
+                    bookListDTO.setImgList(bookDriftMapper.getDriftPicturesByDriftId(bookDrift.getId()));
 
                     bookListDTOS.add(bookListDTO);
                 }
@@ -175,12 +188,22 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
             bookListDTO.setName(book.getName());
             bookListDTO.setAuthor(book.getAuthor());
             bookListDTO.setPicture_url(book.getPictureUrl());
+            bookListDTO.setCategoryId(book.getCategoryId());
+            bookListDTO.setDetail(book.getDescription());
+            bookListDTO.setPublishingHouse(book.getPublishingHouse());
+            bookListDTO.setPublishingTime(book.getPublishingTime());
+            bookListDTO.setIsbn(book.getIsbn());
+
             bookListDTO.setSharerId(bookDrift.getSharerId());
+            bookListDTO.setSharerPhone(bookDrift.getSharerPhone());
             bookListDTO.setSharer(user.getUserName());
             bookListDTO.setLocation(bookDrift.getDriftAddress());
             bookListDTO.setLatitude(bookDrift.getLatitude());
             bookListDTO.setLongitude(bookDrift.getLongitude());
+            bookListDTO.setNote(bookDrift.getNote());
             bookListDTO.setReleaseTime(bookDrift.getReleaseTime());
+            bookListDTO.setImgList(bookDriftMapper.getDriftPicturesByDriftId(bookDrift.getId()));
+
 
             bookListDTOS.add(bookListDTO);
         }

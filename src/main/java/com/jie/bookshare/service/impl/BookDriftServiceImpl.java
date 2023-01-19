@@ -6,6 +6,7 @@ import com.jie.bookshare.entity.Book;
 import com.jie.bookshare.entity.BookDrift;
 import com.jie.bookshare.entity.BookDriftPicture;
 import com.jie.bookshare.entity.DriftPicture;
+import com.jie.bookshare.entity.dto.BookBorrowDTO;
 import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.entity.dto.DriftingBookDTO;
 import com.jie.bookshare.mapper.BookDriftMapper;
@@ -108,7 +109,14 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
             bookDrift.setNote((String) reqBody.get("will"));
             bookDrift.setReleaseTime(new Date());
             bookDrift.setStatus(0); // 发布审核
-            bookDrift.setDriftNum(1);   // 首次漂流
+
+            BookDrift bookLastDrift = this.getBookLastDrift(book.getId());
+            if(bookLastDrift == null){
+                bookDrift.setDriftNum(1);   // 首次漂流
+            } else {
+                bookDrift.setDriftNum(bookLastDrift.getDriftNum() + 1);
+            }
+
             baseMapper.insert(bookDrift);
 
 
@@ -145,7 +153,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
     @Override
     public List<DriftingBookDTO> getDriftingBooks() {
         LambdaQueryWrapper<BookDrift> con1 = new LambdaQueryWrapper<>();
-        con1.eq(BookDrift::getStatus, 3);
+        con1.eq(BookDrift::getStatus, 1);
         List<BookDrift> bookDrifts = bookDriftMapper.selectList(con1);
 
         List<DriftingBookDTO> list = new ArrayList<>();
@@ -171,7 +179,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
     @Override
     public BookListDTO getDriftingById(Integer id) {
         LambdaQueryWrapper<BookDrift> con1 = new LambdaQueryWrapper<>();
-        con1.eq(BookDrift::getId, id).eq(BookDrift::getStatus, 3);
+        con1.eq(BookDrift::getId, id).eq(BookDrift::getStatus, 1);
         BookDrift bookDrift = bookDriftMapper.selectOne(con1);
         Book book = bookMapper.selectById(bookDrift.getBookId());
 
@@ -180,12 +188,39 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         dto.setName(book.getName());
         dto.setAuthor(book.getAuthor());
         dto.setPicture_url(book.getPictureUrl());
+        dto.setDetail(book.getDescription());
+        dto.setCategoryId(book.getCategoryId());
+        dto.setPublishingTime(book.getPublishingTime());
+        dto.setPublishingHouse(book.getPublishingHouse());
+        dto.setIsbn(book.getIsbn());
+
+        dto.setDriftId(bookDrift.getId());
         dto.setLocation(bookDrift.getDriftAddress());
         dto.setSharerId(bookDrift.getSharerId());
         dto.setSharer(bookDrift.getSharerName());
+        dto.setSharerPhone(bookDrift.getSharerPhone());
         dto.setNote(bookDrift.getNote());
+        dto.setLatitude(bookDrift.getLatitude());
+        dto.setLongitude(bookDrift.getLongitude());
+        dto.setReleaseTime(bookDrift.getReleaseTime());
+        dto.setImgList(bookDriftMapper.getDriftPicturesByDriftId(bookDrift.getId()));
 
         return dto;
+    }
+
+    /**
+     * 借书
+     *
+     * @param dto
+     */
+    @Override
+    public void borrowBook(BookBorrowDTO dto) {
+        BookDrift bookDrift = new BookDrift();
+        bookDrift.setId(dto.getDriftId());
+        bookDrift.setBorrowerId(dto.getBorrowId());
+        bookDrift.setStatus(3);
+
+        bookDriftMapper.updateById(bookDrift);
     }
 
 }

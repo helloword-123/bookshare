@@ -17,6 +17,13 @@
     </select>
 
     <select id="selectDriftingBooks" resultType="com.jie.bookshare.entity.BookDrift">
-        select * from book_drift where status = 3;
+        select * from book_drift where status = 1;
+    </select>
+
+    <select id="getDriftPicturesByDriftId" resultType="java.lang.String">
+        select dp.picture_url from drift_picture dp
+        where dp.id in (
+            select bdp.picture_id from book_drift_picture bdp where bdp.drift_id = #{drift_id}
+            )
     </select>
 </mapper>

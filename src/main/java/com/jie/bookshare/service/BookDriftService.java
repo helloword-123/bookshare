@@ -2,6 +2,7 @@ package com.jie.bookshare.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jie.bookshare.entity.BookDrift;
+import com.jie.bookshare.entity.dto.BookBorrowDTO;
 import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.entity.dto.DriftingBookDTO;
 
@@ -58,4 +59,11 @@ public interface BookDriftService extends IService<BookDrift> {
      * @return
      */
     BookListDTO getDriftingById(Integer id);
+
+    /**
+     * 借书
+     * @param dto
+     */
+    void borrowBook(BookBorrowDTO dto);
+
 }

@@ -79,4 +79,23 @@ public class BookCategoryServiceImpl extends ServiceImpl<BookCategoryMapper, Boo
 
         return res;
     }
+
+    /**
+     * 根据id获取分类全名（包括父分类，以"/"分隔）
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public String getCategoryFullName(Integer categoryId) {
+        BookCategory subCategory = bookCategoryMapper.selectById(categoryId);
+        LambdaQueryWrapper<BookCategory> con1 = new LambdaQueryWrapper<>();
+        con1.eq(BookCategory::getId, subCategory.getPid());
+        BookCategory topCategory = bookCategoryMapper.selectOne(con1);
+
+        StringBuilder fullName = new StringBuilder();
+        fullName.append(topCategory.getName()).append(" / ").append(subCategory.getName());
+
+        return fullName.toString();
+    }
 }

@@ -27,4 +27,11 @@ public interface BookCategoryService extends IService<BookCategory> {
      * @return
      */
     List<BookCategoryCascaderDTO> getCategoryCascader();
+
+    /**
+     * 根据id获取分类全名（包括父分类，以"/"分隔）
+     * @param categoryId
+     * @return
+     */
+    String getCategoryFullName(Integer categoryId);
 }
