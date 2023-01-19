@@ -6,6 +6,8 @@ import com.jie.bookshare.entity.Book;
 import com.jie.bookshare.entity.BookDrift;
 import com.jie.bookshare.entity.BookDriftPicture;
 import com.jie.bookshare.entity.DriftPicture;
+import com.jie.bookshare.entity.dto.BookListDTO;
+import com.jie.bookshare.entity.dto.DriftingBookDTO;
 import com.jie.bookshare.mapper.BookDriftMapper;
 import com.jie.bookshare.mapper.BookDriftPictureMapper;
 import com.jie.bookshare.mapper.BookMapper;
@@ -17,10 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -102,6 +101,8 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
             bookDrift.setBookId(book.getId());
             bookDrift.setSharerId((Integer) reqBody.get("userId"));
             bookDrift.setDriftAddress((String) reqBody.get("location"));
+            bookDrift.setLatitude((Double) reqBody.get("latitude"));
+            bookDrift.setLongitude((Double) reqBody.get("longitude"));
             bookDrift.setSharerName((String) reqBody.get("userName"));
             bookDrift.setSharerPhone((String) reqBody.get("phoneNumber"));
             bookDrift.setNote((String) reqBody.get("will"));
@@ -134,6 +135,57 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         }
 
         return true;
+    }
+
+    /**
+     * 地图搜索页获取正在漂流的图书信息
+     *
+     * @return
+     */
+    @Override
+    public List<DriftingBookDTO> getDriftingBooks() {
+        LambdaQueryWrapper<BookDrift> con1 = new LambdaQueryWrapper<>();
+        con1.eq(BookDrift::getStatus, 3);
+        List<BookDrift> bookDrifts = bookDriftMapper.selectList(con1);
+
+        List<DriftingBookDTO> list = new ArrayList<>();
+        for (BookDrift bookDrift : bookDrifts) {
+            DriftingBookDTO dto = new DriftingBookDTO();
+            dto.setId(bookDrift.getId());
+            dto.setAddress(bookDrift.getDriftAddress());
+            dto.setLatitude(bookDrift.getLatitude());
+            dto.setLongitude(bookDrift.getLongitude());
+
+            list.add(dto);
+        }
+
+        return list;
+    }
+
+    /**
+     * 根据id获取正在漂流的信息
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public BookListDTO getDriftingById(Integer id) {
+        LambdaQueryWrapper<BookDrift> con1 = new LambdaQueryWrapper<>();
+        con1.eq(BookDrift::getId, id).eq(BookDrift::getStatus, 3);
+        BookDrift bookDrift = bookDriftMapper.selectOne(con1);
+        Book book = bookMapper.selectById(bookDrift.getBookId());
+
+        BookListDTO dto = new BookListDTO();
+        dto.setBookId(book.getId());
+        dto.setName(book.getName());
+        dto.setAuthor(book.getAuthor());
+        dto.setPicture_url(book.getPictureUrl());
+        dto.setLocation(bookDrift.getDriftAddress());
+        dto.setSharerId(bookDrift.getSharerId());
+        dto.setSharer(bookDrift.getSharerName());
+        dto.setNote(bookDrift.getNote());
+
+        return dto;
     }
 
 }

@@ -42,7 +42,14 @@ public class BookDrift implements Serializable {
 
     private Integer borrowerId;
 
+    @ApiModelProperty(value = "图书分享发布位置")
     private String driftAddress;
+
+    @ApiModelProperty(value = "纬度")
+    private Double latitude;
+
+    @ApiModelProperty(value = "经度")
+    private Double longitude;
 
     @ApiModelProperty(value = "图书分享发布时间")
     private Date releaseTime;

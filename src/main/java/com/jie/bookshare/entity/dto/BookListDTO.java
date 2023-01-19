@@ -2,6 +2,8 @@ package com.jie.bookshare.entity.dto;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class BookListDTO {
 
@@ -18,4 +20,14 @@ public class BookListDTO {
     private String sharer;
 
     private String location;
+
+    private String note;
+
+    private Double latitude;
+
+    private Double longitude;
+
+    private Double distance;
+
+    private Date releaseTime;
 }

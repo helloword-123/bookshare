@@ -13,15 +13,19 @@ import com.jie.bookshare.mapper.BookDriftMapper;
 import com.jie.bookshare.mapper.BookMapper;
 import com.jie.bookshare.mapper.UserMapper;
 import com.jie.bookshare.service.BookService;
+import com.jie.bookshare.utils.LocationUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author wuhaojie
@@ -29,6 +33,8 @@ import java.util.List;
  */
 @Service
 public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements BookService {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(BookServiceImpl.class);
 
     @Autowired
     private BookDriftMapper bookDriftMapper;
@@ -40,22 +46,37 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
     private UserMapper userMapper;
 
 
+    /**
+     * 判断改isbn号的图书是否已经在漂流中
+     *
+     * @param isbn
+     * @return
+     */
     @Override
     public Boolean checkIsbnIsDrifting(String isbn) {
         // 根据isbn查询book的id
         LambdaQueryWrapper<Book> con1 = new LambdaQueryWrapper<>();
         con1.eq(Book::getIsbn, isbn);
         Book book = baseMapper.selectOne(con1);
-        if(book == null){
+        if (book == null) {
             return true;
         }
 
         // 查询改bookid是否正在漂流中
+        // 1.漂流记录没有此书则返回true
+        LambdaQueryWrapper<BookDrift> con3 = new LambdaQueryWrapper<>();
+        con3.eq(BookDrift::getBookId, book.getId());
+        List<BookDrift> bookDrifts1 = bookDriftMapper.selectList(con3);
+        if (bookDrifts1.size() == 0) {
+            return true;
+        }
+
+        // 2.有bookid的而且status < 4的漂流记录，说明此书正在共享中
         LambdaQueryWrapper<BookDrift> con2 = new LambdaQueryWrapper<>();
-        // 有bookid的而且status < 4的漂流记录，说明此书正在共享中
         con2.eq(BookDrift::getBookId, book.getId()).lt(BookDrift::getStatus, 4);
         List<BookDrift> bookDrifts = bookDriftMapper.selectList(con2);
-        return bookDrifts == null;
+
+        return bookDrifts.size() == 0;
     }
 
     /**
@@ -88,7 +109,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
             List<BookListDTO> bookListDTOS = new ArrayList<>();
             for (BookDrift bookDrift : bookDrifts) {
                 Book book = bookMapper.selectById(bookDrift.getBookId());
-                if(subIds.contains(book.getCategoryId())){
+                if (subIds.contains(book.getCategoryId())) {
                     User user = userMapper.selectById(bookDrift.getSharerId());
 
                     BookListDTO bookListDTO = new BookListDTO();
@@ -111,5 +132,79 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
         }
 
         return list;
+    }
+
+    /**
+     * 根据筛选条件返回图书列表
+     *
+     * @param categoryId
+     * @param sortColumn
+     * @param sortOrder
+     * @param keyword
+     * @return
+     */
+    @Override
+    public List<BookListDTO> getListWithCondition(Integer categoryId, String sortColumn, String sortOrder, String keyword, Double latitude, Double longitude) {
+        List<BookListDTO> bookListDTOS = new ArrayList<>();
+        // 1.先根据categoryId和keyword查询列表
+        // 查询正在漂流的图书id
+        List<BookDrift> bookDrifts = bookDriftMapper.selectDriftingBooks();
+
+        // 查询属于子目录的图书
+        for (BookDrift bookDrift : bookDrifts) {
+            // 关键字查询
+            LambdaQueryWrapper<Book> con2 = new LambdaQueryWrapper<>();
+            con2.eq(Book::getId, bookDrift.getBookId());
+            if (categoryId != -1) {
+                con2.eq(Book::getCategoryId, categoryId);
+            }
+            if (keyword != null) {
+                con2.and(wrapper -> wrapper.like(Book::getName, keyword)
+                        .or()
+                        .like(Book::getAuthor, keyword));
+            }
+            Book book = bookMapper.selectOne(con2);
+
+            if (book == null) {
+                continue;
+            }
+
+            User user = userMapper.selectById(bookDrift.getSharerId());
+            BookListDTO bookListDTO = new BookListDTO();
+            bookListDTO.setBookId(book.getId());
+            bookListDTO.setName(book.getName());
+            bookListDTO.setAuthor(book.getAuthor());
+            bookListDTO.setPicture_url(book.getPictureUrl());
+            bookListDTO.setSharerId(bookDrift.getSharerId());
+            bookListDTO.setSharer(user.getUserName());
+            bookListDTO.setLocation(bookDrift.getDriftAddress());
+            bookListDTO.setLatitude(bookDrift.getLatitude());
+            bookListDTO.setLongitude(bookDrift.getLongitude());
+            bookListDTO.setReleaseTime(bookDrift.getReleaseTime());
+
+            bookListDTOS.add(bookListDTO);
+        }
+
+        // 2.再根据排序字段进行排序
+        if (sortColumn == null) {
+            return bookListDTOS;
+        } else if (sortColumn.equals("distance")) {
+            for (BookListDTO dto : bookListDTOS) {
+                dto.setDistance(LocationUtils.getDistance(latitude, longitude, dto.getLatitude(), dto.getLongitude()));
+            }
+            if (sortOrder.equals("asc")) {
+                bookListDTOS.sort(Comparator.comparing(BookListDTO::getDistance));
+            } else if (sortOrder.equals("desc")) {
+                bookListDTOS.sort(Comparator.comparing(BookListDTO::getDistance).reversed());
+            }
+        } else if (sortColumn.equals("releaseTime")) {
+            if (sortOrder.equals("asc")) {
+                bookListDTOS.sort(Comparator.comparing(BookListDTO::getReleaseTime));
+            } else if (sortOrder.equals("desc")) {
+                bookListDTOS.sort(Comparator.comparing(BookListDTO::getReleaseTime).reversed());
+            }
+        }
+
+        return bookListDTOS;
     }
 }

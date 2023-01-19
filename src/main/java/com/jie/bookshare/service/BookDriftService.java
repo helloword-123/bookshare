@@ -2,7 +2,10 @@ package com.jie.bookshare.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jie.bookshare.entity.BookDrift;
+import com.jie.bookshare.entity.dto.BookListDTO;
+import com.jie.bookshare.entity.dto.DriftingBookDTO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,4 +45,17 @@ public interface BookDriftService extends IService<BookDrift> {
      * @return
      */
     Boolean releaseBook(Map<String, Object> reqBody);
+
+    /**
+     * 地图搜索页获取正在漂流的图书信息
+     * @return
+     */
+    List<DriftingBookDTO> getDriftingBooks();
+
+    /**
+     * 根据id获取正在漂流的信息
+     * @param id
+     * @return
+     */
+    BookListDTO getDriftingById(Integer id);
 }

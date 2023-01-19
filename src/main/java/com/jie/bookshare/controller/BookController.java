@@ -2,13 +2,12 @@ package com.jie.bookshare.controller;
 
 
 import com.jie.bookshare.common.Result;
+import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.entity.dto.BookListWithCategoryDTO;
 import com.jie.bookshare.service.BookService;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -53,5 +52,32 @@ public class BookController {
             return Result.ok().code(20002);
         }
         return Result.ok();
+    }
+
+    /**
+     * 根据筛选条件返回图书列表
+     * @param category_id
+     * @param sortColumn
+     * @param sortOrder
+     * @param keyword
+     * @return
+     */
+    @GetMapping("/getListWithCondition")
+    public Result getListWithCondition(
+            @ApiParam(value = "分类ID，非必需", example = "0")
+            @RequestParam(required = false) Integer categoryId,
+            @ApiParam(value = "排序字段，可选值：distance，releaseTime, 非必需", example = "distance")
+            @RequestParam(required = false) String sortColumn,
+            @ApiParam(value = "升序还是降序，可选值：asc、desc，非必需", example = "asc")
+            @RequestParam(required = false) String sortOrder,
+            @ApiParam(value = "模糊查询关键字，非必需", example = "XXX")
+            @RequestParam(required = false) String keyword,
+            @ApiParam(value = "用户当前定位纬度，非必需", example = "XXX")
+            @RequestParam(required = false) Double latitude,
+            @ApiParam(value = "用户当前定位精度，非必需", example = "XXX")
+            @RequestParam(required = false) Double longitude){
+        List<BookListDTO> bookList = bookService.getListWithCondition(categoryId, sortColumn, sortOrder, keyword, latitude, longitude);
+
+        return Result.ok().data("list", bookList);
     }
 }

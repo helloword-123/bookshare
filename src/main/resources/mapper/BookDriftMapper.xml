@@ -3,16 +3,16 @@
 <mapper namespace="com.jie.bookshare.mapper.BookDriftMapper">
 
     <select id="getBookFirstDrift" resultType="com.jie.bookshare.entity.BookDrift">
-        select * from book_drift
-        where book_id = 1 and drift_num =(
-            select min(drift_num) from book_drift
+        select * from book_drift b1
+        where b1.book_id = #{bookId} and b1.drift_num =(
+            select min(b2.drift_num) from book_drift b2 where b2.book_id = #{bookId}
         );
     </select>
 
     <select id="getBookLastDrift" resultType="com.jie.bookshare.entity.BookDrift">
-        select * from book_drift
-        where book_id = 1 and drift_num =(
-            select max(drift_num) from book_drift
+        select * from book_drift b1
+        where b1.book_id = #{bookId} and b1.drift_num =(
+            select max(b2.drift_num) from book_drift b2 where b2.book_id = #{bookId}
         );
     </select>
 
