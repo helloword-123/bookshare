@@ -35,6 +35,9 @@ public class BookListDTO {
     private Double longitude;
     private Double distance;
     private Date releaseTime;
+    private Integer status;
+    private Date driftTime;
+    private Integer driftNum;
 
     private List<String> imgList;
 }

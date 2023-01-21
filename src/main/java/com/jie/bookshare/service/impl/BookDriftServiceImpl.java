@@ -47,6 +47,44 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
     @Autowired
     TransactionDefinition definition;
 
+
+    /**
+     * 工具方法：合并book对象和bookDrift对象为bookListDTO对象
+     *
+     * @param book
+     * @param bookDrift
+     * @return
+     */
+    @Override
+    public BookListDTO mergeBookAndBookDrift(Book book, BookDrift bookDrift) {
+        BookListDTO bookListDTO = new BookListDTO();
+        bookListDTO.setBookId(book.getId());
+        bookListDTO.setName(book.getName());
+        bookListDTO.setAuthor(book.getAuthor());
+        bookListDTO.setPicture_url(book.getPictureUrl());
+        bookListDTO.setCategoryId(book.getCategoryId());
+        bookListDTO.setDetail(book.getDescription());
+        bookListDTO.setPublishingHouse(book.getPublishingHouse());
+        bookListDTO.setPublishingTime(book.getPublishingTime());
+        bookListDTO.setIsbn(book.getIsbn());
+
+        bookListDTO.setDriftId(bookDrift.getId());
+        bookListDTO.setSharerId(bookDrift.getSharerId());
+        bookListDTO.setSharerPhone(bookDrift.getSharerPhone());
+        bookListDTO.setSharer(bookDrift.getSharerName());
+        bookListDTO.setLocation(bookDrift.getDriftAddress());
+        bookListDTO.setLatitude(bookDrift.getLatitude());
+        bookListDTO.setLongitude(bookDrift.getLongitude());
+        bookListDTO.setNote(bookDrift.getNote());
+        bookListDTO.setReleaseTime(bookDrift.getReleaseTime());
+        bookListDTO.setStatus(bookDrift.getStatus());
+        bookListDTO.setDriftTime(bookDrift.getDriftTime());
+        bookListDTO.setDriftNum(bookDrift.getDriftNum());
+        bookListDTO.setImgList(bookDriftMapper.getDriftPicturesByDriftId(bookDrift.getId()));
+
+        return bookListDTO;
+    }
+
     @Override
     public Integer changeBookStatus(Integer bookId, Integer status) {
         BookDrift bookDrift = getBookLastDrift(bookId);
@@ -183,27 +221,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         BookDrift bookDrift = bookDriftMapper.selectOne(con1);
         Book book = bookMapper.selectById(bookDrift.getBookId());
 
-        BookListDTO dto = new BookListDTO();
-        dto.setBookId(book.getId());
-        dto.setName(book.getName());
-        dto.setAuthor(book.getAuthor());
-        dto.setPicture_url(book.getPictureUrl());
-        dto.setDetail(book.getDescription());
-        dto.setCategoryId(book.getCategoryId());
-        dto.setPublishingTime(book.getPublishingTime());
-        dto.setPublishingHouse(book.getPublishingHouse());
-        dto.setIsbn(book.getIsbn());
-
-        dto.setDriftId(bookDrift.getId());
-        dto.setLocation(bookDrift.getDriftAddress());
-        dto.setSharerId(bookDrift.getSharerId());
-        dto.setSharer(bookDrift.getSharerName());
-        dto.setSharerPhone(bookDrift.getSharerPhone());
-        dto.setNote(bookDrift.getNote());
-        dto.setLatitude(bookDrift.getLatitude());
-        dto.setLongitude(bookDrift.getLongitude());
-        dto.setReleaseTime(bookDrift.getReleaseTime());
-        dto.setImgList(bookDriftMapper.getDriftPicturesByDriftId(bookDrift.getId()));
+        BookListDTO dto = this.mergeBookAndBookDrift(book, bookDrift);
 
         return dto;
     }
@@ -219,8 +237,69 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         bookDrift.setId(dto.getDriftId());
         bookDrift.setBorrowerId(dto.getBorrowId());
         bookDrift.setStatus(3);
+        bookDrift.setDriftTime(new Date());
 
         bookDriftMapper.updateById(bookDrift);
     }
 
+    /**
+     * 根据用户id获取他的共享和借阅记录
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<List<BookListDTO>> getShareBorrowBookList(Integer userId) {
+        List<List<BookListDTO>> res = new ArrayList<>();
+
+        // 共享记录
+        LambdaQueryWrapper<BookDrift> con1 = new LambdaQueryWrapper<>();
+        con1.eq(BookDrift::getSharerId, userId);
+        List<BookDrift> bookDrifts1 = bookDriftMapper.selectList(con1);
+        List<BookListDTO> list1 = new ArrayList<>();
+        for (BookDrift bookDrift : bookDrifts1) {
+            Book book = bookMapper.selectById(bookDrift.getBookId());
+            BookListDTO bookListDTO = this.mergeBookAndBookDrift(book, bookDrift);
+            list1.add(bookListDTO);
+        }
+
+        // 借阅记录
+        LambdaQueryWrapper<BookDrift> con2 = new LambdaQueryWrapper<>();
+        con2.eq(BookDrift::getBorrowerId, userId);
+        List<BookDrift> bookDrifts2 = bookDriftMapper.selectList(con2);
+        List<BookListDTO> list2 = new ArrayList<>();
+        for (BookDrift bookDrift : bookDrifts2) {
+            Book book = bookMapper.selectById(bookDrift.getBookId());
+            BookListDTO bookListDTO = this.mergeBookAndBookDrift(book, bookDrift);
+            list2.add(bookListDTO);
+        }
+
+        res.add(list1);
+        res.add(list2);
+
+        return res;
+    }
+
+    /**
+     * 根据图书id获取其漂流记录（顺序连起来）
+     *
+     * @param bookId
+     * @return
+     */
+    @Override
+    public List<BookListDTO> getBookDriftSeries(Integer bookId) {
+        List<BookListDTO> res = new ArrayList<>();
+
+        Book book = bookMapper.selectById(bookId);
+
+        LambdaQueryWrapper<BookDrift> con1 = new LambdaQueryWrapper<>();
+        con1.eq(BookDrift::getBookId, bookId).orderByAsc(BookDrift::getDriftNum);
+        List<BookDrift> bookDrifts = bookDriftMapper.selectList(con1);
+        for (BookDrift bookDrift : bookDrifts) {
+            BookListDTO bookListDTO = this.mergeBookAndBookDrift(book, bookDrift);
+            res.add(bookListDTO);
+        }
+
+        return res;
+    }
 }

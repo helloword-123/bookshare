@@ -1,6 +1,7 @@
 package com.jie.bookshare.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jie.bookshare.entity.Book;
 import com.jie.bookshare.entity.BookDrift;
 import com.jie.bookshare.entity.dto.BookBorrowDTO;
 import com.jie.bookshare.entity.dto.BookListDTO;
@@ -66,4 +67,25 @@ public interface BookDriftService extends IService<BookDrift> {
      */
     void borrowBook(BookBorrowDTO dto);
 
+    /**
+     * 根据用户id获取他的共享和借阅记录
+     * @param userId
+     * @return
+     */
+    List<List<BookListDTO>> getShareBorrowBookList(Integer userId);
+
+    /**
+     * 工具方法：合并book对象和bookDrift对象为bookListDTO对象
+     * @param book
+     * @param bookDrift
+     * @return
+     */
+    BookListDTO mergeBookAndBookDrift(Book book, BookDrift bookDrift);
+
+    /**
+     * 根据图书id获取其漂流记录（顺序连起来）
+     * @param bookId
+     * @return
+     */
+    List<BookListDTO> getBookDriftSeries(Integer bookId);
 }

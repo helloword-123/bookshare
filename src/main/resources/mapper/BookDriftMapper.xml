@@ -26,4 +26,5 @@
             select bdp.picture_id from book_drift_picture bdp where bdp.drift_id = #{drift_id}
             )
     </select>
+
 </mapper>

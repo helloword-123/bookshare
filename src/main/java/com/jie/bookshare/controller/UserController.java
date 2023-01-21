@@ -4,25 +4,17 @@ package com.jie.bookshare.controller;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.dto.AuthenticationDTO;
 import com.jie.bookshare.entity.dto.UserDTO;
-import com.jie.bookshare.entity.security.AppUserDetails;
-import com.jie.bookshare.entity.security.UserType;
 import com.jie.bookshare.service.IRedisService;
 import com.jie.bookshare.service.UserService;
-import com.jie.bookshare.utils.JsonUtil;
 import com.jie.bookshare.utils.JwtUtil;
-import com.jie.bookshare.utils.SpringSecurityUtil;
 import com.jie.bookshare.utils.WxUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -48,10 +40,10 @@ public class UserController {
      * @return
      **/
     @ApiOperation(value = "微信登录后，修改用户头像和昵称")
-    @PostMapping("updateAvatarAndName")
+    @PostMapping("updateUserInfo")
     public Result updateAvatarAndName(@RequestBody UserDTO userDTO) {
 
-        userService.updateAvatarAndName(userDTO);
+        userService.updateUserInfo(userDTO);
 
         return Result.ok();
     }
@@ -62,15 +54,15 @@ public class UserController {
      * @Param
      * @return
      **/
-    @PreAuthorize("hasAuthority('admin:auth')")
+    // @PreAuthorize("hasAuthority('admin:auth')")
     @ApiOperation("管理员退出登录")
-    @GetMapping("/adminLogout")
-    public Result adminLogout() {
+    @GetMapping("/logout/{userId}")
+    public Result logout(@PathVariable Integer userId) {
         //删除登录状态
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
-        String userId = userDetails.getUsername();
-        String key = IRedisService.concatKey("user_details", userId);
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
+//        String userId = userDetails.getUsername();
+        String key = IRedisService.concatKey("user_details", String.valueOf(userId));
         redisService.delete(key);
         return Result.ok();
     }

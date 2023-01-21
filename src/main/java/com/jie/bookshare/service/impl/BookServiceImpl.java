@@ -5,13 +5,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jie.bookshare.entity.Book;
 import com.jie.bookshare.entity.BookCategory;
 import com.jie.bookshare.entity.BookDrift;
-import com.jie.bookshare.entity.User;
 import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.entity.dto.BookListWithCategoryDTO;
 import com.jie.bookshare.mapper.BookCategoryMapper;
 import com.jie.bookshare.mapper.BookDriftMapper;
 import com.jie.bookshare.mapper.BookMapper;
 import com.jie.bookshare.mapper.UserMapper;
+import com.jie.bookshare.service.BookDriftService;
 import com.jie.bookshare.service.BookService;
 import com.jie.bookshare.utils.LocationUtils;
 import org.slf4j.Logger;
@@ -36,6 +36,8 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
 
     private final static Logger LOGGER = LoggerFactory.getLogger(BookServiceImpl.class);
 
+    @Autowired
+    private BookDriftService bookDriftService;
     @Autowired
     private BookDriftMapper bookDriftMapper;
     @Autowired
@@ -110,29 +112,8 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
             for (BookDrift bookDrift : bookDrifts) {
                 Book book = bookMapper.selectById(bookDrift.getBookId());
                 if (subIds.contains(book.getCategoryId())) {
-                    User user = userMapper.selectById(bookDrift.getSharerId());
 
-                    BookListDTO bookListDTO = new BookListDTO();
-                    bookListDTO.setBookId(book.getId());
-                    bookListDTO.setName(book.getName());
-                    bookListDTO.setAuthor(book.getAuthor());
-                    bookListDTO.setPicture_url(book.getPictureUrl());
-                    bookListDTO.setCategoryId(book.getCategoryId());
-                    bookListDTO.setDetail(book.getDescription());
-                    bookListDTO.setPublishingHouse(book.getPublishingHouse());
-                    bookListDTO.setPublishingTime(book.getPublishingTime());
-                    bookListDTO.setIsbn(book.getIsbn());
-
-                    bookListDTO.setDriftId(bookDrift.getId());
-                    bookListDTO.setSharerId(bookDrift.getSharerId());
-                    bookListDTO.setSharer(user.getUserName());
-                    bookListDTO.setSharerPhone(bookDrift.getSharerPhone());
-                    bookListDTO.setLocation(bookDrift.getDriftAddress());
-                    bookListDTO.setLatitude(bookDrift.getLatitude());
-                    bookListDTO.setLongitude(bookDrift.getLongitude());
-                    bookListDTO.setNote(bookDrift.getNote());
-                    bookListDTO.setReleaseTime(bookDrift.getReleaseTime());
-                    bookListDTO.setImgList(bookDriftMapper.getDriftPicturesByDriftId(bookDrift.getId()));
+                    BookListDTO bookListDTO = bookDriftService.mergeBookAndBookDrift(book, bookDrift);
 
                     bookListDTOS.add(bookListDTO);
                 }
@@ -182,28 +163,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
                 continue;
             }
 
-            User user = userMapper.selectById(bookDrift.getSharerId());
-            BookListDTO bookListDTO = new BookListDTO();
-            bookListDTO.setBookId(book.getId());
-            bookListDTO.setName(book.getName());
-            bookListDTO.setAuthor(book.getAuthor());
-            bookListDTO.setPicture_url(book.getPictureUrl());
-            bookListDTO.setCategoryId(book.getCategoryId());
-            bookListDTO.setDetail(book.getDescription());
-            bookListDTO.setPublishingHouse(book.getPublishingHouse());
-            bookListDTO.setPublishingTime(book.getPublishingTime());
-            bookListDTO.setIsbn(book.getIsbn());
-
-            bookListDTO.setSharerId(bookDrift.getSharerId());
-            bookListDTO.setSharerPhone(bookDrift.getSharerPhone());
-            bookListDTO.setSharer(user.getUserName());
-            bookListDTO.setLocation(bookDrift.getDriftAddress());
-            bookListDTO.setLatitude(bookDrift.getLatitude());
-            bookListDTO.setLongitude(bookDrift.getLongitude());
-            bookListDTO.setNote(bookDrift.getNote());
-            bookListDTO.setReleaseTime(bookDrift.getReleaseTime());
-            bookListDTO.setImgList(bookDriftMapper.getDriftPicturesByDriftId(bookDrift.getId()));
-
+            BookListDTO bookListDTO = bookDriftService.mergeBookAndBookDrift(book, bookDrift);
 
             bookListDTOS.add(bookListDTO);
         }
@@ -221,9 +181,10 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
                 bookListDTOS.sort(Comparator.comparing(BookListDTO::getDistance).reversed());
             }
         } else if (sortColumn.equals("releaseTime")) {
-            if (sortOrder.equals("asc")) {
+            // 时间值越大，则越近；所以发布时间近=asc
+            if (sortOrder.equals("desc")) {
                 bookListDTOS.sort(Comparator.comparing(BookListDTO::getReleaseTime));
-            } else if (sortOrder.equals("desc")) {
+            } else if (sortOrder.equals("asc")) {
                 bookListDTOS.sort(Comparator.comparing(BookListDTO::getReleaseTime).reversed());
             }
         }

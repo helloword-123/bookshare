@@ -204,12 +204,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void updateAvatarAndName(UserDTO userDTO) {
+    public void updateUserInfo(UserDTO userDTO) {
         logger.info("updateAvatarAndName： id:{}, userName:{}, avatarUrl:{}", userDTO.getId(), userDTO.getNickName(), userDTO.getAvatarUrl());
         User user = new User();
         user.setId(userDTO.getId());
         user.setUserName(userDTO.getNickName());
         user.setAvatarUrl(userDTO.getAvatarUrl());
+        user.setPhone(userDTO.getPhone());
         baseMapper.updateById(user);
     }
 }

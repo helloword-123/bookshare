@@ -100,4 +100,29 @@ public class BookDriftController {
         return Result.ok();
     }
 
+    /**
+     * 根据用户id获取他的共享和借阅记录
+     * @param userId
+     * @return
+     */
+    @GetMapping("/getShareBorrowBookList/{userId}")
+    public Result getShareBorrowBookList(@PathVariable Integer userId) {
+        // 第一个数组是共享记录；第二个数组是借阅记录
+        List<List<BookListDTO>> bookList = bookDriftService.getShareBorrowBookList(userId);
+
+        return Result.ok().data("bookList", bookList);
+    }
+
+    /**
+     * 根据图书id获取其漂流记录（顺序连起来）
+     * @param bookId
+     * @return
+     */
+    @GetMapping("/getBookDriftSeries/{bookId}")
+    public Result getBookDriftSeries(@PathVariable Integer bookId) {
+        List<BookListDTO> bookDriftSeries = bookDriftService.getBookDriftSeries(bookId);
+
+        return Result.ok().data("bookDriftSeries", bookDriftSeries);
+    }
+
 }

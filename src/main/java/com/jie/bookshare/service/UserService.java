@@ -57,7 +57,7 @@ public interface UserService extends IService<User> {
      * @Param
      * @return
      **/
-    void updateAvatarAndName(UserDTO userDTO);
+    void updateUserInfo(UserDTO userDTO);
 
     String saveUserAuthorityByUserId(Integer userId);
 }
