@@ -19,47 +19,45 @@ import java.util.Date;
  * </p>
  *
  * @author wuhaojie
- * @since 2022-12-16
+ * @since 2023-01-21
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="User对象", description="")
-public class User implements Serializable {
+@ApiModel(value="CampusStaffAuth对象", description="")
+public class CampusStaffAuth implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String userName;
-
-    private String account;
-
-    private String password;
+    private String realName;
 
     private String phone;
 
-    private Integer sex;
+    private String email;
 
-    @ApiModelProperty(value = "用户积分")
-    private Integer point;
+    private String number;
 
-    private Integer totalShareNum;
+    private Integer userId;
 
-    private Integer totalUseNum;
-
-    private String avatarUrl;
-
-    private String openid;
+    @ApiModelProperty(value = "状态，0-未审核，1-审核通过，2-审核未通过")
+    private Integer status;
 
     @ApiModelProperty(name = "创建时间", example = "2022-03-18 17:45:00")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
+
     @ApiModelProperty(name = "修改时间", example = "2022-03-18 17:45:00")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
-    @ApiModelProperty(value = "认证状态，-1-未审核，0-审核中，1-审核通过，2-审核未通过")
-    private Integer authStatus;
+    @ApiModelProperty(value = "审核人id")
+    private Integer checkerId;
+
+    private Date checkTime;
+
+    @ApiModelProperty(value = "审核人回复信息")
+    private String description;
 }
