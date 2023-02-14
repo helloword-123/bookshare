@@ -2,6 +2,7 @@ package com.jie.bookshare.controller;
 
 
 import com.jie.bookshare.common.Result;
+import com.jie.bookshare.entity.AclRole;
 import com.jie.bookshare.entity.dto.AuthenticationDTO;
 import com.jie.bookshare.entity.dto.UserDTO;
 import com.jie.bookshare.service.IRedisService;
@@ -13,6 +14,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +34,24 @@ public class UserController {
     @Autowired
     private IRedisService redisService;
 
+
+    /**
+     * 获取用户角色
+     * @param userId
+     * @return
+     */
+    @ApiOperation(value = "获取用户角色")
+    @GetMapping("getUserRoles/{userId}")
+    public Result getUserRoles(@PathVariable Integer userId) {
+
+        List<String> roles = new ArrayList<>();
+        List<AclRole> aclRoles = userService.findRoleForAdmin(userId);
+        for (AclRole role : aclRoles) {
+            roles.add(role.getKey());
+        }
+
+        return Result.ok().data("roles", roles);
+    }
 
     /*
      * @Author Haojie

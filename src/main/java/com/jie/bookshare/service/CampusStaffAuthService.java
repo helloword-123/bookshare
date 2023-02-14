@@ -3,6 +3,7 @@ package com.jie.bookshare.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jie.bookshare.entity.CampusStaffAuth;
 import com.jie.bookshare.entity.dto.AuthDTO;
+import com.jie.bookshare.entity.dto.CheckDTO;
 
 /**
  * <p>
@@ -25,4 +26,11 @@ public interface CampusStaffAuthService extends IService<CampusStaffAuth> {
      * @param userId
      */
     CampusStaffAuth getAuthInfo(Integer userId);
+
+    /**
+     * 审核
+     * @param checkDTO
+     * @return
+     */
+    void checkAuth(CheckDTO checkDTO);
 }

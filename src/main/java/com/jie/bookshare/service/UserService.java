@@ -60,4 +60,5 @@ public interface UserService extends IService<User> {
     void updateUserInfo(UserDTO userDTO);
 
     String saveUserAuthorityByUserId(Integer userId);
+
 }

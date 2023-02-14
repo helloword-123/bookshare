@@ -5,12 +5,15 @@ import com.jie.bookshare.entity.AuthPicture;
 import com.jie.bookshare.entity.CampusStaffAuth;
 import com.jie.bookshare.entity.User;
 import com.jie.bookshare.entity.dto.AuthDTO;
+import com.jie.bookshare.entity.dto.CheckDTO;
 import com.jie.bookshare.mapper.AuthPictureMapper;
 import com.jie.bookshare.mapper.CampusStaffAuthMapper;
 import com.jie.bookshare.mapper.UserMapper;
 import com.jie.bookshare.service.CampusStaffAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -46,6 +49,11 @@ public class CampusStaffAuthServiceImpl extends ServiceImpl<CampusStaffAuthMappe
         auth.setStatus(0);
         campusStaffAuthMapper.insert(auth);
 
+        User user = new User();
+        user.setId(authDTO.getUserId());
+        user.setAuthStatus(0);
+        userMapper.updateById(user);
+
         for (String url : authDTO.getFileList()) {
             AuthPicture authPicture = new AuthPicture();
             authPicture.setPictureUrl(url);
@@ -63,6 +71,9 @@ public class CampusStaffAuthServiceImpl extends ServiceImpl<CampusStaffAuthMappe
     public CampusStaffAuth getAuthInfo(Integer userId) {
         CampusStaffAuth auth = null;
         User user = userMapper.selectById(userId);
+        if(user == null){
+            return auth;
+        }
         // 未认证
         if(user.getAuthStatus() == -1){
             return null;
@@ -72,5 +83,21 @@ public class CampusStaffAuthServiceImpl extends ServiceImpl<CampusStaffAuthMappe
             auth = campusStaffAuthMapper.getNewestAuthByUserId(userId);
         }
         return auth;
+    }
+
+    /**
+     * 审核
+     *
+     * @param checkDTO
+     * @return
+     */
+    @Override
+    public void checkAuth(CheckDTO checkDTO) {
+        CampusStaffAuth auth = new CampusStaffAuth();
+        auth.setCheckerId(checkDTO.getCheckerId());
+        auth.setDescription(checkDTO.getDescription());
+        auth.setCheckTime(new Date());
+
+        campusStaffAuthMapper.updateById(auth);
     }
 }

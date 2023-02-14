@@ -4,9 +4,12 @@ package com.jie.bookshare.controller;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.CampusStaffAuth;
 import com.jie.bookshare.entity.dto.AuthDTO;
+import com.jie.bookshare.entity.dto.CheckDTO;
 import com.jie.bookshare.service.CampusStaffAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -45,5 +48,29 @@ public class CampusStaffAuthController {
         CampusStaffAuth campusStaffAuth = campusStaffAuthService.getAuthInfo(userId);
 
         return Result.ok().data("campusStaffAuth", campusStaffAuth);
+    }
+
+    /**
+     * 获取所有用户的认证记录
+     * @return
+     */
+    @GetMapping("/getAuthList")
+    public Result getAuthList(){
+        List<CampusStaffAuth> list = campusStaffAuthService.list(null);
+
+        return Result.ok().data("list", list);
+    }
+
+
+    /**
+     * 审核
+     * @param checkDTO
+     * @return
+     */
+    @PostMapping("/check")
+    public Result checkAuth(@RequestBody CheckDTO checkDTO){
+        campusStaffAuthService.checkAuth(checkDTO);
+
+        return Result.ok();
     }
 }
