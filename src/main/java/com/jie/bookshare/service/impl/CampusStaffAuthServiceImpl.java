@@ -94,9 +94,11 @@ public class CampusStaffAuthServiceImpl extends ServiceImpl<CampusStaffAuthMappe
     @Override
     public void checkAuth(CheckDTO checkDTO) {
         CampusStaffAuth auth = new CampusStaffAuth();
+        auth.setId(checkDTO.getId());
         auth.setCheckerId(checkDTO.getCheckerId());
         auth.setDescription(checkDTO.getDescription());
         auth.setCheckTime(new Date());
+        auth.setStatus(checkDTO.getStatus());
 
         campusStaffAuthMapper.updateById(auth);
     }

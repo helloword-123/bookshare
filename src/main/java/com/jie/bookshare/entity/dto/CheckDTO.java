@@ -10,4 +10,7 @@ public class CheckDTO {
     private Integer checkerId;
 
     private String description;
+
+    // 审核结果：0-不通过，1-通过
+    private Integer status;
 }
