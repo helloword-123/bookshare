@@ -1,5 +1,6 @@
 package com.jie.bookshare.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jie.bookshare.entity.AuthPicture;
 import com.jie.bookshare.entity.CampusStaffAuth;
@@ -113,5 +114,26 @@ public class CampusStaffAuthServiceImpl extends ServiceImpl<CampusStaffAuthMappe
     public List<CampusStaffAuth> getAuthList() {
 
         return campusStaffAuthMapper.getAuthList();
+    }
+
+    /**
+     * 判断用户是否已认证
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Boolean getUserIsAuth(Integer id) {
+
+        User user = userMapper.selectById(id);
+        if(user.getAuthId() == -1){
+            return false;
+        }
+
+        LambdaQueryWrapper<CampusStaffAuth> con1 = new LambdaQueryWrapper<>();
+        con1.eq(CampusStaffAuth::getUserId, id).eq(CampusStaffAuth::getStatus, 1);
+        CampusStaffAuth auth = campusStaffAuthMapper.selectOne(con1);
+
+        return auth != null;
     }
 }

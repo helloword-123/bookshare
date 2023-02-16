@@ -41,4 +41,11 @@ public interface CampusStaffAuthService extends IService<CampusStaffAuth> {
      * @return
      */
     List<CampusStaffAuth> getAuthList();
+
+    /**
+     * 判断用户是否已认证
+     * @param id
+     * @return
+     */
+    Boolean getUserIsAuth(Integer id);
 }

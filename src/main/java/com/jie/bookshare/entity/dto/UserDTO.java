@@ -1,8 +1,10 @@
 package com.jie.bookshare.entity.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @ClassName CustomerVo
@@ -16,4 +18,10 @@ public class UserDTO implements Serializable {
     private String nickName;
     private String avatarUrl;
     private String phone;
+    @ApiModelProperty(value = "认证id，-1-未审核")
+    private Integer authId;
+    private List<String> roles;
+
+    // 是否认证通过
+    private Boolean isAuth;
 }

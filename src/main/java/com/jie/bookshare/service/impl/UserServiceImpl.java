@@ -9,6 +9,7 @@ import com.jie.bookshare.entity.security.AppGrantedAuthority;
 import com.jie.bookshare.entity.security.AppUserDetails;
 import com.jie.bookshare.entity.security.UserType;
 import com.jie.bookshare.mapper.*;
+import com.jie.bookshare.service.CampusStaffAuthService;
 import com.jie.bookshare.service.IRedisService;
 import com.jie.bookshare.service.UserService;
 import com.jie.bookshare.utils.JsonUtil;
@@ -50,6 +51,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private AclPermissionTypeMapper aclPermissionTypeMapper;
     @Autowired
     private AclPermissionMapper aclPermissionMapper;
+    @Autowired
+    private CampusStaffAuthService campusStaffAuthService;
 
     @Override
     public List<String> login(String username, String password) {
@@ -196,6 +199,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             userDTO.setNickName(user1.getUserName());
             userDTO.setAvatarUrl(user1.getAvatarUrl());
             userDTO.setPhone(user1.getPhone());
+
+            userDTO.setAuthId(user1.getAuthId());
+            userDTO.setIsAuth(campusStaffAuthService.getUserIsAuth(user1.getId()));
+
+            List<AclRole> roleForAdmin = this.findRoleForAdmin(user1.getId());
+            List<String> roles = new ArrayList<>();
+            for (AclRole aclRole : roleForAdmin) {
+                roles.add(aclRole.getKey());
+            }
+            userDTO.setRoles(roles);
+
+
 
             logger.info("getUserInfoByOpenid：query userid:{}, username:{}, avatarurl:{}", user1.getId(),user1.getUserName(),user1.getAvatarUrl());
         }
