@@ -2,9 +2,7 @@ package com.jie.bookshare.controller;
 
 
 import com.jie.bookshare.common.Result;
-import com.jie.bookshare.entity.dto.BookBorrowDTO;
-import com.jie.bookshare.entity.dto.BookListDTO;
-import com.jie.bookshare.entity.dto.DriftingBookDTO;
+import com.jie.bookshare.entity.dto.*;
 import com.jie.bookshare.service.BookDriftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +24,37 @@ public class BookDriftController {
 
     @Autowired
     private BookDriftService bookDriftService;
+
+
+    /**
+     * 获取未审核的图书
+     *
+     * @return
+     */
+    @GetMapping("/getNotCheckedBooks")
+    public Result getNotCheckedBooks() {
+        List<BookListDTO> bookList = bookDriftService.getNotCheckedBooks();
+
+        return Result.ok().data("bookList", bookList);
+    }
+
+
+    /**
+     * 审核
+     * @param checkBookDriftDTO
+     * @return
+     */
+    @PostMapping("/checkBook")
+    public Result checkBookDrift(@RequestBody CheckBookDriftDTO checkBookDriftDTO) {
+
+        Integer res = bookDriftService.checkBookDrift(checkBookDriftDTO);
+
+        if (res == 0) {
+            return Result.error().message("更新图书漂流状态失败！");
+        }
+        return Result.ok();
+    }
+
 
     /**
      * 修改图书漂流状态

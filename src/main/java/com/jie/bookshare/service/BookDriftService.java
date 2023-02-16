@@ -5,6 +5,7 @@ import com.jie.bookshare.entity.Book;
 import com.jie.bookshare.entity.BookDrift;
 import com.jie.bookshare.entity.dto.BookBorrowDTO;
 import com.jie.bookshare.entity.dto.BookListDTO;
+import com.jie.bookshare.entity.dto.CheckBookDriftDTO;
 import com.jie.bookshare.entity.dto.DriftingBookDTO;
 
 import java.util.List;
@@ -88,4 +89,13 @@ public interface BookDriftService extends IService<BookDrift> {
      * @return
      */
     List<BookListDTO> getBookDriftSeries(Integer bookId);
+
+    /**
+     * 审核
+     * @param checkBookDriftDTO
+     * @return
+     */
+    Integer checkBookDrift(CheckBookDriftDTO checkBookDriftDTO);
+
+    List<BookListDTO> getNotCheckedBooks();
 }

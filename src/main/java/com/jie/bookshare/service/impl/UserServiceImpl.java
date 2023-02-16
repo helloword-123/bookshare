@@ -184,9 +184,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             // openid不存在时新建用户
             User user2 = new User();
             user2.setOpenid(openid);
-            user2.setAuthStatus(-1);
             user2.setTotalShareNum(0);
             user2.setTotalUseNum(0);
+            user2.setAuthId(-1);
             baseMapper.insert(user2);
             userDTO.setId(user2.getId());
 

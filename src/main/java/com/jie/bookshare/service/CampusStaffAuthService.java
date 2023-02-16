@@ -5,6 +5,8 @@ import com.jie.bookshare.entity.CampusStaffAuth;
 import com.jie.bookshare.entity.dto.AuthDTO;
 import com.jie.bookshare.entity.dto.CheckDTO;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -33,4 +35,10 @@ public interface CampusStaffAuthService extends IService<CampusStaffAuth> {
      * @return
      */
     void checkAuth(CheckDTO checkDTO);
+
+    /**
+     * 获取所有用户的认证记录（多次认证只返回最后一条）
+     * @return
+     */
+    List<CampusStaffAuth> getAuthList();
 }

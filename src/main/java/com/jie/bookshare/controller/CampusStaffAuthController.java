@@ -51,12 +51,12 @@ public class CampusStaffAuthController {
     }
 
     /**
-     * 获取所有用户的认证记录
+     * 获取所有用户的认证记录（多次认证只返回最后一条）
      * @return
      */
     @GetMapping("/getAuthList")
     public Result getAuthList(){
-        List<CampusStaffAuth> list = campusStaffAuthService.list(null);
+        List<CampusStaffAuth> list = campusStaffAuthService.getAuthList();
 
         return Result.ok().data("list", list);
     }

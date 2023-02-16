@@ -60,6 +60,6 @@ public class User implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
-    @ApiModelProperty(value = "认证状态，-1-未审核，0-审核中，1-审核通过，2-审核未通过")
-    private Integer authStatus;
+    @ApiModelProperty(value = "认证id，-1-未审核")
+    private Integer authId;
 }

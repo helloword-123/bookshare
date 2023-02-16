@@ -8,6 +8,7 @@ import com.jie.bookshare.entity.BookDriftPicture;
 import com.jie.bookshare.entity.DriftPicture;
 import com.jie.bookshare.entity.dto.BookBorrowDTO;
 import com.jie.bookshare.entity.dto.BookListDTO;
+import com.jie.bookshare.entity.dto.CheckBookDriftDTO;
 import com.jie.bookshare.entity.dto.DriftingBookDTO;
 import com.jie.bookshare.mapper.BookDriftMapper;
 import com.jie.bookshare.mapper.BookDriftPictureMapper;
@@ -301,5 +302,45 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         }
 
         return res;
+    }
+
+    /**
+     * 审核
+     *
+     * @param checkBookDriftDTO
+     * @return
+     */
+    @Override
+    public Integer checkBookDrift(CheckBookDriftDTO checkBookDriftDTO) {
+        BookDrift bookDrift = bookDriftMapper.selectById(checkBookDriftDTO.getId());
+        if(bookDrift == null){
+            return 0;
+        }
+        bookDrift.setStatus(checkBookDriftDTO.getStatus());
+        bookDrift.setCheckerReply(checkBookDriftDTO.getCheckerReply());
+        bookDrift.setCheckTime(new Date());
+        return baseMapper.updateById(bookDrift);
+    }
+
+    /**
+     * 获取未审核的图书
+     *
+     * @return
+     */
+    @Override
+    public List<BookListDTO> getNotCheckedBooks() {
+        List<BookListDTO> list = new ArrayList<>();
+
+        // 共享记录
+        LambdaQueryWrapper<BookDrift> con1 = new LambdaQueryWrapper<>();
+        con1.eq(BookDrift::getStatus, 0);
+        List<BookDrift> bookDrifts1 = bookDriftMapper.selectList(con1);
+        for (BookDrift bookDrift : bookDrifts1) {
+            Book book = bookMapper.selectById(bookDrift.getBookId());
+            BookListDTO bookListDTO = this.mergeBookAndBookDrift(book, bookDrift);
+            list.add(bookListDTO);
+        }
+
+        return list;
     }
 }

@@ -3,6 +3,8 @@ package com.jie.bookshare.mapper;
 import com.jie.bookshare.entity.CampusStaffAuth;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -19,4 +21,6 @@ public interface CampusStaffAuthMapper extends BaseMapper<CampusStaffAuth> {
      * @return
      */
     CampusStaffAuth getNewestAuthByUserId(Integer userId);
+
+    List<CampusStaffAuth> getAuthList();
 }

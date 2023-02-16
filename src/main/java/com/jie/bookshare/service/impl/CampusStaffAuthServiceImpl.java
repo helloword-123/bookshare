@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -51,7 +52,7 @@ public class CampusStaffAuthServiceImpl extends ServiceImpl<CampusStaffAuthMappe
 
         User user = new User();
         user.setId(authDTO.getUserId());
-        user.setAuthStatus(0);
+        user.setAuthId(auth.getId());
         userMapper.updateById(user);
 
         for (String url : authDTO.getFileList()) {
@@ -75,7 +76,7 @@ public class CampusStaffAuthServiceImpl extends ServiceImpl<CampusStaffAuthMappe
             return auth;
         }
         // 未认证
-        if(user.getAuthStatus() == -1){
+        if(user.getAuthId() == -1){
             return null;
         }
         // 返回最新的认证信息
@@ -101,5 +102,16 @@ public class CampusStaffAuthServiceImpl extends ServiceImpl<CampusStaffAuthMappe
         auth.setStatus(checkDTO.getStatus());
 
         campusStaffAuthMapper.updateById(auth);
+    }
+
+    /**
+     * 获取所有用户的认证记录（多次认证只返回最后一条）
+     *
+     * @return
+     */
+    @Override
+    public List<CampusStaffAuth> getAuthList() {
+
+        return campusStaffAuthMapper.getAuthList();
     }
 }

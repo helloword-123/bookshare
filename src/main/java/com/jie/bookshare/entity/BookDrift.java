@@ -75,4 +75,10 @@ public class BookDrift implements Serializable {
     @ApiModelProperty(name = "修改时间", example = "2022-03-18 17:45:00")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
+
+    private Integer checkerId;
+
+    private Date checkTime;
+
+    private String checkerReply;
 }
