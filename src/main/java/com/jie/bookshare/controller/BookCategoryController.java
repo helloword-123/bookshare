@@ -6,6 +6,7 @@ import com.jie.bookshare.entity.BookCategory;
 import com.jie.bookshare.entity.dto.BookCategoryCascaderDTO;
 import com.jie.bookshare.service.BookCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ public class BookCategoryController {
      * 获取所有一级目录
      * @return
      */
+    @PreAuthorize("hasAuthority('book_category:query')")
     @Deprecated
     @GetMapping("/getTopCategories")
     public Result getTopCategories(){
@@ -44,6 +46,7 @@ public class BookCategoryController {
      * 获取一二级图书分类，以级联方式返回
      * @return
      */
+    @PreAuthorize("hasAuthority('book_category:query')")
     @GetMapping("/getCategoryCascader")
     public Result getCategoryCascader(){
         List<BookCategoryCascaderDTO> options = bookCategoryService.getCategoryCascader();
@@ -56,6 +59,7 @@ public class BookCategoryController {
      * @param categoryId
      * @return
      */
+    @PreAuthorize("hasAuthority('book_category:query')")
     @GetMapping("/getCategoryFullName/{categoryId}")
     public Result getCategoryFullName(@PathVariable Integer categoryId) {
         String categoryFullName = bookCategoryService.getCategoryFullName(categoryId);

@@ -12,6 +12,7 @@ import com.jie.bookshare.utils.WxUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class UserController {
      * @param userId
      * @return
      */
+    @PreAuthorize("hasAuthority('user:query')")
     @ApiOperation(value = "获取用户角色")
     @GetMapping("getUserRoles/{userId}")
     public Result getUserRoles(@PathVariable Integer userId) {
@@ -59,6 +61,7 @@ public class UserController {
      * @Param
      * @return
      **/
+    @PreAuthorize("hasAuthority('user:update')")
     @ApiOperation(value = "微信登录后，修改用户头像和昵称")
     @PostMapping("updateUserInfo")
     public Result updateAvatarAndName(@RequestBody UserDTO userDTO) {
@@ -74,7 +77,7 @@ public class UserController {
      * @Param
      * @return
      **/
-    // @PreAuthorize("hasAuthority('admin:auth')")
+    @PreAuthorize("hasAuthority('user:update')")
     @ApiOperation("管理员退出登录")
     @GetMapping("/logout/{userId}")
     public Result logout(@PathVariable Integer userId) {

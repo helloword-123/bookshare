@@ -193,6 +193,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             baseMapper.insert(user2);
             userDTO.setId(user2.getId());
 
+            // 添加user角色
+            LambdaQueryWrapper<AclRole> con1 = new LambdaQueryWrapper<>();
+            con1.eq(AclRole::getKey, "user");
+            AclRole aclRole = aclRoleMapper.selectOne(con1);
+            AclRoleUser aclRoleUser = new AclRoleUser();
+            aclRoleUser.setUserId(user2.getId());
+            aclRoleUser.setRoleId(aclRole.getId());
+            aclRoleUserMapper.insert(aclRoleUser);
+
             logger.info("getUserInfoByOpenid：this openid doesn't match any user in database. Create a new user with this openid");
         } else {
             userDTO.setId(user1.getId());

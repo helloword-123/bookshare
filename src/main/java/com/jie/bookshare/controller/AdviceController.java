@@ -5,6 +5,7 @@ import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.dto.AdviceDTO;
 import com.jie.bookshare.service.AdviceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class AdviceController {
      * @param adviceDTO
      * @return
      */
+    @PreAuthorize("hasAuthority('advice:add')")
     @PostMapping("/add")
     public Result add(@RequestBody AdviceDTO adviceDTO){
         adviceService.add(adviceDTO);

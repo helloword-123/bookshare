@@ -7,6 +7,7 @@ import com.jie.bookshare.entity.dto.BookListWithCategoryDTO;
 import com.jie.bookshare.service.BookService;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class BookController {
      * 小程序首页获取图书数据，根据分类id聚合返回
      * @return
      */
+    @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/getListWithCategory")
     public Result getListWithCategory(){
         List<BookListWithCategoryDTO> bookList = bookService.getListWithCategory();
@@ -42,6 +44,7 @@ public class BookController {
      * @param isbn
      * @return
      */
+    @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/isDrifting/{isbn}")
     public Result checkIsbnIsDrifting(@PathVariable String isbn){
 
@@ -62,6 +65,7 @@ public class BookController {
      * @param keyword
      * @return
      */
+    @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/getListWithCondition")
     public Result getListWithCondition(
             @ApiParam(value = "分类ID，非必需", example = "0")
