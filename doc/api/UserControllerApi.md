@@ -36,7 +36,7 @@ Field | Type|Description|Since
 ---|---|---|---
 success|boolean|No comments found.|-
 code|int32|No comments found.|-
-message|string|No comments found.|-
+MQMessage|string|No comments found.|-
 data|map|No comments found.|-
 └─any object|object|any object.|-
 
@@ -45,7 +45,7 @@ data|map|No comments found.|-
 {
   "success": true,
   "code": 414,
-  "message": "success",
+  "MQMessage": "success",
   "data": {
     "mapKey": {}
   }
@@ -77,7 +77,7 @@ Field | Type|Description|Since
 ---|---|---|---
 success|boolean|No comments found.|-
 code|int32|No comments found.|-
-message|string|No comments found.|-
+MQMessage|string|No comments found.|-
 data|map|No comments found.|-
 └─any object|object|any object.|-
 
@@ -86,7 +86,7 @@ data|map|No comments found.|-
 {
   "success": true,
   "code": 862,
-  "message": "success",
+  "MQMessage": "success",
   "data": {
     "mapKey": {}
   }
@@ -127,7 +127,7 @@ Field | Type|Description|Since
 ---|---|---|---
 success|boolean|No comments found.|-
 code|int32|No comments found.|-
-message|string|No comments found.|-
+MQMessage|string|No comments found.|-
 data|map|No comments found.|-
 └─any object|object|any object.|-
 
@@ -136,7 +136,7 @@ data|map|No comments found.|-
 {
   "success": true,
   "code": 640,
-  "message": "success",
+  "MQMessage": "success",
   "data": {
     "mapKey": {}
   }
@@ -177,7 +177,7 @@ Field | Type|Description|Since
 ---|---|---|---
 success|boolean|No comments found.|-
 code|int32|No comments found.|-
-message|string|No comments found.|-
+MQMessage|string|No comments found.|-
 data|map|No comments found.|-
 └─any object|object|any object.|-
 
@@ -186,7 +186,7 @@ data|map|No comments found.|-
 {
   "success": true,
   "code": 58,
-  "message": "success",
+  "MQMessage": "success",
   "data": {
     "mapKey": {}
   }
@@ -224,7 +224,7 @@ Field | Type|Description|Since
 ---|---|---|---
 success|boolean|No comments found.|-
 code|int32|No comments found.|-
-message|string|No comments found.|-
+MQMessage|string|No comments found.|-
 data|map|No comments found.|-
 └─any object|object|any object.|-
 
@@ -233,7 +233,7 @@ data|map|No comments found.|-
 {
   "success": true,
   "code": 378,
-  "message": "success",
+  "MQMessage": "success",
   "data": {
     "mapKey": {}
   }

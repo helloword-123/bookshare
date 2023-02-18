@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public interface IRedisService {
+
     static String concatKey(String... keys) {
         int n = keys.length;
         StringBuilder sb = new StringBuilder();

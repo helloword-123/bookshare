@@ -5,6 +5,8 @@ import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.AclRole;
 import com.jie.bookshare.entity.dto.AuthenticationDTO;
 import com.jie.bookshare.entity.dto.UserDTO;
+import com.jie.bookshare.mq.MessageConsumer;
+import com.jie.bookshare.mq.MessageProducer;
 import com.jie.bookshare.service.IRedisService;
 import com.jie.bookshare.service.UserService;
 import com.jie.bookshare.utils.JwtUtil;
@@ -34,6 +36,12 @@ public class UserController {
     private UserService userService;
     @Autowired
     private IRedisService redisService;
+
+
+    @Autowired
+    private MessageProducer messageProducer;
+    @Autowired
+    private MessageConsumer messageConsumer;
 
 
     /**

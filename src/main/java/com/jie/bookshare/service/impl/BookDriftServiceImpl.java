@@ -14,6 +14,8 @@ import com.jie.bookshare.mapper.BookDriftMapper;
 import com.jie.bookshare.mapper.BookDriftPictureMapper;
 import com.jie.bookshare.mapper.BookMapper;
 import com.jie.bookshare.mapper.DriftPictureMapper;
+import com.jie.bookshare.mq.MQMessage;
+import com.jie.bookshare.mq.MessageProducer;
 import com.jie.bookshare.service.BookDriftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -42,6 +44,8 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
     private BookDriftPictureMapper bookDriftPictureMapper;
     @Autowired
     private DriftPictureMapper driftPictureMapper;
+    @Autowired
+    private MessageProducer messageProducer;
 
     @Autowired
     private DataSourceTransactionManager dsManager;
@@ -307,18 +311,25 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
     /**
      * 审核
      *
-     * @param checkBookDriftDTO
+     * @param dto
      * @return
      */
     @Override
-    public Integer checkBookDrift(CheckBookDriftDTO checkBookDriftDTO) {
-        BookDrift bookDrift = bookDriftMapper.selectById(checkBookDriftDTO.getId());
+    public Integer checkBookDrift(CheckBookDriftDTO dto) {
+        BookDrift bookDrift = bookDriftMapper.selectById(dto.getId());
         if(bookDrift == null){
             return 0;
         }
-        bookDrift.setStatus(checkBookDriftDTO.getStatus());
-        bookDrift.setCheckerReply(checkBookDriftDTO.getCheckerReply());
+        bookDrift.setStatus(dto.getStatus());
+        bookDrift.setCheckerReply(dto.getCheckerReply());
         bookDrift.setCheckTime(new Date());
+
+        // 推送消息到消息队列
+        MQMessage mqMessage = new MQMessage(0, dto.getCheckerId(), bookDrift.getSharerId(), new Date());
+        mqMessage.addData("title", "图书分享审核结果");
+        mqMessage.addData("message", (dto.getStatus() == 1 ? "审核通过：" : "审核不通过：") + dto.getCheckerReply());
+        messageProducer.lPush(String.valueOf(bookDrift.getSharerId()), mqMessage);
+
         return baseMapper.updateById(bookDrift);
     }
 

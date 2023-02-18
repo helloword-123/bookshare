@@ -3,7 +3,6 @@ package com.jie.bookshare.controller;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.service.UserService;
 import com.jie.bookshare.service.impl.OssService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -49,7 +48,7 @@ public class CommonController {
     @GetMapping("test/getToken")
     public Result getToken() {
         String username = "admin";
-        String password = "123456";
+        String password = "admin";
         List<String> info = userService.login(username, password); //info是{token,rId}
         if (info == null) {
             return Result.error().message("账号密码不匹配！");

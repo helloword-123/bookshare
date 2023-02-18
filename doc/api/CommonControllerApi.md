@@ -29,7 +29,7 @@ Field | Type|Description|Since
 ---|---|---|---
 success|boolean|No comments found.|-
 code|int32|No comments found.|-
-message|string|No comments found.|-
+MQMessage|string|No comments found.|-
 data|map|No comments found.|-
 └─any object|object|any object.|-
 
@@ -38,7 +38,7 @@ data|map|No comments found.|-
 {
   "success": true,
   "code": 643,
-  "message": "success",
+  "MQMessage": "success",
   "data": {
     "mapKey": {}
   }
@@ -69,7 +69,7 @@ Field | Type|Description|Since
 ---|---|---|---
 success|boolean|No comments found.|-
 code|int32|No comments found.|-
-message|string|No comments found.|-
+MQMessage|string|No comments found.|-
 data|map|No comments found.|-
 └─any object|object|any object.|-
 
@@ -78,7 +78,7 @@ data|map|No comments found.|-
 {
   "success": true,
   "code": 323,
-  "message": "success",
+  "MQMessage": "success",
   "data": {
     "mapKey": {}
   }

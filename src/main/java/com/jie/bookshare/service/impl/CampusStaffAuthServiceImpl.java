@@ -10,6 +10,8 @@ import com.jie.bookshare.entity.dto.CheckDTO;
 import com.jie.bookshare.mapper.AuthPictureMapper;
 import com.jie.bookshare.mapper.CampusStaffAuthMapper;
 import com.jie.bookshare.mapper.UserMapper;
+import com.jie.bookshare.mq.MQMessage;
+import com.jie.bookshare.mq.MessageProducer;
 import com.jie.bookshare.service.CampusStaffAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,8 @@ public class CampusStaffAuthServiceImpl extends ServiceImpl<CampusStaffAuthMappe
     private AuthPictureMapper authPictureMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private MessageProducer messageProducer;
 
     /**
      * 添加校园认证记录
@@ -95,14 +99,21 @@ public class CampusStaffAuthServiceImpl extends ServiceImpl<CampusStaffAuthMappe
      */
     @Override
     public void checkAuth(CheckDTO checkDTO) {
-        CampusStaffAuth auth = new CampusStaffAuth();
+        CampusStaffAuth auth = campusStaffAuthMapper.selectById(checkDTO.getId());
         auth.setId(checkDTO.getId());
         auth.setCheckerId(checkDTO.getCheckerId());
         auth.setDescription(checkDTO.getDescription());
         auth.setCheckTime(new Date());
         auth.setStatus(checkDTO.getStatus());
-
         campusStaffAuthMapper.updateById(auth);
+
+
+        // 推送消息到消息队列
+        MQMessage mqMessage = new MQMessage(0, checkDTO.getCheckerId(), auth.getUserId(), new Date());
+        mqMessage.addData("title", "认证审核结果");
+        mqMessage.addData("message", (checkDTO.getStatus() == 1 ? "审核通过：" : "审核不通过：") + checkDTO.getDescription());
+        messageProducer.lPush(String.valueOf(auth.getUserId()), mqMessage);
+
     }
 
     /**
