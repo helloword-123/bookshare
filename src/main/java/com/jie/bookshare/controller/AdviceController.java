@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * <p>
- *  前端控制器
- * </p>
+ * 评价Controller
  *
  * @author wuhaojie
  * @since 2023-01-20
@@ -29,7 +27,7 @@ public class AdviceController {
 
     /**
      * 添加建议
-     * @param adviceDTO
+     * @param adviceDTO 前端提交的评价dto
      * @return
      */
     @PreAuthorize("hasAuthority('advice:add')")

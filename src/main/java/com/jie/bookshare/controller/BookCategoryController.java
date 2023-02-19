@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * <p>
- *  前端控制器
- * </p>
+ * 图书目录Controller
  *
  * @author wuhaojie
  * @since 2022-12-16
@@ -56,7 +54,7 @@ public class BookCategoryController {
 
     /**
      * 根据id获取分类全名（包括父分类，以"/"分隔）
-     * @param categoryId
+     * @param categoryId    目录id
      * @return
      */
     @PreAuthorize("hasAuthority('book_category:query')")

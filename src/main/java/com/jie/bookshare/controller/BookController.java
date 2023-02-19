@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * <p>
- *  前端控制器
- * </p>
+ * 图书Controller
  *
  * @author wuhaojie
  * @since 2022-12-16
@@ -41,7 +39,7 @@ public class BookController {
 
     /**
      * 判断改isbn号的图书是否已经在漂流中
-     * @param isbn
+     * @param isbn  图书ISBN码
      * @return
      */
     @PreAuthorize("hasAuthority('book:query')")
@@ -59,10 +57,10 @@ public class BookController {
 
     /**
      * 根据筛选条件返回图书列表
-     * @param categoryId
-     * @param sortColumn
-     * @param sortOrder
-     * @param keyword
+     * @param categoryId    图书分类id
+     * @param sortColumn    排序字段
+     * @param sortOrder     升序/降序
+     * @param keyword       模糊查询关键词
      * @return
      */
     @PreAuthorize("hasAuthority('book:query')")

@@ -14,12 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 /**
- * @ClassName CommonController
- * @Description TODO
- * @Author wuhaojie
- * @Date 2022/4/17 9:58
+ * 公共Controller
+ *
+ * @author wuhaojie
+ * @since 2023-01-21
  */
-
 @RestController
 @RequestMapping("/common")
 public class CommonController {
@@ -32,6 +31,11 @@ public class CommonController {
     private UserService userService;
 
 
+    /**
+     * 上传图片接口
+     * @param file  上传的图片文件
+     * @return
+     */
     @ApiOperation("添加时上传图片")
     @PostMapping("uploadFile")
     public Result uploadOssFile(
@@ -44,6 +48,10 @@ public class CommonController {
         return Result.ok().data("url", url);
     }
 
+    /**
+     * 测试：直接获取token
+     * @return
+     */
     @ApiOperation(value = "测试：直接获取token")
     @GetMapping("test/getToken")
     public Result getToken() {

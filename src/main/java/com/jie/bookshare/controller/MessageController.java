@@ -13,9 +13,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * <p>
- *  前端控制器
- * </p>
+ * 消息Controller
  *
  * @author wuhaojie
  * @since 2023-02-18
@@ -29,7 +27,7 @@ public class MessageController {
 
     /**
      * 获取未读消息长度
-     * @param userId
+     * @param userId    用户id
      * @return
      */
     @GetMapping("/getUnReadMessagesSize/{userId}")
@@ -41,7 +39,7 @@ public class MessageController {
 
     /**
      * 根据userId获取其已读和未读消息
-     * @param userId
+     * @param userId    用户id
      * @return
      */
     @GetMapping("/getAllMessages/{userId}")
@@ -58,8 +56,8 @@ public class MessageController {
 
     /**
      * 已读消息
-     * @param userId
-     * @param msgId
+     * @param userId    用户id
+     * @param msgId     消息id
      * @return
      */
     @GetMapping("/readMessage/{userId}/{msgId}")

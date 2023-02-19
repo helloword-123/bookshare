@@ -24,7 +24,7 @@ public class MysqlDocConfig {
         hikariConfig.setDriverClassName("com.mysql.cj.jdbc.Driver");
         hikariConfig.setJdbcUrl("jdbc:mysql://120.77.76.39:3306/bookshare");
         hikariConfig.setUsername("root");
-        hikariConfig.setPassword("root");
+        hikariConfig.setPassword("kfHG4ibZ@958421#com");
         //设置可以获取tables remarks信息
         hikariConfig.addDataSourceProperty("useInformationSchema", "true");
         hikariConfig.setMinimumIdle(2);
@@ -41,7 +41,8 @@ public class MysqlDocConfig {
                 //生成模板实现
                 .produceType(EngineTemplateType.freemarker)
                 //自定义文件名称
-                .fileName("bookshare数据库文档").build();
+                .fileName("bookshare数据库文档")
+                .build();
 
         //忽略表
         ArrayList<String> ignoreTableName = new ArrayList<>();

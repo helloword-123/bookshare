@@ -12,9 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
- *  前端控制器
- * </p>
+ * 图书漂流Controller
  *
  * @author wuhaojie
  * @since 2022-12-16
@@ -43,7 +41,7 @@ public class BookDriftController {
 
     /**
      * 审核
-     * @param checkBookDriftDTO
+     * @param checkBookDriftDTO 前端审核传输的dto
      * @return
      */
     @PreAuthorize("hasAuthority('book_drift:admin')")
@@ -62,8 +60,8 @@ public class BookDriftController {
     /**
      * 修改图书漂流状态
      *
-     * @param bookId
-     * @param status
+     * @param bookId    图书id
+     * @param status    修改状态
      * @return
      */
     @PreAuthorize("hasAuthority('book_drift:admin')")
@@ -81,7 +79,7 @@ public class BookDriftController {
     /**
      * 图书共享，保存信息
      *
-     * @param reqBody
+     * @param reqBody   前端共享图书传输的对象
      * @return
      */
     @PreAuthorize("hasAuthority('book_drift:add')")
@@ -112,7 +110,7 @@ public class BookDriftController {
     /**
      * 根据id获取正在漂流的信息
      *
-     * @param id
+     * @param id    图书漂流id
      * @return
      */
     @PreAuthorize("hasAuthority('book_drift:query')")
@@ -126,7 +124,7 @@ public class BookDriftController {
     /**
      * 借书
      *
-     * @param dto
+     * @param dto   前端借阅图书传输的dto
      * @return
      */
     @PreAuthorize("hasAuthority('book_drift:update')")
@@ -139,7 +137,7 @@ public class BookDriftController {
 
     /**
      * 根据用户id获取他的共享和借阅记录
-     * @param userId
+     * @param userId    用户id
      * @return
      */
     @PreAuthorize("hasAuthority('book_drift:query')")
@@ -153,7 +151,7 @@ public class BookDriftController {
 
     /**
      * 根据图书id获取其漂流记录（顺序连起来）
-     * @param bookId
+     * @param bookId    用户id
      * @return
      */
     @PreAuthorize("hasAuthority('book_drift:query')")

@@ -15,15 +15,28 @@ import java.util.Map;
  */
 @Data
 public class Result implements Serializable {
+
+    /**
+     * 是否成功
+     */
     @ApiModelProperty(value = "是否成功")
     private Boolean success;
 
+    /**
+     * 返回码
+     */
     @ApiModelProperty(value = "返回码")
     private Integer code;
 
+    /**
+     * 返回消息
+     */
     @ApiModelProperty(value = "返回消息")
     private String message;
 
+    /**
+     * 返回数据
+     */
     @ApiModelProperty(value = "返回数据")
     private Map<String, Object> data = new HashMap<String, Object>();
 

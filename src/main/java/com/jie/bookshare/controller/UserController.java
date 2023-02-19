@@ -22,9 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
- * 前端控制器
- * </p>
+ * 用户Controller
  *
  * @author wuhaojie
  * @since 2022-12-16
@@ -46,7 +44,7 @@ public class UserController {
 
     /**
      * 获取用户角色
-     * @param userId
+     * @param userId    用户id
      * @return
      */
     @PreAuthorize("hasAuthority('user:query')")
@@ -63,12 +61,11 @@ public class UserController {
         return Result.ok().data("roles", roles);
     }
 
-    /*
-     * @Author Haojie
-     * @Description 微信登录后，修改用户头像和昵称
-     * @Param
+    /**
+     * 微信登录后，修改用户头像和昵称
+     * @param userDTO   用户头像和昵称
      * @return
-     **/
+     */
     @PreAuthorize("hasAuthority('user:update')")
     @ApiOperation(value = "微信登录后，修改用户头像和昵称")
     @PostMapping("updateUserInfo")
@@ -79,31 +76,26 @@ public class UserController {
         return Result.ok();
     }
 
-    /*
-     * @Author Haojie
-     * @Description 管理员退出登录
-     * @Param
+    /**
+     * 管理员退出登录
+     * @param userId    用户id
      * @return
-     **/
+     */
     @PreAuthorize("hasAuthority('user:update')")
     @ApiOperation("管理员退出登录")
     @GetMapping("/logout/{userId}")
     public Result logout(@PathVariable Integer userId) {
-        //删除登录状态
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
-//        String userId = userDetails.getUsername();
         String key = IRedisService.concatKey("user_details", String.valueOf(userId));
         redisService.delete(key);
         return Result.ok();
     }
 
-    /*
-     * @Author Haojie
-     * @Description 后台账号登录
-     * @Param
+    /**
+     * 后台账号登录
+     * @param authenticationDTO 前端后台登录传输的dto
      * @return
-     **/
+     */
+    @Deprecated
     @ApiOperation(value = "后台登录")
     @PostMapping("login")
     public Result login(
@@ -119,12 +111,11 @@ public class UserController {
     }
 
 
-    /*
-     * @Author Haojie
-     * @Description 小程序登录根据code获取token，并且请求openid与本地账号系统绑定，最后返回用户信息和token
-     * @Param
+    /**
+     * 小程序登录根据code获取token，并且请求openid与本地账号系统绑定，最后返回用户信息和token
+     * @param reqBody   前端微信登录传输的dto
      * @return
-     **/
+     */
     @ApiOperation(value = "微信小程序登录")
     @PostMapping("/wxLogin")
     public Result wxLogin(
@@ -154,12 +145,11 @@ public class UserController {
         }
     }
 
-    /*
-     * @Author Haojie
-     * @Description 验证token有效性
-     * @Param
+    /**
+     * 验证token有效性
+     * @param token token值
      * @return
-     **/
+     */
     @ApiOperation(value = "验证token有效性", notes =
             "返回数据含有一个isValid字段，如果token有效，则isValid字段为true，否则为false"
     )

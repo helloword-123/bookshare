@@ -1,11 +1,15 @@
 package com.jie.bookshare.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -26,6 +30,13 @@ public class BookDriftPicture implements Serializable {
     private Integer driftId;
 
     private Integer pictureId;
+
+    @ApiModelProperty(name = "创建时间", example = "2022-03-18 17:45:00")
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
+    @ApiModelProperty(name = "修改时间", example = "2022-03-18 17:45:00")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 
 
 }

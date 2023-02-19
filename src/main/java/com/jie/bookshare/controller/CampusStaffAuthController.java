@@ -15,9 +15,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * <p>
- *  前端控制器
- * </p>
+ * 认证Controller
  *
  * @author wuhaojie
  * @since 2023-01-21
@@ -34,7 +32,7 @@ public class CampusStaffAuthController {
 
     /**
      * 根据authId查询所有认证图片
-     * @param authId
+     * @param authId    认证记录id
      * @return
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:query')")
@@ -47,7 +45,7 @@ public class CampusStaffAuthController {
 
     /**
      * 添加校园认证记录
-     * @param authDTO
+     * @param authDTO   前端添加校园认证记录传输的dto
      * @return
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:add')")
@@ -60,7 +58,7 @@ public class CampusStaffAuthController {
 
     /**
      * 根据userId获取用户的认证信息
-     * @param userId
+     * @param userId    用户id
      * @return
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:query')")
@@ -86,7 +84,7 @@ public class CampusStaffAuthController {
 
     /**
      * 审核
-     * @param checkDTO
+     * @param checkDTO  前端审核传输的dto
      * @return
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:admin')")

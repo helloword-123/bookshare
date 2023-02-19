@@ -14,9 +14,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * <p>
- *  前端控制器
- * </p>
+ * 图书收藏Controller
  *
  * @author wuhaojie
  * @since 2023-02-14
@@ -30,8 +28,8 @@ public class BookCollectController {
 
     /**
      * 更新收藏信息
-     * @param bookId
-     * @param userId
+     * @param bookId    图书id
+     * @param userId    用户id
      * @return
      */
     @PreAuthorize("hasAuthority('book_collect:update')")
@@ -43,6 +41,12 @@ public class BookCollectController {
     }
 
 
+    /**
+     * 获取图书收藏状态
+     * @param bookId    图书id
+     * @param userId    用户id
+     * @return
+     */
     @PreAuthorize("hasAuthority('book_collect:query')")
     @GetMapping("/getBookCollectByIds/{bookId}/{userId}")
     public Result getBookCollectByIds(@PathVariable Integer bookId, @PathVariable Integer userId){
@@ -52,6 +56,11 @@ public class BookCollectController {
     }
 
 
+    /**
+     * 获取图书收藏列表
+     * @param userId    用户id
+     * @return
+     */
     @PreAuthorize("hasAuthority('book_collect:query')")
     @GetMapping("/getCollectedBooks/{userId}")
     public Result getCollectedBooks(@PathVariable Integer userId){

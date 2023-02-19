@@ -1,5 +1,8 @@
 {
   "outPath": "/Users/yang/workspace/java/bookshare/doc/api",
-  "serverUrl": "http://127.0.0.1:8090",
-  "coverOld": true
+  "serverUrl": "http://120.77.76.39:8090",
+  "coverOld": true,
+  "allInOne": true,
+  "projectName": "bookshare接口文档",
+  "showAuthor":true
 }
