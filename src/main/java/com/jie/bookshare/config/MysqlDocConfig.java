@@ -8,7 +8,7 @@ import cn.smallbun.screw.core.execute.DocumentationExecute;
 import cn.smallbun.screw.core.process.ProcessConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.testng.annotations.Test;
+
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class MysqlDocConfig {
     /**
      * 文档生成
      */
-    @Test
+    // @Test
     void documentGeneration() {
         //数据源
         HikariConfig hikariConfig = new HikariConfig();
