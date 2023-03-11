@@ -20,7 +20,7 @@ spring:
     host: 120.77.76.39
     password: 123456
     port: 6379
-    timeout: 6000
+    timeout: 30000
     jedis:
       pool:
         max-wait: -1
@@ -50,4 +50,4 @@ aliyun:
 logging:
   # 日志级别，可以打印sql语句
   level:
-    com.jie.bookshare: debug
+    com.jie.bookshare: info

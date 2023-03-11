@@ -328,7 +328,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         MQMessage mqMessage = new MQMessage(0, dto.getCheckerId(), bookDrift.getSharerId(), new Date());
         mqMessage.addData("title", "图书分享审核结果");
         mqMessage.addData("message", (dto.getStatus() == 1 ? "审核通过：" : "审核不通过：") + dto.getCheckerReply());
-        messageProducer.lPush(String.valueOf(bookDrift.getSharerId()), mqMessage);
+        messageProducer.lPush(mqMessage);
 
         return baseMapper.updateById(bookDrift);
     }

@@ -43,17 +43,6 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
         List<List<MQMessage>> res = new ArrayList<>();
 
         // 1. 获取所有未读消息
-        // 1.1 获取消息队列中的消息
-        List<MQMessage> messageList = messageConsumer.rPop(String.valueOf(userId));
-        for (MQMessage mqMessage : messageList) {
-            Message msg = new Message();
-            msg.setProducerId(mqMessage.getProducerId());
-            msg.setHasConsumed(0);
-            msg.setMessage(SerializeUtil.serializeObjToBytes(mqMessage));
-            msg.setConsumerId(userId);
-            messageMapper.insert(msg);
-        }
-        // 1.2 存入数据库
         LambdaQueryWrapper<Message> con1 = new LambdaQueryWrapper<>();
         con1.eq(Message::getConsumerId, userId)
                 .eq(Message::getHasConsumed, 0)
@@ -94,12 +83,11 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
      */
     @Override
     public Integer getUnReadMessagesSize(Integer userId) {
-        Long mqSize = messageConsumer.getMQSize(String.valueOf(userId));
         LambdaQueryWrapper<Message> con1 = new LambdaQueryWrapper<>();
-        con1.eq(Message::getConsumerId, userId).eq(Message::getHasConsumed, 0);
-        Integer count = messageMapper.selectCount(con1);
+        con1.eq(Message::getConsumerId, userId)
+                .eq(Message::getHasConsumed, 0);
 
-        return Math.toIntExact(mqSize) + count;
+        return messageMapper.selectCount(con1);
     }
 
     /**

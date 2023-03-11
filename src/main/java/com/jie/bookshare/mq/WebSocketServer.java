@@ -40,6 +40,10 @@ public class WebSocketServer {
      */
     private String userId = "";
 
+    public static WebSocketServer getWebSocketServerByUserId(String userId){
+        return webSocketMap.get(userId);
+    }
+
     /**
      * 连接建立成功调用的方法
      */

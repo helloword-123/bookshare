@@ -47,7 +47,7 @@ public class MessageController {
         List<List<MQMessage>> messageList = null;
         try {
              messageList = messageService.getAllMessages(userId);
-        } catch (Exception e){
+        } catch (Exception ignored){
 
         }
 

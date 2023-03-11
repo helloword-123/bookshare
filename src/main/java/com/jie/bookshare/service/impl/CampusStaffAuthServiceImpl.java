@@ -112,7 +112,7 @@ public class CampusStaffAuthServiceImpl extends ServiceImpl<CampusStaffAuthMappe
         MQMessage mqMessage = new MQMessage(0, checkDTO.getCheckerId(), auth.getUserId(), new Date());
         mqMessage.addData("title", "认证审核结果");
         mqMessage.addData("message", (checkDTO.getStatus() == 1 ? "审核通过：" : "审核不通过：") + checkDTO.getDescription());
-        messageProducer.lPush(String.valueOf(auth.getUserId()), mqMessage);
+        messageProducer.lPush(mqMessage);
 
     }
 

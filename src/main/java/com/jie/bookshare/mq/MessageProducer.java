@@ -15,9 +15,9 @@ public class MessageProducer {
     private RedisTemplate<String,Object> redisTemplate;
 
 
-    public void lPush(String msgNameSuffix, MQMessage msg) {
+    public void lPush(MQMessage msg) {
         new Thread(() -> {
-            Long size = redisTemplate.opsForList().leftPush(MESSAGE_KEY + msgNameSuffix, msg);
+            Long size = redisTemplate.opsForList().leftPush(MESSAGE_KEY, msg);
         }).start();
     }
 }
