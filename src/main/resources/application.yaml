@@ -28,6 +28,7 @@ spring:
         max-idle: 20
         min-idle: 10
 
+
 # mybatis-plus配置
 mybatis-plus:
   global-config:
@@ -38,6 +39,7 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
 
+
 # 阿里云oss账号信息
 aliyun:
   oss:
@@ -47,6 +49,8 @@ aliyun:
       keysecret: kfHG4ibZYv6SXiCRPn9BRy6WVSwa4N
       bucketname: edu-wuhaojie
       projectname: bookshare
+
+
 logging:
   # 日志级别，可以打印sql语句
   level:
@@ -54,3 +58,16 @@ logging:
   file:
     name: bookshare.log
     path: ./
+    clean-history-on-start: false
+
+
+management:
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'

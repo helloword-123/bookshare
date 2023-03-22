@@ -36,7 +36,6 @@ public class TokenFilter extends OncePerRequestFilter {
         String userId = JwtUtil.getUserId(token);
         //若token无效，则拒绝请求
         if (userId == null) {
-            logger.error("Receive a request, but the token is wrong. Token is: {}.", token);
             filterChain.doFilter(request, response);
             return;
         }
