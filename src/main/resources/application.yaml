@@ -51,3 +51,6 @@ logging:
   # 日志级别，可以打印sql语句
   level:
     com.jie.bookshare: info
+  file:
+    name: bookshare.log
+    path: ./

@@ -56,16 +56,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public List<String> login(String username, String password) {
-        logger.info("login: username:{}, password:{}", username, password);
+        logger.info("Username:{}, password:{}", username, password);
 
         // 查找用户名和密码，并比对密码
         LambdaQueryWrapper<User> cond = new LambdaQueryWrapper<>();
         cond.eq(User::getAccount, username);
         User user = baseMapper.selectOne(cond);
-        if (user == null)
+        if (user == null) {
+            logger.info("User does not exist!");
             return null;
-        if (!passwordEncoder.matches(password, user.getPassword()))
+        }
+        if (!passwordEncoder.matches(password, user.getPassword())){
+            logger.info("Password does not match!");
             return null;
+        }
 
         String token = saveUserAuthorityByUserId(user.getId());
 
@@ -80,6 +84,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      **/
     @Override
     public String saveUserAuthorityByUserId(Integer userId){
+        logger.info("Save user's authority by userId: {}.", userId);
         String token = null;
 
         //查询权限
@@ -106,12 +111,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         hash.put("user_details", JsonUtil.toJson(userDetails));
         redisService.putAll(key, hash);
         redisService.expire(key, 1, TimeUnit.DAYS);
-
+        logger.info("Token is: {}, user_details is {}.", token, userDetails);
         return token;
     }
 
     @Override
     public Collection<AppGrantedAuthority> selectAuthoritiesForRoles(List<AclRole> roles) {
+        logger.info("Select authorities for roles: {}.", roles);
         List<Integer> roleIdList = roles
                 .stream().map(AclRole::getId).collect(Collectors.toList());
         QueryWrapper<AclRolePermission> cond2 = new QueryWrapper<>();
@@ -135,19 +141,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     new AppGrantedAuthority(menuType.getKey() + ":" + menu.getKey());
             authorities.add(authority);
         }
+        logger.info("Authrities is: {}.", authorities);
         return authorities;
     }
 
     @Override
     public Boolean validatePassword(String aId, String password) {
+        logger.info("Validate the password: {}, adminId is: {}.", password, aId);
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getId, aId);
         User admin = baseMapper.selectOne(wrapper);
         if (admin == null) {
+            logger.info("adminId: {} does not exist!", aId);
             return false;
         }
-        if (!passwordEncoder.matches(password, admin.getPassword()))
+        if (!passwordEncoder.matches(password, admin.getPassword())) {
+            logger.info("Password does not match!");
             return false;
+        }
         return true;
     }
 
@@ -156,6 +167,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public List<AclRole> findRoleForAdmin(Integer userId) {
+        logger.info("Find roles for admin, adminId is: {}.", userId);
         LambdaQueryWrapper<AclRoleUser> cond1 = new LambdaQueryWrapper<>();
         cond1.eq(AclRoleUser::getUserId, userId).select(AclRoleUser::getRoleId);
         List<AclRoleUser> userRoles = aclRoleUserMapper.selectList(cond1);
@@ -163,7 +175,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .stream().map(AclRoleUser::getRoleId).collect(Collectors.toList());
         LambdaQueryWrapper<AclRole> cond2 = new LambdaQueryWrapper<>();
         cond2.in(AclRole::getId, roleIdList).select(AclRole::getKey, AclRole::getId);
-        return aclRoleMapper.selectList(cond2);
+        List<AclRole> aclRoles = aclRoleMapper.selectList(cond2);
+
+        logger.info("Roles is {}.", aclRoles);
+        return aclRoles;
     }
 
     /**
@@ -171,6 +186,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public boolean exists(String id) {
+        logger.info("judge id: {} if exists.", id);
         LambdaQueryWrapper<User> cond = new LambdaQueryWrapper<>();
         cond.eq(User::getId, id);
         return baseMapper.selectCount(cond) > 0;
@@ -178,6 +194,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public UserDTO getUserInfoByOpenid(String openid) {
+        logger.info("Get userInfo by openid: {}.", openid);
         UserDTO userDTO = new UserDTO();
         //先根据用户名判断该用户存不存在
         QueryWrapper<User> wrapper = new QueryWrapper<>();
@@ -202,7 +219,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             aclRoleUser.setRoleId(aclRole.getId());
             aclRoleUserMapper.insert(aclRoleUser);
 
-            logger.info("getUserInfoByOpenid：this openid doesn't match any user in database. Create a new user with this openid");
+            logger.info("This openid doesn't match any user in database. Create a new user with this openid");
         } else {
             userDTO.setId(user1.getId());
             userDTO.setNickName(user1.getUserName());
@@ -221,7 +238,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
 
-            logger.info("getUserInfoByOpenid：query userid:{}, username:{}, avatarurl:{}", user1.getId(),user1.getUserName(),user1.getAvatarUrl());
+            logger.info("Query userid:{}, username:{}, avatarurl:{}", user1.getId(),user1.getUserName(),user1.getAvatarUrl());
         }
 
 
@@ -232,7 +249,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void updateUserInfo(UserDTO userDTO) {
-        logger.info("updateAvatarAndName： id:{}, userName:{}, avatarUrl:{}", userDTO.getId(), userDTO.getNickName(), userDTO.getAvatarUrl());
+        logger.info("id:{}, userName:{}, avatarUrl:{}", userDTO.getId(), userDTO.getNickName(), userDTO.getAvatarUrl());
         User user = new User();
         user.setId(userDTO.getId());
         user.setUserName(userDTO.getNickName());

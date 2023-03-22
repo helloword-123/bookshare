@@ -9,6 +9,8 @@ import com.jie.bookshare.mapper.AdviceMapper;
 import com.jie.bookshare.mapper.AdvicePictureMapper;
 import com.jie.bookshare.mapper.DriftPictureMapper;
 import com.jie.bookshare.service.AdviceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AdviceServiceImpl extends ServiceImpl<AdviceMapper, Advice> implements AdviceService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private AdviceMapper adviceMapper;
@@ -37,6 +41,8 @@ public class AdviceServiceImpl extends ServiceImpl<AdviceMapper, Advice> impleme
      */
     @Override
     public void add(AdviceDTO adviceDTO) {
+        logger.info("add advice: {}.", adviceDTO);
+
         Advice advice = new Advice();
         advice.setUserId(adviceDTO.getUserId());
         advice.setContact(adviceDTO.getContact());

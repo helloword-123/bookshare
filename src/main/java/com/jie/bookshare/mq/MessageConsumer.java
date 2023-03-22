@@ -1,10 +1,11 @@
 package com.jie.bookshare.mq;
 
-import com.aliyun.oss.model.CnameConfiguration;
 import com.jie.bookshare.entity.Message;
 import com.jie.bookshare.mapper.MessageMapper;
 import com.jie.bookshare.utils.SerializeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -13,14 +14,14 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
 @EnableScheduling
 public class MessageConsumer {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -42,7 +43,7 @@ public class MessageConsumer {
                 if (mqMessage == null) {
                     continue;
                 }
-                log.info("receive a message! msg:{}.", mqMessage);
+                logger.info("receive a message! msg:{}.", mqMessage);
                 // 插入数据库
                 Message msg = new Message();
                 msg.setProducerId(mqMessage.getProducerId());
@@ -51,6 +52,7 @@ public class MessageConsumer {
                     msg.setMessage(SerializeUtil.serializeObjToBytes(mqMessage));
                 } catch (IOException e) {
                     e.printStackTrace();
+                    continue;
                 }
                 msg.setConsumerId(mqMessage.getConsumerId());
                 messageMapper.insert(msg);
@@ -62,6 +64,7 @@ public class MessageConsumer {
                 }
                 try {
                     wss.sendMessage("你有新的消息！");
+                    logger.info("Send message to userId: {}.", mqMessage.getConsumerId());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -10,6 +10,8 @@ import com.jie.bookshare.mapper.BookCollectMapper;
 import com.jie.bookshare.mapper.BookMapper;
 import com.jie.bookshare.service.BookCollectService;
 import com.jie.bookshare.service.BookDriftService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,6 +29,8 @@ import java.util.List;
 @Service
 public class BookCollectServiceImpl extends ServiceImpl<BookCollectMapper, BookCollect> implements BookCollectService {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Resource
     private BookCollectMapper bookCollectMapper;
 
@@ -42,6 +46,7 @@ public class BookCollectServiceImpl extends ServiceImpl<BookCollectMapper, BookC
      */
     @Override
     public List<BookListDTO> getCollectedBooks(Integer userId) {
+        logger.info("Get collected books by userId: {}.", userId);
         List<BookListDTO> res = new ArrayList<>();
 
         List<BookDrift> bookDrifts = bookCollectMapper.getCollectedBooks(userId);
@@ -50,7 +55,7 @@ public class BookCollectServiceImpl extends ServiceImpl<BookCollectMapper, BookC
             BookListDTO bookListDTO = bookDriftService.mergeBookAndBookDrift(book, bookDrift);
             res.add(bookListDTO);
         }
-
+        logger.info("Collected books is: {}.", res);
         return res;
     }
 
@@ -61,13 +66,14 @@ public class BookCollectServiceImpl extends ServiceImpl<BookCollectMapper, BookC
      */
     @Override
     public Integer getBookCollectByIds(Integer bookId, Integer userId) {
+        logger.info("Get BookCollect status By bookId: {}, userId: {}.", bookId, userId);
         LambdaQueryWrapper<BookCollect> con1 = new LambdaQueryWrapper<>();
         con1.eq(BookCollect::getBookId, bookId).eq(BookCollect::getUserId, userId);
         BookCollect bookCollect = bookCollectMapper.selectOne(con1);
         if(bookCollect == null){
+            logger.info("bookCollect record does not exist!");
             return 0;
         }
-
         return bookCollect.getStatus();
     }
 
@@ -80,8 +86,8 @@ public class BookCollectServiceImpl extends ServiceImpl<BookCollectMapper, BookC
      */
     @Override
     public Integer updateByIds(Integer bookId, Integer userId) {
-        Integer code = 0;
-
+        logger.info("Update bookCollect by bookId: {}, userId: {}.", bookId, userId);
+        int code = 0;
         LambdaQueryWrapper<BookCollect> con1 = new LambdaQueryWrapper<>();
         con1.eq(BookCollect::getBookId, bookId).eq(BookCollect::getUserId, userId);
         BookCollect bookCollect = bookCollectMapper.selectOne(con1);
@@ -102,6 +108,7 @@ public class BookCollectServiceImpl extends ServiceImpl<BookCollectMapper, BookC
             code = 1;
         }
         bookCollectMapper.update(bookCollect, con1);
+        logger.info("BookCollect's status is: {}.", bookCollect.getStatus());
 
         return code;
     }

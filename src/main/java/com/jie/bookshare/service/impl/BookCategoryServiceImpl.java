@@ -6,6 +6,8 @@ import com.jie.bookshare.entity.BookCategory;
 import com.jie.bookshare.entity.dto.BookCategoryCascaderDTO;
 import com.jie.bookshare.mapper.BookCategoryMapper;
 import com.jie.bookshare.service.BookCategoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ import java.util.Map;
 @Service
 public class BookCategoryServiceImpl extends ServiceImpl<BookCategoryMapper, BookCategory> implements BookCategoryService {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private BookCategoryMapper bookCategoryMapper;
 
@@ -38,7 +42,9 @@ public class BookCategoryServiceImpl extends ServiceImpl<BookCategoryMapper, Boo
         LambdaQueryWrapper<BookCategory> con1 = new LambdaQueryWrapper<>();
         con1.eq(BookCategory::getPid, 0);
 
-        return baseMapper.selectList(con1);
+        List<BookCategory> categories = baseMapper.selectList(con1);
+        logger.info("Get book's top categories: {}.", categories);
+        return categories;
     }
 
     /**
@@ -48,6 +54,7 @@ public class BookCategoryServiceImpl extends ServiceImpl<BookCategoryMapper, Boo
      */
     @Override
     public List<BookCategoryCascaderDTO> getCategoryCascader() {
+        logger.info("Get category cascader.");
         List<BookCategoryCascaderDTO> res = new ArrayList<>();
         // 查询所有一级目录
         LambdaQueryWrapper<BookCategory> con1 = new LambdaQueryWrapper<>();
@@ -76,6 +83,7 @@ public class BookCategoryServiceImpl extends ServiceImpl<BookCategoryMapper, Boo
 
             res.add(bccDTO);
         }
+        logger.info("Category cascader is: {}.", res);
 
         return res;
     }
@@ -88,6 +96,7 @@ public class BookCategoryServiceImpl extends ServiceImpl<BookCategoryMapper, Boo
      */
     @Override
     public String getCategoryFullName(Integer categoryId) {
+        logger.info("Get category full name By id: {}.", categoryId);
         BookCategory subCategory = bookCategoryMapper.selectById(categoryId);
         LambdaQueryWrapper<BookCategory> con1 = new LambdaQueryWrapper<>();
         con1.eq(BookCategory::getId, subCategory.getPid());
@@ -95,6 +104,7 @@ public class BookCategoryServiceImpl extends ServiceImpl<BookCategoryMapper, Boo
 
         StringBuilder fullName = new StringBuilder();
         fullName.append(topCategory.getName()).append(" / ").append(subCategory.getName());
+        logger.info("Category id={}, full name is {}.", categoryId, fullName);
 
         return fullName.toString();
     }

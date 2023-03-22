@@ -5,6 +5,8 @@ import com.jie.bookshare.entity.security.AppUserDetails;
 import com.jie.bookshare.service.IRedisService;
 import com.jie.bookshare.utils.JsonUtil;
 import com.jie.bookshare.utils.JwtUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +21,9 @@ import java.io.IOException;
 
 @Component
 public class TokenFilter extends OncePerRequestFilter {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private IRedisService redisService;
 
@@ -31,6 +36,7 @@ public class TokenFilter extends OncePerRequestFilter {
         String userId = JwtUtil.getUserId(token);
         //若token无效，则拒绝请求
         if (userId == null) {
+            logger.error("Receive a request, but the token is wrong. Token is: {}.", token);
             filterChain.doFilter(request, response);
             return;
         }
@@ -40,12 +46,14 @@ public class TokenFilter extends OncePerRequestFilter {
         String validToken = redisService.get(key, "token");
         //若在Redis中不存在相应的登陆状态，或者该token已经无效，则拒绝请求
         if (!token.equals(validToken)) {
+            logger.error("Redis does not has this token: {}!", token);
             filterChain.doFilter(request, response);
             return;
         }
         String json = redisService.get(key, "user_details");
         AppUserDetails userDetails = JsonUtil.jsonToObject(json, AppUserDetails.class);
         if (userDetails == null) {
+            logger.error("Redis does not has user_details!");
             filterChain.doFilter(request, response);
             return;
         }

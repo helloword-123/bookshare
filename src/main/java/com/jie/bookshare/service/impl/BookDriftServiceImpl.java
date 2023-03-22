@@ -17,6 +17,8 @@ import com.jie.bookshare.mapper.DriftPictureMapper;
 import com.jie.bookshare.mq.MQMessage;
 import com.jie.bookshare.mq.MessageProducer;
 import com.jie.bookshare.service.BookDriftService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,8 @@ import java.util.*;
  */
 @Service
 public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift> implements BookDriftService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private BookDriftMapper bookDriftMapper;
@@ -92,8 +96,10 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
 
     @Override
     public Integer changeBookStatus(Integer bookId, Integer status) {
+        logger.info("Change book status. BookId is: {}, status: {}.", bookId, status);
         BookDrift bookDrift = getBookLastDrift(bookId);
         if(bookDrift == null){
+            logger.info("This bookId: {} does not has any drift record!", bookId);
             return 0;
         }
         bookDrift.setStatus(status);
@@ -102,17 +108,19 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
 
     @Override
     public BookDrift getBookFirstDrift(Integer bookId) {
-
+        logger.info("Get book's first drift record, bookId is: {}.", bookId);
         return bookDriftMapper.getBookFirstDrift(bookId);
     }
 
     @Override
     public BookDrift getBookLastDrift(Integer bookId) {
+        logger.info("Get book's last drift record, bookId is: {}.", bookId);
         return bookDriftMapper.getBookLastDrift(bookId);
     }
 
     @Override
     public Boolean releaseBook(Map<String, Object> reqBody) {
+        logger.info("Release book, bookInfo is: {}.", reqBody);
         // 手动开启事务
         TransactionStatus ts = null;
         try {
@@ -155,6 +163,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
 
             BookDrift bookLastDrift = this.getBookLastDrift(book.getId());
             if(bookLastDrift == null){
+                logger.info("The bookId: {} is first drift.", book.getId());
                 bookDrift.setDriftNum(1);   // 首次漂流
             } else {
                 bookDrift.setDriftNum(bookLastDrift.getDriftNum() + 1);
@@ -195,6 +204,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
      */
     @Override
     public List<DriftingBookDTO> getDriftingBooks() {
+        logger.info("Get drifting books.");
         LambdaQueryWrapper<BookDrift> con1 = new LambdaQueryWrapper<>();
         con1.eq(BookDrift::getStatus, 1);
         List<BookDrift> bookDrifts = bookDriftMapper.selectList(con1);
@@ -209,6 +219,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
 
             list.add(dto);
         }
+        logger.info("Drifting books is: {}.", list);
 
         return list;
     }
@@ -221,12 +232,14 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
      */
     @Override
     public BookListDTO getDriftingById(Integer id) {
+        logger.info("Get drifting book by bookId: {}.", id);
         LambdaQueryWrapper<BookDrift> con1 = new LambdaQueryWrapper<>();
         con1.eq(BookDrift::getId, id).eq(BookDrift::getStatus, 1);
         BookDrift bookDrift = bookDriftMapper.selectOne(con1);
         Book book = bookMapper.selectById(bookDrift.getBookId());
 
         BookListDTO dto = this.mergeBookAndBookDrift(book, bookDrift);
+        logger.info("BookListDTO is: {}.", dto);
 
         return dto;
     }
@@ -238,6 +251,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
      */
     @Override
     public void borrowBook(BookBorrowDTO dto) {
+        logger.info("Borrow book, BookBorrowDTO is: {}.", dto);
         BookDrift bookDrift = new BookDrift();
         bookDrift.setId(dto.getDriftId());
         bookDrift.setBorrowerId(dto.getBorrowId());
@@ -255,6 +269,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
      */
     @Override
     public List<List<BookListDTO>> getShareBorrowBookList(Integer userId) {
+        logger.info("Get share and borrow bookList by userId: {}.", userId);
         List<List<BookListDTO>> res = new ArrayList<>();
 
         // 共享记录
@@ -281,6 +296,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
 
         res.add(list1);
         res.add(list2);
+        logger.info("Share and borrow bookList is: {}.", res);
 
         return res;
     }
@@ -293,6 +309,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
      */
     @Override
     public List<BookListDTO> getBookDriftSeries(Integer bookId) {
+        logger.info("Get bookDrift series by bookId: {}.", bookId);
         List<BookListDTO> res = new ArrayList<>();
 
         Book book = bookMapper.selectById(bookId);
@@ -304,6 +321,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
             BookListDTO bookListDTO = this.mergeBookAndBookDrift(book, bookDrift);
             res.add(bookListDTO);
         }
+        logger.info("BookDrift series is: {}.", res);
 
         return res;
     }
@@ -316,6 +334,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
      */
     @Override
     public Integer checkBookDrift(CheckBookDriftDTO dto) {
+        logger.info("Check bookDrift record, CheckBookDriftDTO is: {}.", dto);
         BookDrift bookDrift = bookDriftMapper.selectById(dto.getId());
         if(bookDrift == null){
             return 0;
@@ -329,6 +348,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         mqMessage.addData("title", "图书分享审核结果");
         mqMessage.addData("message", (dto.getStatus() == 1 ? "审核通过：" : "审核不通过：") + dto.getCheckerReply());
         messageProducer.lPush(mqMessage);
+        logger.info("Push a new message: {} to mq.", mqMessage);
 
         return baseMapper.updateById(bookDrift);
     }
@@ -340,6 +360,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
      */
     @Override
     public List<BookListDTO> getNotCheckedBooks() {
+        logger.info("Get not checked books.");
         List<BookListDTO> list = new ArrayList<>();
 
         // 共享记录
@@ -351,6 +372,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
             BookListDTO bookListDTO = this.mergeBookAndBookDrift(book, bookDrift);
             list.add(bookListDTO);
         }
+        logger.info("Not checked books is: {}.", list);
 
         return list;
     }

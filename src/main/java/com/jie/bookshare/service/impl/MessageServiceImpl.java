@@ -5,9 +5,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jie.bookshare.entity.Message;
 import com.jie.bookshare.mapper.MessageMapper;
 import com.jie.bookshare.mq.MQMessage;
-import com.jie.bookshare.mq.MessageConsumer;
 import com.jie.bookshare.service.MessageService;
 import com.jie.bookshare.utils.SerializeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +27,8 @@ import java.util.List;
 @Service
 public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> implements MessageService {
 
-    @Resource
-    private MessageConsumer messageConsumer;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Resource
     private MessageMapper messageMapper;
 
@@ -40,6 +41,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
     @Transactional
     @Override
     public List<List<MQMessage>> getAllMessages(Integer userId) throws Exception {
+        logger.info("Get all messages by userId: {}.", userId);
         List<List<MQMessage>> res = new ArrayList<>();
 
         // 1. 获取所有未读消息
@@ -71,6 +73,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
 
         res.add(mqMessages1);
         res.add(mqMessages2);
+        logger.info("Messages is: {}.", res);
 
         return res;
     }
@@ -83,6 +86,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
      */
     @Override
     public Integer getUnReadMessagesSize(Integer userId) {
+        logger.info("Get unread messages by userId: {}.", userId);
         LambdaQueryWrapper<Message> con1 = new LambdaQueryWrapper<>();
         con1.eq(Message::getConsumerId, userId)
                 .eq(Message::getHasConsumed, 0);
@@ -98,6 +102,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
      */
     @Override
     public void readMessage(Integer userId, Integer msgId) {
+        logger.info("UserId: {}, read a message ,msgId: {}.", userId, msgId);
         Message message = new Message();
         message.setId(msgId);
         message.setHasConsumed(1);

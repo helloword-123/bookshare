@@ -34,7 +34,7 @@ import java.util.List;
 @Service
 public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements BookService {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(BookServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private BookDriftService bookDriftService;
@@ -56,11 +56,13 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
      */
     @Override
     public Boolean checkIsbnIsDrifting(String isbn) {
+        logger.info("Isbn: {}, check this book is drifting.", isbn);
         // 根据isbn查询book的id
         LambdaQueryWrapper<Book> con1 = new LambdaQueryWrapper<>();
         con1.eq(Book::getIsbn, isbn);
         Book book = baseMapper.selectOne(con1);
         if (book == null) {
+            logger.info("The book does not exist!");
             return true;
         }
 
@@ -70,6 +72,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
         con3.eq(BookDrift::getBookId, book.getId());
         List<BookDrift> bookDrifts1 = bookDriftMapper.selectList(con3);
         if (bookDrifts1.size() == 0) {
+            logger.info("The book does not drift!");
             return true;
         }
 
@@ -77,8 +80,13 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
         LambdaQueryWrapper<BookDrift> con2 = new LambdaQueryWrapper<>();
         con2.eq(BookDrift::getBookId, book.getId()).lt(BookDrift::getStatus, 4);
         List<BookDrift> bookDrifts = bookDriftMapper.selectList(con2);
+        if(bookDrifts.size() == 0){
+            logger.info("The book is not drifting!");
+            return true;
+        }
 
-        return bookDrifts.size() == 0;
+        logger.info("The book is drifting, cannot drift repetitively!");
+        return false;
     }
 
     /**
@@ -88,6 +96,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
      */
     @Override
     public List<BookListWithCategoryDTO> getListWithCategory() {
+        logger.info("Get bookList classified by category。");
         List<BookListWithCategoryDTO> list = new ArrayList<>();
 
         // 1.查询所有一级目录
@@ -125,6 +134,8 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
             list.add(dto);
         }
 
+        logger.info("BookList classified by category is: {}.", list);
+
         return list;
     }
 
@@ -139,6 +150,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
      */
     @Override
     public List<BookListDTO> getListWithCondition(Integer categoryId, String sortColumn, String sortOrder, String keyword, Double latitude, Double longitude) {
+        logger.info("Get bookList with condition, categoryId is: {}, sortColumn is: {}, sortOrder is: {}, keyword: {}, latitude is: {}, longitude is: {}.", categoryId, sortColumn, sortOrder, keyword, latitude, longitude);
         List<BookListDTO> bookListDTOS = new ArrayList<>();
         // 1.先根据categoryId和keyword查询列表
         // 查询正在漂流的图书id
@@ -188,6 +200,8 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
                 bookListDTOS.sort(Comparator.comparing(BookListDTO::getReleaseTime).reversed());
             }
         }
+
+        logger.info("BookList with condition is: {}.", bookListDTOS);
 
         return bookListDTOS;
     }
