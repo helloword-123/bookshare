@@ -17,6 +17,7 @@ import com.jie.bookshare.utils.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +54,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private AclPermissionMapper aclPermissionMapper;
     @Autowired
     private CampusStaffAuthService campusStaffAuthService;
+
 
     @Override
     public List<String> login(String username, String password) {
@@ -192,6 +194,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return baseMapper.selectCount(cond) > 0;
     }
 
+    @CachePut(value = "userInfo#24*3600", key = "#openid")
     @Override
     public UserDTO getUserInfoByOpenid(String openid) {
         logger.info("Get userInfo by openid: {}.", openid);
@@ -236,18 +239,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
             userDTO.setRoles(roles);
 
-
-
             logger.info("Query userid:{}, username:{}, avatarurl:{}", user1.getId(),user1.getUserName(),user1.getAvatarUrl());
         }
-
-
 
         return userDTO;
 
     }
 
     @Override
+    @CachePut(value = "userInfo#24*3600", key = "#userDTO.id")
     public void updateUserInfo(UserDTO userDTO) {
         logger.info("id:{}, userName:{}, avatarUrl:{}", userDTO.getId(), userDTO.getNickName(), userDTO.getAvatarUrl());
         User user = new User();
