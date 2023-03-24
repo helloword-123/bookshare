@@ -1,6 +1,7 @@
 package com.jie.bookshare.controller;
 
 
+import com.jie.bookshare.common.RedisKeys;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.AclRole;
 import com.jie.bookshare.entity.dto.AuthenticationDTO;
@@ -85,7 +86,7 @@ public class UserController {
     @ApiOperation("管理员退出登录")
     @GetMapping("/logout/{userId}")
     public Result logout(@PathVariable Integer userId) {
-        String key = IRedisService.concatKey("user_details", String.valueOf(userId));
+        String key = IRedisService.concatKey(RedisKeys.USER_INFO, String.valueOf(userId));
         redisService.delete(key);
         return Result.ok();
     }
@@ -161,7 +162,7 @@ public class UserController {
         if (userId == null)
             return Result.ok().data("isValid", false);
         //检查token跟Redis中保存的登录状态中的token是否一致
-        String key = IRedisService.concatKey("user_details", userId);
+        String key = IRedisService.concatKey(RedisKeys.USER_INFO, userId);
         String validToken = redisService.get(key, "token");
         return Result.ok().data("isValid", token.equals(validToken));
     }

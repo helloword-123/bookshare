@@ -2,6 +2,7 @@ package com.jie.bookshare.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jie.bookshare.entity.CampusStaffAuth;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author wuhaojie
  * @since 2023-01-21
  */
+@Component
 public interface CampusStaffAuthMapper extends BaseMapper<CampusStaffAuth> {
 
     /**

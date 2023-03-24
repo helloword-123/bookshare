@@ -98,44 +98,32 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
     public List<BookListWithCategoryDTO> getListWithCategory() {
         logger.info("Get bookList classified by category。");
         List<BookListWithCategoryDTO> list = new ArrayList<>();
-
         // 1.查询所有一级目录
         LambdaQueryWrapper<BookCategory> con1 = new LambdaQueryWrapper<>();
         con1.eq(BookCategory::getPid, 0);
         List<BookCategory> categories = bookCategoryMapper.selectList(con1);
-
         // 2.根据一级目录id聚合图书数据（后续修改只返回部分）
         for (BookCategory category : categories) {
             BookListWithCategoryDTO dto = new BookListWithCategoryDTO();
-
-
             // 查询属于这个category_id的书籍
             // 2.1 先查一级目录的所有子目录
             List<Integer> subIds = bookCategoryMapper.selectSubCategoryIds(category.getId());
-
             // 2.2 查询正在漂流的图书id
             List<BookDrift> bookDrifts = bookDriftMapper.selectDriftingBooks();
-
             // 2.3 查询属于子目录的图书
             List<BookListDTO> bookListDTOS = new ArrayList<>();
             for (BookDrift bookDrift : bookDrifts) {
                 Book book = bookMapper.selectById(bookDrift.getBookId());
                 if (subIds.contains(book.getCategoryId())) {
-
                     BookListDTO bookListDTO = bookDriftService.mergeBookAndBookDrift(book, bookDrift);
-
                     bookListDTOS.add(bookListDTO);
                 }
             }
-
             dto.setBookCategory(category);
             dto.setList(bookListDTOS);
-
             list.add(dto);
         }
-
         logger.info("BookList classified by category is: {}.", list);
-
         return list;
     }
 

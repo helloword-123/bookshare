@@ -1,7 +1,8 @@
 package com.jie.bookshare.mapper;
 
-import com.jie.bookshare.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jie.bookshare.entity.User;
+import org.springframework.stereotype.Component;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author wuhaojie
  * @since 2022-12-16
  */
+@Component
 public interface UserMapper extends BaseMapper<User> {
 
 }

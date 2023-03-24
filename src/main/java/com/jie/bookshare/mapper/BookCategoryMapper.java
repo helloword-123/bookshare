@@ -2,6 +2,7 @@ package com.jie.bookshare.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jie.bookshare.entity.BookCategory;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author wuhaojie
  * @since 2022-12-16
  */
+@Component
 public interface BookCategoryMapper extends BaseMapper<BookCategory> {
 
     /**

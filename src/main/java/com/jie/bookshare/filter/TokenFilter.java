@@ -1,6 +1,7 @@
 package com.jie.bookshare.filter;
 
 
+import com.jie.bookshare.common.RedisKeys;
 import com.jie.bookshare.entity.security.AppUserDetails;
 import com.jie.bookshare.service.IRedisService;
 import com.jie.bookshare.utils.JsonUtil;
@@ -41,7 +42,7 @@ public class TokenFilter extends OncePerRequestFilter {
         }
 
         //从Redis中获取相应的登陆状态
-        String key = IRedisService.concatKey("user_details", userId);
+        String key = IRedisService.concatKey(RedisKeys.USER_INFO, userId);
         String validToken = redisService.get(key, "token");
         //若在Redis中不存在相应的登陆状态，或者该token已经无效，则拒绝请求
         if (!token.equals(validToken)) {
@@ -49,7 +50,7 @@ public class TokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String json = redisService.get(key, "user_details");
+        String json = redisService.get(key, RedisKeys.USER_INFO);
         AppUserDetails userDetails = JsonUtil.jsonToObject(json, AppUserDetails.class);
         if (userDetails == null) {
             logger.error("Redis does not has user_details!");

@@ -3,6 +3,7 @@ package com.jie.bookshare.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jie.bookshare.common.RedisKeys;
 import com.jie.bookshare.entity.*;
 import com.jie.bookshare.entity.dto.UserDTO;
 import com.jie.bookshare.entity.security.AppGrantedAuthority;
@@ -107,10 +108,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         AppUserDetails userDetails = new AppUserDetails(
                 String.valueOf(userId), null, authorities, userType);
         token = JwtUtil.generateToken(String.valueOf(userId));
-        String key = IRedisService.concatKey("user_details", String.valueOf(userId));
+        String key = IRedisService.concatKey(RedisKeys.USER_INFO, String.valueOf(userId));
         Map<String, String> hash = new HashMap<>();
         hash.put("token", token);
-        hash.put("user_details", JsonUtil.toJson(userDetails));
+        hash.put(RedisKeys.USER_INFO, JsonUtil.toJson(userDetails));
         redisService.putAll(key, hash);
         redisService.expire(key, 1, TimeUnit.DAYS);
         logger.info("Token is: {}, user_details is {}.", token, userDetails);
