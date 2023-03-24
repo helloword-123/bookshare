@@ -15,6 +15,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private TokenFilter tokenFilter;
 
+    /**
+     * 设置接口拦截规则
+     *
+     * @param httpSecurity httpSecurity对象
+     */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
@@ -22,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/user/wxLogin").anonymous()
-                .antMatchers("/user/login").anonymous(  )
+                .antMatchers("/user/login").anonymous()
                 .antMatchers("/**").permitAll()
                 .antMatchers("/user/checkToken").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()

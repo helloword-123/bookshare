@@ -6,8 +6,6 @@ import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.AclRole;
 import com.jie.bookshare.entity.dto.AuthenticationDTO;
 import com.jie.bookshare.entity.dto.UserDTO;
-import com.jie.bookshare.mq.MessageConsumer;
-import com.jie.bookshare.mq.MessageProducer;
 import com.jie.bookshare.service.IRedisService;
 import com.jie.bookshare.service.UserService;
 import com.jie.bookshare.utils.JwtUtil;
@@ -36,50 +34,42 @@ public class UserController {
     @Autowired
     private IRedisService redisService;
 
-
-    @Autowired
-    private MessageProducer messageProducer;
-    @Autowired
-    private MessageConsumer messageConsumer;
-
-
     /**
      * 获取用户角色
-     * @param userId    用户id
+     *
+     * @param userId 用户id
      * @return
      */
     @PreAuthorize("hasAuthority('user:query')")
     @ApiOperation(value = "获取用户角色")
     @GetMapping("getUserRoles/{userId}")
     public Result getUserRoles(@PathVariable Integer userId) {
-
         List<String> roles = new ArrayList<>();
         List<AclRole> aclRoles = userService.findRoleForAdmin(userId);
         for (AclRole role : aclRoles) {
             roles.add(role.getKey());
         }
-
         return Result.ok().data("roles", roles);
     }
 
     /**
      * 微信登录后，修改用户头像和昵称
-     * @param userDTO   用户头像和昵称
+     *
+     * @param userDTO 用户头像和昵称
      * @return
      */
     @PreAuthorize("hasAuthority('user:update')")
     @ApiOperation(value = "微信登录后，修改用户头像和昵称")
     @PostMapping("updateUserInfo")
     public Result updateAvatarAndName(@RequestBody UserDTO userDTO) {
-
         userService.updateUserInfo(userDTO);
-
         return Result.ok();
     }
 
     /**
      * 管理员退出登录
-     * @param userId    用户id
+     *
+     * @param userId 用户id
      * @return
      */
     @PreAuthorize("hasAuthority('user:update')")
@@ -93,6 +83,7 @@ public class UserController {
 
     /**
      * 后台账号登录
+     *
      * @param authenticationDTO 前端后台登录传输的dto
      * @return
      */
@@ -114,7 +105,8 @@ public class UserController {
 
     /**
      * 小程序登录根据code获取token，并且请求openid与本地账号系统绑定，最后返回用户信息和token
-     * @param reqBody   前端微信登录传输的dto
+     *
+     * @param reqBody 前端微信登录传输的dto
      * @return
      */
     @ApiOperation(value = "微信小程序登录")
@@ -126,7 +118,6 @@ public class UserController {
         if (code == null) {
             return Result.error().message("缺少code参数");
         }
-
         try {
             Map<String, Object> map = WxUtil.code2Session(code);
             Integer errCode = (Integer) map.get("errcode");
@@ -136,7 +127,7 @@ public class UserController {
                 UserDTO userDTO = userService.getUserInfoByOpenid(openid);
                 String token = userService.saveUserAuthorityByUserId(userDTO.getId());
 
-                return Result.ok().data("token", token).data("openid",openid).data("userinfo", userDTO);
+                return Result.ok().data("token", token).data("openid", openid).data("userinfo", userDTO);
             } else {
                 return Result.error().message((String) map.get("errmsg"));
             }
@@ -148,6 +139,7 @@ public class UserController {
 
     /**
      * 验证token有效性
+     *
      * @param token token值
      * @return
      */

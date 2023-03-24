@@ -33,7 +33,8 @@ public class CommonController {
 
     /**
      * 上传图片接口
-     * @param file  上传的图片文件
+     *
+     * @param file 上传的图片文件
      * @return
      */
     @ApiOperation("添加时上传图片")
@@ -41,7 +42,7 @@ public class CommonController {
     public Result uploadOssFile(
             @ApiParam("图片文件")
             @RequestParam("image")
-                    MultipartFile file) {
+            MultipartFile file) {
         log.info("图片上传");
         //获取上传文件
         String url = ossService.uploadFileAvatar(file);
@@ -50,6 +51,7 @@ public class CommonController {
 
     /**
      * 测试：直接获取token
+     *
      * @return
      */
     @ApiOperation(value = "测试：直接获取token")
@@ -61,7 +63,7 @@ public class CommonController {
         if (info == null) {
             return Result.error().message("账号密码不匹配！");
         }
-        return Result.ok().data("token", info.get(0)).data("rId",info.get(1));
+        return Result.ok().data("token", info.get(0)).data("rId", info.get(1));
     }
 
 }

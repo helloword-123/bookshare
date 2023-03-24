@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author wuhaojie
@@ -28,37 +28,53 @@ public interface UserService extends IService<User> {
     List<String> login(String username, String password);
 
     /**
-     * 根据token返回管理员信息
+     * 判断该id的用户是否存在
      *
-     * @param token
-     * @return AdminVo
+     * @param id 用户id
      */
-    // AdminVo getInfo(String token);
-
     boolean exists(String id);
 
+    /**
+     * 查询userId的所有角色
+     *
+     * @param userId 用户id
+     */
     List<AclRole> findRoleForAdmin(Integer userId);
 
+    /**
+     * 查询角色的所有权限
+     *
+     * @param roles 所有角色
+     */
     Collection<AppGrantedAuthority> selectAuthoritiesForRoles(List<AclRole> roles);
 
+    /**
+     * 查询userId的所有权限并保存到Redis
+     *
+     * @param userId 用户id
+     */
+    String saveUserAuthorityByUserId(Integer userId);
+
+    /**
+     * 验证密码是否正确
+     *
+     * @param aId      用户id
+     * @param password 密码
+     */
     Boolean validatePassword(String aId, String password);
 
     /**
      * 微信授权登录后，根据登录信息返回顾客id
      *
-     * @param
-     * @return Integer
+     * @param openid openid
      */
     UserDTO getUserInfoByOpenid(String openid);
 
-    /*
-     * @Author Haojie
-     * @Description 更新用户头像和昵称
-     * @Param
-     * @return
-     **/
+    /**
+     * 更新用户头像和昵称
+     *
+     * @param userDTO 用户信息dto
+     */
     void updateUserInfo(UserDTO userDTO);
-
-    String saveUserAuthorityByUserId(Integer userId);
 
 }

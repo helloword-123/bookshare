@@ -13,7 +13,10 @@ public class WxUtil {
     private static final String BASE_URL = "https://api.weixin.qq.com/sns/";
 
     /**
-     * 登录凭证校验
+     * 根据code发起微信登录
+     *
+     * @param code 前端wx.login获取的code
+     * @return 登录后微信平台返回的数据
      */
     public static Map<String, Object> code2Session(String code) throws IOException, ParseException {
         HttpClient httpClient = new HttpClient(BASE_URL + "jscode2session");

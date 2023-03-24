@@ -32,66 +32,66 @@ public class CampusStaffAuthController {
 
     /**
      * 根据authId查询所有认证图片
-     * @param authId    认证记录id
+     *
+     * @param authId 认证记录id
      * @return
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:query')")
     @GetMapping("/getAuthImgList/{authId}")
-    public Result getAuthImgListByAuthId(@PathVariable Integer authId){
+    public Result getAuthImgListByAuthId(@PathVariable Integer authId) {
         List<String> imgList = authPictureService.getAuthImgListByAuthId(authId);
-
         return Result.ok().data("imgList", imgList);
     }
 
     /**
      * 添加校园认证记录
-     * @param authDTO   前端添加校园认证记录传输的dto
+     *
+     * @param authDTO 前端添加校园认证记录传输的dto
      * @return
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:add')")
     @PostMapping("/add")
-    public Result add(@RequestBody AuthDTO authDTO){
+    public Result add(@RequestBody AuthDTO authDTO) {
         campusStaffAuthService.add(authDTO);
-
         return Result.ok();
     }
 
     /**
      * 根据userId获取用户的认证信息
-     * @param userId    用户id
+     *
+     * @param userId 用户id
      * @return
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:query')")
     @GetMapping("/getAuthInfo/{userId}")
-    public Result getAuthInfo(@PathVariable Integer userId){
+    public Result getAuthInfo(@PathVariable Integer userId) {
         CampusStaffAuth campusStaffAuth = campusStaffAuthService.getAuthInfo(userId);
-
         return Result.ok().data("campusStaffAuth", campusStaffAuth);
     }
 
     /**
      * 获取所有用户的认证记录（多次认证只返回最后一条）
+     *
      * @return
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:admin')")
     @GetMapping("/getAuthList")
-    public Result getAuthList(){
+    public Result getAuthList() {
         List<CampusStaffAuth> list = campusStaffAuthService.getAuthList();
-
         return Result.ok().data("list", list);
     }
 
 
     /**
      * 审核
-     * @param checkDTO  前端审核传输的dto
+     *
+     * @param checkDTO 前端审核传输的dto
      * @return
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:admin')")
     @PostMapping("/check")
-    public Result checkAuth(@RequestBody CheckDTO checkDTO){
+    public Result checkAuth(@RequestBody CheckDTO checkDTO) {
         campusStaffAuthService.checkAuth(checkDTO);
-
         return Result.ok();
     }
 }

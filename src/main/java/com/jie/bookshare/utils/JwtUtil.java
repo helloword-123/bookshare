@@ -9,6 +9,12 @@ public class JwtUtil {
     public static final int EXP_TIME = 1000 * 60 * 60 * 24;
     public static final String SECRET_KEY = "fmf4+3D&LP@$rVFGEuKrr*8mY-%umxG7";
 
+    /**
+     * 根据userId生成Token
+     *
+     * @param userId 用户id
+     * @return token
+     */
     public static String generateToken(String userId) {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
@@ -20,6 +26,12 @@ public class JwtUtil {
                 .compact();
     }
 
+    /**
+     * 根据token解析出userId
+     *
+     * @param token token值
+     * @return userId
+     */
     public static String getUserId(String token) {
         if (token == null) {
             return null;
@@ -35,7 +47,4 @@ public class JwtUtil {
         }
     }
 
-    public static boolean checkToken(String token) {
-        return getUserId(token) != null;
-    }
 }

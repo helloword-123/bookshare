@@ -14,6 +14,12 @@ import java.util.Date;
  */
 @Component
 public class MyBatisPlusMetaObjectHandler implements MetaObjectHandler {
+
+    /**
+     * 自动注入对象值
+     *
+     * @param metaObject 数据表字段
+     */
     @Override
     public void insertFill(MetaObject metaObject) {
         // 属性名称，不是字段
@@ -21,6 +27,11 @@ public class MyBatisPlusMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName("updateTime", new Date(), metaObject);
     }
 
+    /**
+     * 更新时字段注入
+     *
+     * @param metaObject 数据表字段
+     */
     @Override
     public void updateFill(MetaObject metaObject) {
         this.setFieldValByName("updateTime", new Date(), metaObject);

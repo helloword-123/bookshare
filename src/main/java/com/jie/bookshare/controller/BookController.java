@@ -27,29 +27,28 @@ public class BookController {
 
     /**
      * 小程序首页获取图书数据，根据分类id聚合返回
+     *
      * @return
      */
     @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/getListWithCategory")
-    public Result getListWithCategory(){
+    public Result getListWithCategory() {
         List<BookListWithCategoryDTO> bookList = bookService.getListWithCategory();
-
         return Result.ok().data("bookList", bookList);
     }
 
     /**
      * 判断改isbn号的图书是否已经在漂流中
-     * @param isbn  图书ISBN码
+     *
+     * @param isbn 图书ISBN码
      * @return
      */
     @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/isDrifting/{isbn}")
-    public Result checkIsbnIsDrifting(@PathVariable String isbn){
-
+    public Result checkIsbnIsDrifting(@PathVariable String isbn) {
         Boolean res = bookService.checkIsbnIsDrifting(isbn);
-
         // 图书漂流正在进行中，无法重复漂流
-        if(!res){
+        if (!res) {
             return Result.ok().code(20002);
         }
         return Result.ok();
@@ -57,10 +56,11 @@ public class BookController {
 
     /**
      * 根据筛选条件返回图书列表
-     * @param categoryId    图书分类id
-     * @param sortColumn    排序字段
-     * @param sortOrder     升序/降序
-     * @param keyword       模糊查询关键词
+     *
+     * @param categoryId 图书分类id
+     * @param sortColumn 排序字段
+     * @param sortOrder  升序/降序
+     * @param keyword    模糊查询关键词
      * @return
      */
     @PreAuthorize("hasAuthority('book:query')")
@@ -77,9 +77,8 @@ public class BookController {
             @ApiParam(value = "用户当前定位纬度，非必需", example = "XXX")
             @RequestParam(required = false) Double latitude,
             @ApiParam(value = "用户当前定位精度，非必需", example = "XXX")
-            @RequestParam(required = false) Double longitude){
+            @RequestParam(required = false) Double longitude) {
         List<BookListDTO> bookList = bookService.getListWithCondition(categoryId, sortColumn, sortOrder, keyword, latitude, longitude);
-
         return Result.ok().data("list", bookList);
     }
 }

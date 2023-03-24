@@ -40,12 +40,21 @@ public class WebSocketServer {
      */
     private String userId = "";
 
-    public static WebSocketServer getWebSocketServerByUserId(String userId){
+    /**
+     * 根据userId返回WebSocketServer对象
+     *
+     * @param userId 用户id
+     * @return WebSocketServer
+     */
+    public static WebSocketServer getWebSocketServerByUserId(String userId) {
         return webSocketMap.get(userId);
     }
 
     /**
      * 连接建立成功调用的方法
+     *
+     * @param session 会话信息
+     * @param userId  用户id
      */
     @OnOpen
     public void onOpen(Session session, @PathParam("userId") String userId) {
@@ -66,6 +75,7 @@ public class WebSocketServer {
         }
     }
 
+
     /**
      * 连接关闭调用的方法
      */
@@ -82,6 +92,7 @@ public class WebSocketServer {
      * 收到客户端消息后调用的方法
      *
      * @param message 客户端发送过来的消息
+     * @param session 会话信息
      */
     @OnMessage
     public void onMessage(String message, Session session) {
@@ -105,8 +116,8 @@ public class WebSocketServer {
     /**
      * 发生错误时调用
      *
-     * @param session
-     * @param error
+     * @param session 会话信息
+     * @param error   异常
      */
     @OnError
     public void onError(Session session, Throwable error) {
@@ -116,6 +127,8 @@ public class WebSocketServer {
 
     /**
      * 实现服务器主动推送
+     *
+     * @param message 推送信息
      */
     public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);

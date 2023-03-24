@@ -16,6 +16,8 @@ import java.util.List;
 public class CorsConfig implements WebMvcConfigurer {
     /**
      * 跨域配置
+     *
+     * @param registry
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -29,6 +31,8 @@ public class CorsConfig implements WebMvcConfigurer {
 
     /**
      * 进行全局跨域配置后可能会影响swagger页面等静态资源的访问，需要加入以下配置重新指定静态资源位置
+     *
+     * @param registry
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -44,6 +48,8 @@ public class CorsConfig implements WebMvcConfigurer {
 
     /**
      * 进行上面的静态资源配置后还会出现中文乱码问题，下面进行字符编码的配置
+     *
+     * @param converters
      */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

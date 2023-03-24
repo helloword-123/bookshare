@@ -65,11 +65,6 @@ public class Result implements Serializable {
     // 实现链式编程
     // 比如 Result.ok().code(code).message(message)...
 
-    public Result success(Boolean success){
-        this.setSuccess(success);
-        return this;
-    }
-
     public Result message(String message){
         this.setMessage(message);
         return this;

@@ -33,7 +33,9 @@ public class MessageConsumer {
     // 阻塞时间
     private final Integer BLOCK_TIME = 10;
 
-
+    /**
+     * 消息消费者，右弹出队列消息
+     */
     @PostConstruct
     public void brPop() {
         new Thread(() -> {

@@ -16,9 +16,13 @@ public class MessageProducer {
     public static final String MESSAGE_KEY = "mq:";
 
     @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
-
+    /**
+     * 消息提供，左推送消息到队列
+     *
+     * @param msg 消息
+     */
     public void lPush(MQMessage msg) {
         new Thread(() -> {
             Long size = redisTemplate.opsForList().leftPush(MESSAGE_KEY, msg);

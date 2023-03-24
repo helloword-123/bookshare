@@ -27,14 +27,14 @@ public class AdviceController {
 
     /**
      * 添加建议
+     *
      * @param adviceDTO 前端提交的评价dto
      * @return
      */
     @PreAuthorize("hasAuthority('advice:add')")
     @PostMapping("/add")
-    public Result add(@RequestBody AdviceDTO adviceDTO){
+    public Result add(@RequestBody AdviceDTO adviceDTO) {
         adviceService.add(adviceDTO);
-
         return Result.ok();
     }
 }

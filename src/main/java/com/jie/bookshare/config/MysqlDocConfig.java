@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class MysqlDocConfig {
     /**
-     * 文档生成
+     * MySQL文档生成，需要时打开@Test注释运行即可
      */
     // @Test
     void documentGeneration() {

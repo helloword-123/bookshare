@@ -27,43 +27,43 @@ public class MessageController {
 
     /**
      * 获取未读消息长度
-     * @param userId    用户id
+     *
+     * @param userId 用户id
      * @return
      */
     @GetMapping("/getUnReadMessagesSize/{userId}")
-    public Result getUnReadMessagesSize(@PathVariable Integer userId){
+    public Result getUnReadMessagesSize(@PathVariable Integer userId) {
         Integer msgSize = messageService.getUnReadMessagesSize(userId);
-
         return Result.ok().data("msgSize", msgSize);
     }
 
     /**
      * 根据userId获取其已读和未读消息
-     * @param userId    用户id
+     *
+     * @param userId 用户id
      * @return
      */
     @GetMapping("/getAllMessages/{userId}")
-    public Result getAllMessages(@PathVariable Integer userId){
+    public Result getAllMessages(@PathVariable Integer userId) {
         List<List<MQMessage>> messageList = null;
         try {
-             messageList = messageService.getAllMessages(userId);
-        } catch (Exception ignored){
-
+            messageList = messageService.getAllMessages(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         return Result.ok().data("messageList", messageList);
     }
 
     /**
      * 已读消息
-     * @param userId    用户id
-     * @param msgId     消息id
+     *
+     * @param userId 用户id
+     * @param msgId  消息id
      * @return
      */
     @GetMapping("/readMessage/{userId}/{msgId}")
-    public Result readMessage(@PathVariable Integer userId, @PathVariable Integer msgId){
+    public Result readMessage(@PathVariable Integer userId, @PathVariable Integer msgId) {
         messageService.readMessage(userId, msgId);
-
         return Result.ok();
     }
 }

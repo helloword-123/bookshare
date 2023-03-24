@@ -27,8 +27,6 @@ public interface IRedisService {
 
     String get(String key, String hashKey);
 
-    Map<String, String> getAll(String key);
-
     Boolean expire(String key, long timeout, TimeUnit unit);
 
     Boolean delete(String k);

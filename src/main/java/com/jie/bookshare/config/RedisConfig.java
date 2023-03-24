@@ -22,6 +22,12 @@ import java.util.Map;
 @Configuration
 public class RedisConfig {
 
+    /**
+     * 生成缓存管理者
+     *
+     * @param redisConnectionFactory redis连接工厂
+     * @return CacheManager
+     */
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
@@ -33,6 +39,9 @@ public class RedisConfig {
 
     /**
      * redisTemplate配置
+     *
+     * @param factory redis连接工厂
+     * @return RedisTemplate
      */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
@@ -76,7 +85,7 @@ class MyRedisCacheManager extends RedisCacheManager {
     /**
      * 默认的key前缀
      */
-    private static final CacheKeyPrefix DEFAULT_CACHE_KEY_PREFIX = cacheName -> cacheName+":";
+    private static final CacheKeyPrefix DEFAULT_CACHE_KEY_PREFIX = cacheName -> cacheName + ":";
     /**
      * 默认序列化方式为json
      */
@@ -86,24 +95,29 @@ class MyRedisCacheManager extends RedisCacheManager {
     public MyRedisCacheManager(RedisCacheWriter cacheWriter, RedisCacheConfiguration defaultCacheConfiguration) {
         super(cacheWriter, defaultCacheConfiguration);
     }
+
     public MyRedisCacheManager(RedisCacheWriter cacheWriter, RedisCacheConfiguration defaultCacheConfiguration, String... initialCacheNames) {
         super(cacheWriter, defaultCacheConfiguration, initialCacheNames);
     }
+
     public MyRedisCacheManager(RedisCacheWriter cacheWriter, RedisCacheConfiguration defaultCacheConfiguration, boolean allowInFlightCacheCreation, String... initialCacheNames) {
         super(cacheWriter, defaultCacheConfiguration, allowInFlightCacheCreation, initialCacheNames);
     }
+
     public MyRedisCacheManager(RedisCacheWriter cacheWriter, RedisCacheConfiguration defaultCacheConfiguration, Map<String, RedisCacheConfiguration> initialCacheConfigurations) {
         super(cacheWriter, defaultCacheConfiguration, initialCacheConfigurations);
     }
+
     public MyRedisCacheManager(RedisCacheWriter cacheWriter, RedisCacheConfiguration defaultCacheConfiguration, Map<String, RedisCacheConfiguration> initialCacheConfigurations, boolean allowInFlightCacheCreation) {
         super(cacheWriter, defaultCacheConfiguration, initialCacheConfigurations, allowInFlightCacheCreation);
     }
 
     /**
      * 针对@Cacheable设置缓存过期时间
-     * @param name
-     * @param cacheConfig
-     * @return
+     *
+     * @param name        @Cacheable、@CachePut和@CacheEvit注解的value/cacheNames的值
+     * @param cacheConfig 缓存配置
+     * @return RedisCache
      */
     @Override
     protected RedisCache createRedisCache(String name, RedisCacheConfiguration cacheConfig) {
@@ -116,7 +130,7 @@ class MyRedisCacheManager extends RedisCacheManager {
                 // JS引擎计算字符串表达式
                 ScriptEngineManager mgr = new ScriptEngineManager();
                 ScriptEngine engine = mgr.getEngineByName("JavaScript");
-                ttl = (Integer)engine.eval(cacheParams[1]);
+                ttl = (Integer) engine.eval(cacheParams[1]);
             } catch (ScriptException e) {
                 throw new RuntimeException(e);
             }

@@ -79,12 +79,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return Arrays.asList(token, user.getId().toString());
     }
 
-    /*
-     * @Author Haojie
-     * @Description 根据用户id生成token返回，并且查询该用户的权限信息且保存到redis
-     * @Param
-     * @return
-     **/
     @Override
     public String saveUserAuthorityByUserId(Integer userId){
         logger.info("Save user's authority by userId: {}.", userId);
@@ -165,9 +159,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return true;
     }
 
-    /**
-     * 查询管理员所具有的所有角色
-     */
     @Override
     public List<AclRole> findRoleForAdmin(Integer userId) {
         logger.info("Find roles for admin, adminId is: {}.", userId);
@@ -184,9 +175,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return aclRoles;
     }
 
-    /**
-     * 检测ID对应的管理员是否存在
-     */
     @Override
     public boolean exists(String id) {
         logger.info("judge id: {} if exists.", id);

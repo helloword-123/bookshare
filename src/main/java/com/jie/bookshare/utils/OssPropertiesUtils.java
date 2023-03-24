@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @ClassName ConstantPropertiesUtils
- * @Description TODO
+ * @Description 阿里云OSS配置文件
  * @Author wuhaojie
  * @Date 2021/8/8 20:53
  */
