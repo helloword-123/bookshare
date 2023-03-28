@@ -36,6 +36,8 @@ public class BookListDTO {
     private Double distance;
     private Date releaseTime;
     private Integer status;
+    private Integer borrowerId;
+    private String borrowerName;
     private Date driftTime;
     private Integer driftNum;
 

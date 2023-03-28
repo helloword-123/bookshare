@@ -2,18 +2,12 @@ package com.jie.bookshare.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.jie.bookshare.entity.Book;
-import com.jie.bookshare.entity.BookDrift;
-import com.jie.bookshare.entity.BookDriftPicture;
-import com.jie.bookshare.entity.DriftPicture;
+import com.jie.bookshare.entity.*;
 import com.jie.bookshare.entity.dto.BookBorrowDTO;
 import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.entity.dto.CheckBookDriftDTO;
 import com.jie.bookshare.entity.dto.DriftingBookDTO;
-import com.jie.bookshare.mapper.BookDriftMapper;
-import com.jie.bookshare.mapper.BookDriftPictureMapper;
-import com.jie.bookshare.mapper.BookMapper;
-import com.jie.bookshare.mapper.DriftPictureMapper;
+import com.jie.bookshare.mapper.*;
 import com.jie.bookshare.mq.MQMessage;
 import com.jie.bookshare.mq.MessageProducer;
 import com.jie.bookshare.service.BookDriftService;
@@ -50,6 +44,8 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
     private DriftPictureMapper driftPictureMapper;
     @Autowired
     private MessageProducer messageProducer;
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private DataSourceTransactionManager dsManager;
@@ -87,6 +83,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         bookListDTO.setNote(bookDrift.getNote());
         bookListDTO.setReleaseTime(bookDrift.getReleaseTime());
         bookListDTO.setStatus(bookDrift.getStatus());
+        bookListDTO.setBorrowerId(bookDrift.getBorrowerId());
         bookListDTO.setDriftTime(bookDrift.getDriftTime());
         bookListDTO.setDriftNum(bookDrift.getDriftNum());
         bookListDTO.setImgList(bookDriftMapper.getDriftPicturesByDriftId(bookDrift.getId()));
@@ -319,6 +316,10 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         List<BookDrift> bookDrifts = bookDriftMapper.selectList(con1);
         for (BookDrift bookDrift : bookDrifts) {
             BookListDTO bookListDTO = this.mergeBookAndBookDrift(book, bookDrift);
+            if(bookDrift.getBorrowerId() != null){
+                User borrower = userMapper.selectById(bookDrift.getBorrowerId());
+                bookListDTO.setBorrowerName(borrower.getUserName());
+            }
             res.add(bookListDTO);
         }
         logger.info("BookDrift series is: {}.", res);
