@@ -7,7 +7,6 @@ import com.jie.bookshare.mapper.AuthPictureMapper;
 import com.jie.bookshare.service.AuthPictureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,7 +35,7 @@ public class AuthPictureServiceImpl extends ServiceImpl<AuthPictureMapper, AuthP
      * @param authId
      * @return
      */
-    @Cacheable(value = "authImgList", key = "#authId")
+    //@Cacheable(value = "authImgList", key = "#authId")
     @Override
     public List<String> getAuthImgListByAuthId(Integer authId) {
         logger.info("Get auth's imageList By authId: {}.", authId);

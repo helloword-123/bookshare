@@ -18,7 +18,6 @@ import com.jie.bookshare.utils.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -183,7 +182,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return baseMapper.selectCount(cond) > 0;
     }
 
-    @CachePut(value = "userInfo#24*3600", key = "#openid")
+    //@CachePut(value = "userInfo#24*3600", key = "#openid")
     @Override
     public UserDTO getUserInfoByOpenid(String openid) {
         logger.info("Get userInfo by openid: {}.", openid);
@@ -199,6 +198,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user2.setTotalShareNum(0);
             user2.setTotalUseNum(0);
             user2.setAuthId(-1);
+            user2.setUserName("快乐小青蛙");
+            user2.setAvatarUrl("https://edu-wuhaojie.oss-cn-shenzhen.aliyuncs.com/bookshare/2023/01/01/14557b6d05f940949138367ebee89090f8S9a6ph8Rz9d997e5b2fa33d4fe0296c25fb672d07e.jpeg");
             baseMapper.insert(user2);
             userDTO.setId(user2.getId());
 
@@ -236,7 +237,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    @CachePut(value = "userInfo#24*3600", key = "#userDTO.id")
+    //@CachePut(value = "userInfo#24*3600", key = "#userDTO.id")
     public void updateUserInfo(UserDTO userDTO) {
         logger.info("id:{}, userName:{}, avatarUrl:{}", userDTO.getId(), userDTO.getNickName(), userDTO.getAvatarUrl());
         User user = new User();

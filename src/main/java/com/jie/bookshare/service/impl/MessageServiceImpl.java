@@ -9,7 +9,6 @@ import com.jie.bookshare.service.MessageService;
 import com.jie.bookshare.utils.SerializeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +40,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
      */
     @Override
     @Transactional
-    @Cacheable(value = "messages#10*60", key = "#userId")
+    //@Cacheable(value = "messages#10*60", key = "#userId")
     public List<List<MQMessage>> getAllMessages(Integer userId) throws Exception {
         logger.info("Get all messages by userId: {}.", userId);
         List<List<MQMessage>> res = new ArrayList<>();
@@ -87,7 +86,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
      * @return
      */
     @Override
-    @Cacheable(value = "unReadMessageSize#60", key = "#userId")
+    //@Cacheable(value = "unReadMessageSize#60", key = "#userId")
     public Integer getUnReadMessagesSize(Integer userId) {
         logger.info("Get unread messages by userId: {}.", userId);
         LambdaQueryWrapper<Message> con1 = new LambdaQueryWrapper<>();
