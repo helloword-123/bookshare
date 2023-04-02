@@ -1,0 +1,73 @@
+spring:
+  # mysql数据库配置
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/bookshare
+    username: root
+    password: kfHG4ibZ@958421#com
+    hikari:
+      maximum-pool-size: 60
+      connection-timeout: 60000
+      idle-timeout: 60000
+      validation-timeout: 3000
+      max-lifetime: 60000
+      login-timeout: 5
+      minimum-idle: 10
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  # redis账号密码
+  redis:
+    host: 127.0.0.1
+    password:
+    port: 6379
+    timeout: 30000
+    jedis:
+      pool:
+        max-wait: -1
+        max-active: -1
+        max-idle: 20
+        min-idle: 10
+
+
+# mybatis-plus配置
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.jie.bookshare.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+# 阿里云oss账号信息
+aliyun:
+  oss:
+    file:
+      endpoint: oss-cn-shenzhen.aliyuncs.com
+      keyid: LTAI5tAthXiqzCSghz8EX4VR
+      keysecret: kfHG4ibZYv6SXiCRPn9BRy6WVSwa4N
+      bucketname: edu-wuhaojie
+      projectname: bookshare
+
+
+logging:
+  # 日志级别，可以打印sql语句
+  level:
+    com.jie.bookshare: info
+  file:
+    name: bookshare.log
+    path: ./
+    clean-history-on-start: false
+
+
+management:
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'

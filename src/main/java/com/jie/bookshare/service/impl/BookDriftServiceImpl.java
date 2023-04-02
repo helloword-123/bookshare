@@ -293,7 +293,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
 
         res.add(list1);
         res.add(list2);
-        logger.info("Share and borrow bookList is: {}.", res);
+//        logger.info("Share and borrow bookList is: {}.", res);
 
         return res;
     }

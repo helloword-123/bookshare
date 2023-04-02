@@ -1,5 +1,3 @@
-package com.jie.bookshare.config;
-
 import cn.smallbun.screw.core.Configuration;
 import cn.smallbun.screw.core.engine.EngineConfig;
 import cn.smallbun.screw.core.engine.EngineFileType;
@@ -8,16 +6,16 @@ import cn.smallbun.screw.core.execute.DocumentationExecute;
 import cn.smallbun.screw.core.process.ProcessConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-
+import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
 
-public class MysqlDocConfig {
+public class MysqlDocGenerator {
     /**
      * MySQL文档生成，需要时打开@Test注释运行即可
      */
-    // @Test
+    @Test
     void documentGeneration() {
         //数据源
         HikariConfig hikariConfig = new HikariConfig();
