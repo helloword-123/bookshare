@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.Map;
  * @author wuhaojie
  * @since 2022-12-16
  */
+@Validated
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -40,8 +42,8 @@ public class UserController {
      * @param userId 用户id
      * @return
      */
-    @PreAuthorize("hasAuthority('user:query')")
     @ApiOperation(value = "获取用户角色")
+    @PreAuthorize("hasAuthority('user:query')")
     @GetMapping("getUserRoles/{userId}")
     public Result getUserRoles(@PathVariable Integer userId) {
         List<String> roles = new ArrayList<>();
@@ -55,11 +57,11 @@ public class UserController {
     /**
      * 微信登录后，修改用户头像和昵称
      *
-     * @param userDTO 用户头像和昵称
+     * @param userDTO 用户头像和昵称（暂时不校验参数）
      * @return
      */
-    @PreAuthorize("hasAuthority('user:update')")
     @ApiOperation(value = "微信登录后，修改用户头像和昵称")
+    @PreAuthorize("hasAuthority('user:update')")
     @PostMapping("updateUserInfo")
     public Result updateAvatarAndName(@RequestBody UserDTO userDTO) {
         userService.updateUserInfo(userDTO);
@@ -72,8 +74,8 @@ public class UserController {
      * @param userId 用户id
      * @return
      */
-    @PreAuthorize("hasAuthority('user:update')")
     @ApiOperation("管理员退出登录")
+    @PreAuthorize("hasAuthority('user:update')")
     @GetMapping("/logout/{userId}")
     public Result logout(@PathVariable Integer userId) {
         String key = IRedisService.concatKey(RedisKeys.USER_INFO, String.valueOf(userId));

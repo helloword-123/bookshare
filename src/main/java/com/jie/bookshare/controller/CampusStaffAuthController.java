@@ -9,9 +9,11 @@ import com.jie.bookshare.service.AuthPictureService;
 import com.jie.bookshare.service.CampusStaffAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -20,6 +22,7 @@ import java.util.List;
  * @author wuhaojie
  * @since 2023-01-21
  */
+@Validated
 @RestController
 @RequestMapping("/campus-staff-auth")
 public class CampusStaffAuthController {
@@ -51,7 +54,7 @@ public class CampusStaffAuthController {
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:add')")
     @PostMapping("/add")
-    public Result add(@RequestBody AuthDTO authDTO) {
+    public Result add(@RequestBody @Valid AuthDTO authDTO) {
         campusStaffAuthService.add(authDTO);
         return Result.ok();
     }
