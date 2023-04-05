@@ -10,12 +10,12 @@ import com.jie.bookshare.utils.JsonUtil;
 import com.jie.bookshare.utils.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ public class TokenFilter extends OncePerRequestFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
+    @Resource
     private IRedisService redisService;
 
     @Override
@@ -54,7 +54,9 @@ public class TokenFilter extends OncePerRequestFilter {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             PrintWriter writer = response.getWriter();
-            writer.print(JsonUtil.toJson(Result.error().code(ResultCode.CODE_ERROR_TOKEN_EXPIRE).message(ResultCode.MESSAGE_TOKEN_EXPIRE)));
+            writer.print(JsonUtil.toJson(Result.error().code(ResultCode.CODE_TOKEN_EXPIRE).message(ResultCode.MESSAGE_TOKEN_EXPIRE)));
+            writer.flush();
+            writer.close();
 
             return;
         }
@@ -66,7 +68,9 @@ public class TokenFilter extends OncePerRequestFilter {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             PrintWriter writer = response.getWriter();
-            writer.print(JsonUtil.toJson(Result.error() .code(ResultCode.CODE_ERROR_TOKEN_EXPIRE).message(ResultCode.MESSAGE_TOKEN_EXPIRE)));
+            writer.print(JsonUtil.toJson(Result.error() .code(ResultCode.CODE_TOKEN_EXPIRE).message(ResultCode.MESSAGE_TOKEN_EXPIRE)));
+            writer.flush();
+            writer.close();
 
             return;
         }

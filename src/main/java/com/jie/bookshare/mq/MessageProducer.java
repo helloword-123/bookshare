@@ -3,9 +3,10 @@ package com.jie.bookshare.mq;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 @Slf4j
 @Component
@@ -15,7 +16,7 @@ public class MessageProducer {
 
     public static final String MESSAGE_KEY = "mq:";
 
-    @Autowired
+    @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
     /**

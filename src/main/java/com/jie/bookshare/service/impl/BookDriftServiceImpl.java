@@ -13,12 +13,12 @@ import com.jie.bookshare.mq.MessageProducer;
 import com.jie.bookshare.service.BookDriftService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -34,22 +34,22 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
+    @Resource
     private BookDriftMapper bookDriftMapper;
-    @Autowired
+    @Resource
     private BookMapper bookMapper;
-    @Autowired
+    @Resource
     private BookDriftPictureMapper bookDriftPictureMapper;
-    @Autowired
+    @Resource
     private DriftPictureMapper driftPictureMapper;
-    @Autowired
+    @Resource
     private MessageProducer messageProducer;
-    @Autowired
+    @Resource
     private UserMapper userMapper;
 
-    @Autowired
+    @Resource
     private DataSourceTransactionManager dsManager;
-    @Autowired
+    @Resource
     TransactionDefinition definition;
 
 

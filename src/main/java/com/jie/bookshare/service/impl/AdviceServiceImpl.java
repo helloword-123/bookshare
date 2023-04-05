@@ -11,8 +11,9 @@ import com.jie.bookshare.mapper.DriftPictureMapper;
 import com.jie.bookshare.service.AdviceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -27,11 +28,11 @@ public class AdviceServiceImpl extends ServiceImpl<AdviceMapper, Advice> impleme
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
+    @Resource
     private AdviceMapper adviceMapper;
-    @Autowired
+    @Resource
     private DriftPictureMapper driftPictureMapper;
-    @Autowired
+    @Resource
     private AdvicePictureMapper advicePictureMapper;
 
     /**

@@ -1,7 +1,6 @@
 package com.jie.bookshare.config;
 
 import com.jie.bookshare.filter.TokenFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,10 +8,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.annotation.Resource;
+
 @SpringBootConfiguration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
+    @Resource
     private TokenFilter tokenFilter;
 
     /**
@@ -29,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/wxLogin").anonymous()
                 .antMatchers("/user/login").anonymous()
                 .antMatchers("/actuator/shutdown").permitAll()
+                .antMatchers("/common/test").permitAll()
                 .antMatchers("/user/checkToken").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/common/test/getToken").permitAll()

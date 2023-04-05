@@ -16,9 +16,9 @@ import com.jie.bookshare.service.BookService;
 import com.jie.bookshare.utils.LocationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -36,15 +36,15 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
+    @Resource
     private BookDriftService bookDriftService;
-    @Autowired
+    @Resource
     private BookDriftMapper bookDriftMapper;
-    @Autowired
+    @Resource
     private BookCategoryMapper bookCategoryMapper;
-    @Autowired
+    @Resource
     private BookMapper bookMapper;
-    @Autowired
+    @Resource
     private UserMapper userMapper;
 
 

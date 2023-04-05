@@ -15,9 +15,9 @@ import com.jie.bookshare.mq.MessageProducer;
 import com.jie.bookshare.service.CampusStaffAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -34,13 +34,13 @@ public class CampusStaffAuthServiceImpl extends ServiceImpl<CampusStaffAuthMappe
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
+    @Resource
     private CampusStaffAuthMapper campusStaffAuthMapper;
-    @Autowired
+    @Resource
     private AuthPictureMapper authPictureMapper;
-    @Autowired
+    @Resource
     private UserMapper userMapper;
-    @Autowired
+    @Resource
     private MessageProducer messageProducer;
 
     /**

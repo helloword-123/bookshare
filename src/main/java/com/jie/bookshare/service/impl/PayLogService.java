@@ -12,22 +12,17 @@ package com.jie.bookshare.service.impl;
 //
 
 
-import com.github.wxpay.sdk.WXPayUtil;
 import com.jie.bookshare.service.IPayLogService;
-import com.jie.bookshare.utils.HttpClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class PayLogService implements IPayLogService {
-//    @Autowired
+//    @Resource
 //    private OrderMapper orderMapper;
 //
-//    @Autowired
+//    @Resource
 //    private OrderDetailsMapper orderDetailsMapper;
 
     //请求微信支付二维码

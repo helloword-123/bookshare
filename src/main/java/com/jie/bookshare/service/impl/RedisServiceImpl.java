@@ -1,17 +1,17 @@
 package com.jie.bookshare.service.impl;
 
 import com.jie.bookshare.service.IRedisService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class RedisServiceImpl implements IRedisService {
 
-    @Autowired
+    @Resource
     private StringRedisTemplate redis;
 
     @Override

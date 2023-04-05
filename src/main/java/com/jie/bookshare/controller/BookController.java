@@ -1,18 +1,20 @@
 package com.jie.bookshare.controller;
 
 
+import com.jie.bookshare.common.CommonConstant;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.entity.dto.BookListWithCategoryDTO;
+import com.jie.bookshare.filter.ddos.AccessLimit;
 import com.jie.bookshare.service.BookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
@@ -28,7 +30,7 @@ import java.util.List;
 @Api(tags = "图书相关")
 public class BookController {
 
-    @Autowired
+    @Resource
     private BookService bookService;
 
     /**
@@ -36,6 +38,7 @@ public class BookController {
      *
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "小程序首页获取图书数据，根据分类id聚合返回")
     @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/getListWithCategory")
@@ -50,6 +53,7 @@ public class BookController {
      * @param isbn 图书ISBN码
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "判断改isbn号的图书是否已经在漂流中")
     @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/isDrifting/{isbn}")
@@ -74,6 +78,7 @@ public class BookController {
      * @param keyword    模糊查询关键词
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "根据筛选条件返回图书列表")
     @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/getListWithCondition")

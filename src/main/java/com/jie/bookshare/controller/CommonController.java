@@ -1,6 +1,9 @@
 package com.jie.bookshare.controller;
 
+import com.jie.bookshare.common.CommonConstant;
 import com.jie.bookshare.common.Result;
+import com.jie.bookshare.entity.dto.AuthenticationDTO;
+import com.jie.bookshare.filter.ddos.AccessLimit;
 import com.jie.bookshare.service.UserService;
 import com.jie.bookshare.service.impl.OssService;
 import com.jie.bookshare.utils.UploadCheckUtils;
@@ -9,10 +12,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -27,10 +30,10 @@ import java.util.List;
 public class CommonController {
     private Logger log = LoggerFactory.getLogger(getClass());
 
-    @Autowired
+    @Resource
     private OssService ossService;
 
-    @Autowired
+    @Resource
     private UserService userService;
 
 
@@ -40,6 +43,7 @@ public class CommonController {
      * @param file 上传的图片文件
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation("添加时上传图片")
     @PostMapping("uploadFile")
     public Result uploadOssFile(
@@ -59,6 +63,7 @@ public class CommonController {
      *
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "测试：直接获取token")
     @GetMapping("test/getToken")
     public Result getToken() {
@@ -69,6 +74,13 @@ public class CommonController {
             return Result.error().message("账号密码不匹配！");
         }
         return Result.ok().data("token", info.get(0)).data("rId", info.get(1));
+    }
+
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
+    @PostMapping("test")
+    public String test(@RequestBody AuthenticationDTO auth){
+
+        return auth.getUsername();
     }
 
 }

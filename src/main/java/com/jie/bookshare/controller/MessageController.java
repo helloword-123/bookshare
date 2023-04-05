@@ -1,7 +1,9 @@
 package com.jie.bookshare.controller;
 
 
+import com.jie.bookshare.common.CommonConstant;
 import com.jie.bookshare.common.Result;
+import com.jie.bookshare.filter.ddos.AccessLimit;
 import com.jie.bookshare.mq.MQMessage;
 import com.jie.bookshare.service.MessageService;
 import io.swagger.annotations.Api;
@@ -38,6 +40,7 @@ public class MessageController {
      * @param userId 用户id
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "获取未读消息长度")
     @GetMapping("/getUnReadMessagesSize/{userId}")
     public Result getUnReadMessagesSize(
@@ -54,6 +57,7 @@ public class MessageController {
      * @param userId 用户id
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "根据userId获取其已读和未读消息")
     @GetMapping("/getAllMessages/{userId}")
     public Result getAllMessages(
@@ -76,6 +80,7 @@ public class MessageController {
      * @param msgId  消息id
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "读取消息")
     @GetMapping("/readMessage/{userId}/{msgId}")
     public Result readMessage(

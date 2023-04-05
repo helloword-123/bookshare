@@ -1,11 +1,13 @@
 package com.jie.bookshare.controller;
 
 
+import com.jie.bookshare.common.CommonConstant;
 import com.jie.bookshare.common.RedisKeys;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.AclRole;
 import com.jie.bookshare.entity.dto.AuthenticationDTO;
 import com.jie.bookshare.entity.dto.UserDTO;
+import com.jie.bookshare.filter.ddos.AccessLimit;
 import com.jie.bookshare.service.IRedisService;
 import com.jie.bookshare.service.UserService;
 import com.jie.bookshare.utils.JwtUtil;
@@ -13,11 +15,11 @@ import com.jie.bookshare.utils.WxUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import java.util.ArrayList;
@@ -35,9 +37,9 @@ import java.util.Map;
 @RequestMapping("/user")
 @Api(tags = "用户相关")
 public class UserController {
-    @Autowired
+    @Resource
     private UserService userService;
-    @Autowired
+    @Resource
     private IRedisService redisService;
 
     /**
@@ -46,6 +48,7 @@ public class UserController {
      * @param userId 用户id
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "获取用户角色")
     @PreAuthorize("hasAuthority('user:query')")
     @GetMapping("getUserRoles/{userId}")
@@ -67,6 +70,7 @@ public class UserController {
      * @param userDTO 用户头像和昵称（暂时不校验参数）
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "微信登录后，修改用户头像和昵称")
     @PreAuthorize("hasAuthority('user:update')")
     @PostMapping("updateUserInfo")
@@ -81,6 +85,7 @@ public class UserController {
      * @param userId 用户id
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation("管理员退出登录")
     @PreAuthorize("hasAuthority('user:update')")
     @GetMapping("/logout/{userId}")
@@ -99,6 +104,7 @@ public class UserController {
      * @param authenticationDTO 前端后台登录传输的dto
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @Deprecated
     @ApiOperation(value = "后台登录")
     @PostMapping("login")
@@ -122,6 +128,7 @@ public class UserController {
      * @param reqBody 前端微信登录传输的dto
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "微信小程序登录")
     @PostMapping("/wxLogin")
     public Result wxLogin(
@@ -156,6 +163,7 @@ public class UserController {
      * @param token token值
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "验证token有效性", notes =
             "返回数据含有一个isValid字段，如果token有效，则isValid字段为true，否则为false"
     )

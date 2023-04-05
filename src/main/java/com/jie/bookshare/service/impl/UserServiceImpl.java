@@ -17,10 +17,10 @@ import com.jie.bookshare.utils.JsonUtil;
 import com.jie.bookshare.utils.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -38,21 +38,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
+    @Resource
     private PasswordEncoder passwordEncoder;
-    @Autowired
+    @Resource
     private IRedisService redisService;
-    @Autowired
+    @Resource
     private AclRoleUserMapper aclRoleUserMapper;
-    @Autowired
+    @Resource
     private AclRoleMapper aclRoleMapper;
-    @Autowired
+    @Resource
     private AclRolePermissionMapper aclRolePermissionMapper;
-    @Autowired
+    @Resource
     private AclPermissionTypeMapper aclPermissionTypeMapper;
-    @Autowired
+    @Resource
     private AclPermissionMapper aclPermissionMapper;
-    @Autowired
+    @Resource
     private CampusStaffAuthService campusStaffAuthService;
 
 

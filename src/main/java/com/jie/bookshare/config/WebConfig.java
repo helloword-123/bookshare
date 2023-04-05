@@ -1,19 +1,31 @@
 package com.jie.bookshare.config;
 
+import com.jie.bookshare.filter.ddos.AccessInterceptor;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
+import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @SpringBootConfiguration
 @EnableWebMvc
-public class CorsConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
+
+    @Resource
+    private AccessInterceptor accessInterceptor;
+
+    @Override
+    // 把拦截器Interceptor注册到springboot中
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 注册拦截器
+        registry.addInterceptor(accessInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
+    }
+
     /**
      * 跨域配置
      *

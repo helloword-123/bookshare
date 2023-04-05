@@ -1,16 +1,17 @@
 package com.jie.bookshare.controller;
 
 
+import com.jie.bookshare.common.CommonConstant;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.CampusStaffAuth;
 import com.jie.bookshare.entity.dto.AuthDTO;
 import com.jie.bookshare.entity.dto.CheckDTO;
+import com.jie.bookshare.filter.ddos.AccessLimit;
 import com.jie.bookshare.service.AuthPictureService;
 import com.jie.bookshare.service.CampusStaffAuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ import java.util.List;
 @Api(tags = "认证相关")
 public class CampusStaffAuthController {
 
-    @Autowired
+    @Resource
     private CampusStaffAuthService campusStaffAuthService;
     @Resource
     private AuthPictureService authPictureService;
@@ -44,6 +45,7 @@ public class CampusStaffAuthController {
      * @param authId 认证记录id
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "根据authId查询所有认证图片")
     @PreAuthorize("hasAuthority('campus_staff_auth:query')")
     @GetMapping("/getAuthImgList/{authId}")
@@ -61,6 +63,7 @@ public class CampusStaffAuthController {
      * @param authDTO 前端添加校园认证记录传输的dto
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "添加校园认证记录")
     @PreAuthorize("hasAuthority('campus_staff_auth:add')")
     @PostMapping("/add")
@@ -78,6 +81,7 @@ public class CampusStaffAuthController {
      * @param userId 用户id
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "根据userId获取用户的认证信息")
     @PreAuthorize("hasAuthority('campus_staff_auth:query')")
     @GetMapping("/getAuthInfo/{userId}")
@@ -94,6 +98,7 @@ public class CampusStaffAuthController {
      *
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "获取所有用户的认证记录（多次认证只返回最后一条）")
     @PreAuthorize("hasAuthority('campus_staff_auth:admin')")
     @GetMapping("/getAuthList")
@@ -109,6 +114,7 @@ public class CampusStaffAuthController {
      * @param checkDTO 前端审核传输的dto
      * @return
      */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "审核")
     @PreAuthorize("hasAuthority('campus_staff_auth:admin')")
     @PostMapping("/check")
