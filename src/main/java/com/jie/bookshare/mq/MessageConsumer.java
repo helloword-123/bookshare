@@ -38,39 +38,53 @@ public class MessageConsumer {
      */
     @PostConstruct
     public void brPop() {
-        new Thread(() -> {
+        Thread thread = new Thread(() -> {
             while (true) {
-                MQMessage mqMessage = (MQMessage) redisTemplate.opsForList().rightPop(MESSAGE_KEY, BLOCK_TIME,
-                        TimeUnit.SECONDS);
-                if (mqMessage == null) {
-                    continue;
+                Thread current = Thread.currentThread();
+                if(current.isInterrupted()) {
+                    // 断开连接
+                    log.info("Redis consumer 正常断开连接！");
+                    break;
                 }
-                logger.info("receive a message! msg:{}.", mqMessage);
-                // 插入数据库
-                Message msg = new Message();
-                msg.setProducerId(mqMessage.getProducerId());
-                msg.setHasConsumed(0);
-                try {
-                    msg.setMessage(SerializeUtil.serializeObjToBytes(mqMessage));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    continue;
-                }
-                msg.setConsumerId(mqMessage.getConsumerId());
-                messageMapper.insert(msg);
 
-                // 通知用户
-                WebSocketServer wss = WebSocketServer.getWebSocketServerByUserId(String.valueOf(mqMessage.getConsumerId()));
-                if (wss == null) {
-                    continue;
-                }
                 try {
-                    wss.sendMessage("你有新的消息！");
-                    logger.info("Send message to userId: {}.", mqMessage.getConsumerId());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    MQMessage mqMessage = (MQMessage) redisTemplate.opsForList().rightPop(MESSAGE_KEY, BLOCK_TIME,
+                            TimeUnit.SECONDS);
+                    if (mqMessage == null) {
+                        continue;
+                    }
+                    logger.info("receive a message! msg:{}.", mqMessage);
+                    // 插入数据库
+                    Message msg = new Message();
+                    msg.setProducerId(mqMessage.getProducerId());
+                    msg.setHasConsumed(0);
+                    try {
+                        msg.setMessage(SerializeUtil.serializeObjToBytes(mqMessage));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        continue;
+                    }
+                    msg.setConsumerId(mqMessage.getConsumerId());
+                    messageMapper.insert(msg);
+
+                    // 通知用户
+                    WebSocketServer wss = WebSocketServer.getWebSocketServerByUserId(String.valueOf(mqMessage.getConsumerId()));
+                    if (wss == null) {
+                        continue;
+                    }
+                    try {
+                        wss.sendMessage("你有新的消息！");
+                        logger.info("Send message to userId: {}.", mqMessage.getConsumerId());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e){
+                    log.error(e.getMessage());
                 }
             }
-        }).start();
+        });
+        // 启动
+        thread.setName("consumer");
+        thread.start();
     }
 }

@@ -24,8 +24,24 @@ class TerminateBean {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PreDestroy
-    public void preDestroy() {
+    public void preDestroy() throws InterruptedException {
         // 关闭服务器前的收尾工作......
+        // 1. 关闭Redis消费者线程
+        ThreadGroup currentGroup = Thread.currentThread().getThreadGroup();
+        int activeThreadNum = currentGroup.activeCount();
+        Thread[] activeThreads = new Thread[activeThreadNum];
+        currentGroup.enumerate(activeThreads);
+        Thread consumerThread = null;
+        for (int i = 0; i < activeThreadNum; i++){
+            if("consumer".equals(activeThreads[i].getName())){
+                consumerThread = activeThreads[i];
+                break;
+            }
+        }
+        if(consumerThread != null){
+            consumerThread.interrupt();
+            consumerThread.join();
+        }
 
         logger.info("SpringBoot process is destroyed!");
     }
