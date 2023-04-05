@@ -4,12 +4,14 @@ package com.jie.bookshare.controller;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.mq.MQMessage;
 import com.jie.bookshare.service.MessageService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.Digits;
 import java.util.List;
 
 /**
@@ -18,6 +20,7 @@ import java.util.List;
  * @author wuhaojie
  * @since 2023-02-18
  */
+@Validated
 @RestController
 @RequestMapping("/message")
 public class MessageController {
@@ -32,7 +35,8 @@ public class MessageController {
      * @return
      */
     @GetMapping("/getUnReadMessagesSize/{userId}")
-    public Result getUnReadMessagesSize(@PathVariable Integer userId) {
+    public Result getUnReadMessagesSize(@Digits(integer = 3, fraction = 0)
+                                        @PathVariable Integer userId) {
         Integer msgSize = messageService.getUnReadMessagesSize(userId);
         return Result.ok().data("msgSize", msgSize);
     }
@@ -44,7 +48,8 @@ public class MessageController {
      * @return
      */
     @GetMapping("/getAllMessages/{userId}")
-    public Result getAllMessages(@PathVariable Integer userId) {
+    public Result getAllMessages(@Digits(integer = 3, fraction = 0)
+                                 @PathVariable Integer userId) {
         List<List<MQMessage>> messageList = null;
         try {
             messageList = messageService.getAllMessages(userId);
@@ -62,7 +67,10 @@ public class MessageController {
      * @return
      */
     @GetMapping("/readMessage/{userId}/{msgId}")
-    public Result readMessage(@PathVariable Integer userId, @PathVariable Integer msgId) {
+    public Result readMessage(@Digits(integer = 3, fraction = 0)
+                              @PathVariable Integer userId,
+                              @Digits(integer = 3, fraction = 0)
+                              @PathVariable Integer msgId) {
         messageService.readMessage(userId, msgId);
         return Result.ok();
     }

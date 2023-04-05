@@ -6,11 +6,14 @@ import com.jie.bookshare.entity.dto.AdviceDTO;
 import com.jie.bookshare.service.AdviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * 评价Controller
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author wuhaojie
  * @since 2023-01-20
  */
+@Validated
 @RestController
 @RequestMapping("/advice")
 public class AdviceController {
@@ -33,7 +37,8 @@ public class AdviceController {
      */
     @PreAuthorize("hasAuthority('advice:add')")
     @PostMapping("/add")
-    public Result add(@RequestBody AdviceDTO adviceDTO) {
+    public Result add(@Valid
+                      @RequestBody AdviceDTO adviceDTO) {
         adviceService.add(adviceDTO);
         return Result.ok();
     }

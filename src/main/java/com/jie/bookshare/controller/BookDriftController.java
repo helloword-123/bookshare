@@ -6,8 +6,11 @@ import com.jie.bookshare.entity.dto.*;
 import com.jie.bookshare.service.BookDriftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +20,7 @@ import java.util.Map;
  * @author wuhaojie
  * @since 2022-12-16
  */
+@Validated
 @RestController
 @RequestMapping("/book-drift")
 public class BookDriftController {
@@ -46,7 +50,8 @@ public class BookDriftController {
      */
     @PreAuthorize("hasAuthority('book_drift:admin')")
     @PostMapping("/checkBook")
-    public Result checkBookDrift(@RequestBody CheckBookDriftDTO checkBookDriftDTO) {
+    public Result checkBookDrift(@Valid
+                                 @RequestBody CheckBookDriftDTO checkBookDriftDTO) {
         Integer res = bookDriftService.checkBookDrift(checkBookDriftDTO);
         if (res == 0) {
             return Result.error().message("更新图书漂流状态失败！");
@@ -64,7 +69,10 @@ public class BookDriftController {
      */
     @PreAuthorize("hasAuthority('book_drift:admin')")
     @PutMapping("/checkBook/{bookId}/{status}")
-    public Result checkBook(@PathVariable Integer bookId, @PathVariable Integer status) {
+    public Result checkBook(@Digits(integer = 3, fraction = 0)
+                            @PathVariable Integer bookId,
+                            @Digits(integer = 3, fraction = 0)
+                            @PathVariable Integer status) {
         Integer res = bookDriftService.changeBookStatus(bookId, status);
         if (res == 0) {
             return Result.error().message("更新图书漂流状态失败！");
@@ -108,7 +116,8 @@ public class BookDriftController {
      */
     @PreAuthorize("hasAuthority('book_drift:query')")
     @GetMapping("/getDriftingById/{id}")
-    public Result getById(@PathVariable Integer id) {
+    public Result getById(@Digits(integer = 3, fraction = 0)
+                          @PathVariable Integer id) {
         BookListDTO bookListDTO = bookDriftService.getDriftingById(id);
         return Result.ok().data("bookDrift", bookListDTO);
     }
@@ -121,7 +130,8 @@ public class BookDriftController {
      */
     @PreAuthorize("hasAuthority('book_drift:update')")
     @PostMapping("/borrow")
-    public Result borrowBook(@RequestBody BookBorrowDTO dto) {
+    public Result borrowBook(@Valid
+                             @RequestBody BookBorrowDTO dto) {
         bookDriftService.borrowBook(dto);
         return Result.ok();
     }
@@ -134,7 +144,8 @@ public class BookDriftController {
      */
     @PreAuthorize("hasAuthority('book_drift:query')")
     @GetMapping("/getShareBorrowBookList/{userId}")
-    public Result getShareBorrowBookList(@PathVariable Integer userId) {
+    public Result getShareBorrowBookList(@Digits(integer = 3, fraction = 0)
+                                         @PathVariable Integer userId) {
         // 第一个数组是共享记录；第二个数组是借阅记录
         List<List<BookListDTO>> bookList = bookDriftService.getShareBorrowBookList(userId);
         return Result.ok().data("bookList", bookList);
@@ -148,7 +159,8 @@ public class BookDriftController {
      */
     @PreAuthorize("hasAuthority('book_drift:query')")
     @GetMapping("/getBookDriftSeries/{bookId}")
-    public Result getBookDriftSeries(@PathVariable Integer bookId) {
+    public Result getBookDriftSeries(@Digits(integer = 3, fraction = 0)
+                                     @PathVariable Integer bookId) {
         List<BookListDTO> bookDriftSeries = bookDriftService.getBookDriftSeries(bookId);
         return Result.ok().data("bookDriftSeries", bookDriftSeries);
     }

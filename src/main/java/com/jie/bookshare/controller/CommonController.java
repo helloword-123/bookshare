@@ -3,6 +3,7 @@ package com.jie.bookshare.controller;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.service.UserService;
 import com.jie.bookshare.service.impl.OssService;
+import com.jie.bookshare.utils.UploadCheckUtils;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -44,6 +45,8 @@ public class CommonController {
             @RequestParam("image")
             MultipartFile file) {
         log.info("图片上传");
+        // 校验
+        UploadCheckUtils.uploadVerify(file);
         //获取上传文件
         String url = ossService.uploadFileAvatar(file);
         return Result.ok().data("url", url);

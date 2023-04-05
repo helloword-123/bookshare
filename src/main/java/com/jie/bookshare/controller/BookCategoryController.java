@@ -7,11 +7,13 @@ import com.jie.bookshare.entity.dto.BookCategoryCascaderDTO;
 import com.jie.bookshare.service.BookCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Digits;
 import java.util.List;
 
 /**
@@ -20,6 +22,7 @@ import java.util.List;
  * @author wuhaojie
  * @since 2022-12-16
  */
+@Validated
 @RestController
 @RequestMapping("/book-category")
 public class BookCategoryController {
@@ -60,7 +63,8 @@ public class BookCategoryController {
      */
     @PreAuthorize("hasAuthority('book_category:query')")
     @GetMapping("/getCategoryFullName/{categoryId}")
-    public Result getCategoryFullName(@PathVariable Integer categoryId) {
+    public Result getCategoryFullName(@Digits(integer = 3, fraction = 0)
+                                      @PathVariable Integer categoryId) {
         String categoryFullName = bookCategoryService.getCategoryFullName(categoryId);
         return Result.ok().data("categoryFullName", categoryFullName);
     }

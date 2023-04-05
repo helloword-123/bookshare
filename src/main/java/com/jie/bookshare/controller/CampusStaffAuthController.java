@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import java.util.List;
 
 /**
@@ -41,7 +42,8 @@ public class CampusStaffAuthController {
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:query')")
     @GetMapping("/getAuthImgList/{authId}")
-    public Result getAuthImgListByAuthId(@PathVariable Integer authId) {
+    public Result getAuthImgListByAuthId(@Digits(integer = 3, fraction = 0)
+                                         @PathVariable Integer authId) {
         List<String> imgList = authPictureService.getAuthImgListByAuthId(authId);
         return Result.ok().data("imgList", imgList);
     }
@@ -54,7 +56,8 @@ public class CampusStaffAuthController {
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:add')")
     @PostMapping("/add")
-    public Result add(@RequestBody @Valid AuthDTO authDTO) {
+    public Result add(@Valid
+                      @RequestBody AuthDTO authDTO) {
         campusStaffAuthService.add(authDTO);
         return Result.ok();
     }
@@ -67,7 +70,8 @@ public class CampusStaffAuthController {
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:query')")
     @GetMapping("/getAuthInfo/{userId}")
-    public Result getAuthInfo(@PathVariable Integer userId) {
+    public Result getAuthInfo(@Digits(integer = 3, fraction = 0)
+                              @PathVariable Integer userId) {
         CampusStaffAuth campusStaffAuth = campusStaffAuthService.getAuthInfo(userId);
         return Result.ok().data("campusStaffAuth", campusStaffAuth);
     }
@@ -93,7 +97,8 @@ public class CampusStaffAuthController {
      */
     @PreAuthorize("hasAuthority('campus_staff_auth:admin')")
     @PostMapping("/check")
-    public Result checkAuth(@RequestBody CheckDTO checkDTO) {
+    public Result checkAuth(@Valid
+                            @RequestBody CheckDTO checkDTO) {
         campusStaffAuthService.checkAuth(checkDTO);
         return Result.ok();
     }

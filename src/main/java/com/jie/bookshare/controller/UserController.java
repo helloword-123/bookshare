@@ -17,6 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +47,8 @@ public class UserController {
     @ApiOperation(value = "获取用户角色")
     @PreAuthorize("hasAuthority('user:query')")
     @GetMapping("getUserRoles/{userId}")
-    public Result getUserRoles(@PathVariable Integer userId) {
+    public Result getUserRoles(@Digits(integer = 3, fraction = 0)
+                               @PathVariable Integer userId) {
         List<String> roles = new ArrayList<>();
         List<AclRole> aclRoles = userService.findRoleForAdmin(userId);
         for (AclRole role : aclRoles) {
@@ -77,7 +80,8 @@ public class UserController {
     @ApiOperation("管理员退出登录")
     @PreAuthorize("hasAuthority('user:update')")
     @GetMapping("/logout/{userId}")
-    public Result logout(@PathVariable Integer userId) {
+    public Result logout(@Digits(integer = 3, fraction = 0)
+                         @PathVariable Integer userId) {
         String key = IRedisService.concatKey(RedisKeys.USER_INFO, String.valueOf(userId));
         redisService.delete(key);
         return Result.ok();
@@ -94,6 +98,7 @@ public class UserController {
     @PostMapping("login")
     public Result login(
             @ApiParam(value = "登录的账号密码", required = true)
+            @Valid
             @RequestBody AuthenticationDTO authenticationDTO) {
         String username = authenticationDTO.getUsername();
         String password = authenticationDTO.getPassword();

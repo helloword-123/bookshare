@@ -8,8 +8,10 @@ import com.jie.bookshare.service.BookService;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 /**
@@ -18,6 +20,7 @@ import java.util.List;
  * @author wuhaojie
  * @since 2022-12-16
  */
+@Validated
 @RestController
 @RequestMapping("/book")
 public class BookController {
@@ -45,7 +48,9 @@ public class BookController {
      */
     @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/isDrifting/{isbn}")
-    public Result checkIsbnIsDrifting(@PathVariable String isbn) {
+    public Result checkIsbnIsDrifting(
+            @Pattern(regexp = "^[0-9]{10}|[0-9]{13}$", message = "isbn码格式不符合要求")
+            @PathVariable String isbn) {
         Boolean res = bookService.checkIsbnIsDrifting(isbn);
         // 图书漂流正在进行中，无法重复漂流
         if (!res) {
@@ -78,6 +83,13 @@ public class BookController {
             @RequestParam(required = false) Double latitude,
             @ApiParam(value = "用户当前定位精度，非必需", example = "XXX")
             @RequestParam(required = false) Double longitude) {
+        // 校验
+        if (sortColumn != null && !"distance".equals(sortColumn) && !"releaseTime".equals(sortColumn)) {
+            return Result.error().message("排序字段不符合要求！");
+        }
+        if (sortOrder != null && !"asc".equals(sortOrder) && !"desc".equals(sortOrder)) {
+            return Result.error().message("排序方式不符合要求！");
+        }
         List<BookListDTO> bookList = bookService.getListWithCondition(categoryId, sortColumn, sortOrder, keyword, latitude, longitude);
         return Result.ok().data("list", bookList);
     }

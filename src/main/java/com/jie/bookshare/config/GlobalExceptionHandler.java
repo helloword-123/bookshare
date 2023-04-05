@@ -67,10 +67,10 @@ public class GlobalExceptionHandler {
 
     // 其他所有异常捕获器
     @ExceptionHandler(Exception.class)
-    public Result otherErrorDispose(Exception e) {
+    public Result otherExceptionDispose(Exception e) {
         // 打印错误日志
         log.error("错误代码({}),错误信息({})", ResultCode.ERROR, e.getMessage());
         e.printStackTrace();
-        return Result.error().message(ResultCode.ERROR_MESSAGE);
+        return Result.error().message(e.getMessage());
     }
 }
