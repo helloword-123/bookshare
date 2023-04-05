@@ -5,6 +5,7 @@ import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.entity.dto.BookListWithCategoryDTO;
 import com.jie.bookshare.service.BookService;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +34,7 @@ public class BookController {
      *
      * @return
      */
+    @ApiOperation(value = "小程序首页获取图书数据，根据分类id聚合返回")
     @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/getListWithCategory")
     public Result getListWithCategory() {
@@ -46,6 +48,7 @@ public class BookController {
      * @param isbn 图书ISBN码
      * @return
      */
+    @ApiOperation(value = "判断改isbn号的图书是否已经在漂流中")
     @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/isDrifting/{isbn}")
     public Result checkIsbnIsDrifting(
@@ -68,6 +71,7 @@ public class BookController {
      * @param keyword    模糊查询关键词
      * @return
      */
+    @ApiOperation(value = "根据筛选条件返回图书列表")
     @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/getListWithCondition")
     public Result getListWithCondition(

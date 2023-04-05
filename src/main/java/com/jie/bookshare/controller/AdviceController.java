@@ -4,6 +4,7 @@ package com.jie.bookshare.controller;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.dto.AdviceDTO;
 import com.jie.bookshare.service.AdviceService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +36,7 @@ public class AdviceController {
      * @param adviceDTO 前端提交的评价dto
      * @return
      */
+    @ApiOperation(value = "添加建议")
     @PreAuthorize("hasAuthority('advice:add')")
     @PostMapping("/add")
     public Result add(@Valid

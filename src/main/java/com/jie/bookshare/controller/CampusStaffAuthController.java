@@ -7,6 +7,7 @@ import com.jie.bookshare.entity.dto.AuthDTO;
 import com.jie.bookshare.entity.dto.CheckDTO;
 import com.jie.bookshare.service.AuthPictureService;
 import com.jie.bookshare.service.CampusStaffAuthService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -40,6 +41,7 @@ public class CampusStaffAuthController {
      * @param authId 认证记录id
      * @return
      */
+    @ApiOperation(value = "根据authId查询所有认证图片")
     @PreAuthorize("hasAuthority('campus_staff_auth:query')")
     @GetMapping("/getAuthImgList/{authId}")
     public Result getAuthImgListByAuthId(@Digits(integer = 3, fraction = 0)
@@ -54,6 +56,7 @@ public class CampusStaffAuthController {
      * @param authDTO 前端添加校园认证记录传输的dto
      * @return
      */
+    @ApiOperation(value = "添加校园认证记录")
     @PreAuthorize("hasAuthority('campus_staff_auth:add')")
     @PostMapping("/add")
     public Result add(@Valid
@@ -68,6 +71,7 @@ public class CampusStaffAuthController {
      * @param userId 用户id
      * @return
      */
+    @ApiOperation(value = "根据userId获取用户的认证信息")
     @PreAuthorize("hasAuthority('campus_staff_auth:query')")
     @GetMapping("/getAuthInfo/{userId}")
     public Result getAuthInfo(@Digits(integer = 3, fraction = 0)
@@ -81,6 +85,7 @@ public class CampusStaffAuthController {
      *
      * @return
      */
+    @ApiOperation(value = "获取所有用户的认证记录（多次认证只返回最后一条）")
     @PreAuthorize("hasAuthority('campus_staff_auth:admin')")
     @GetMapping("/getAuthList")
     public Result getAuthList() {
@@ -95,6 +100,7 @@ public class CampusStaffAuthController {
      * @param checkDTO 前端审核传输的dto
      * @return
      */
+    @ApiOperation(value = "审核")
     @PreAuthorize("hasAuthority('campus_staff_auth:admin')")
     @PostMapping("/check")
     public Result checkAuth(@Valid

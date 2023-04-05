@@ -4,6 +4,7 @@ package com.jie.bookshare.controller;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.service.BookCollectService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,7 @@ public class BookCollectController {
      * @param userId 用户id
      * @return
      */
+    @ApiOperation(value = "更新收藏信息")
     @PreAuthorize("hasAuthority('book_collect:update')")
     @GetMapping("/update/{bookId}/{userId}")
     public Result updateByIds(@Digits(integer = 3, fraction = 0)
@@ -54,6 +56,7 @@ public class BookCollectController {
      * @param userId 用户id
      * @return
      */
+    @ApiOperation(value = "获取图书收藏状态")
     @PreAuthorize("hasAuthority('book_collect:query')")
     @GetMapping("/getBookCollectByIds/{bookId}/{userId}")
     public Result getBookCollectByIds(@Digits(integer = 3, fraction = 0)
@@ -71,6 +74,7 @@ public class BookCollectController {
      * @param userId 用户id
      * @return
      */
+    @ApiOperation(value = "获取图书收藏列表")
     @PreAuthorize("hasAuthority('book_collect:query')")
     @GetMapping("/getCollectedBooks/{userId}")
     public Result getCollectedBooks(@Digits(integer = 3, fraction = 0)

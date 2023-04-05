@@ -4,6 +4,7 @@ package com.jie.bookshare.controller;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.dto.*;
 import com.jie.bookshare.service.BookDriftService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -34,6 +35,7 @@ public class BookDriftController {
      *
      * @return
      */
+    @ApiOperation(value = "获取未审核的图书")
     @PreAuthorize("hasAuthority('book_drift:admin')")
     @GetMapping("/getNotCheckedBooks")
     public Result getNotCheckedBooks() {
@@ -48,6 +50,7 @@ public class BookDriftController {
      * @param checkBookDriftDTO 前端审核传输的dto
      * @return
      */
+    @ApiOperation(value = "审核")
     @PreAuthorize("hasAuthority('book_drift:admin')")
     @PostMapping("/checkBook")
     public Result checkBookDrift(@Valid
@@ -67,6 +70,7 @@ public class BookDriftController {
      * @param status 修改状态
      * @return
      */
+    @ApiOperation(value = "修改图书漂流状态")
     @PreAuthorize("hasAuthority('book_drift:admin')")
     @PutMapping("/checkBook/{bookId}/{status}")
     public Result checkBook(@Digits(integer = 3, fraction = 0)
@@ -86,6 +90,7 @@ public class BookDriftController {
      * @param reqBody 前端共享图书传输的对象
      * @return
      */
+    @ApiOperation(value = "图书共享")
     @PreAuthorize("hasAuthority('book_drift:add')")
     @PostMapping("/shareBook")
     public Result shareBook(@RequestBody Map<String, Object> reqBody) {
@@ -101,6 +106,7 @@ public class BookDriftController {
      *
      * @return
      */
+    @ApiOperation(value = "地图搜索页获取正在漂流的图书信息")
     @PreAuthorize("hasAuthority('book_drift:query')")
     @GetMapping("/getDriftingBooks")
     public Result getDriftingBooks() {
@@ -114,6 +120,7 @@ public class BookDriftController {
      * @param id 图书漂流id
      * @return
      */
+    @ApiOperation(value = "根据id获取正在漂流的信息")
     @PreAuthorize("hasAuthority('book_drift:query')")
     @GetMapping("/getDriftingById/{id}")
     public Result getById(@Digits(integer = 3, fraction = 0)
@@ -128,6 +135,7 @@ public class BookDriftController {
      * @param dto 前端借阅图书传输的dto
      * @return
      */
+    @ApiOperation(value = "借书")
     @PreAuthorize("hasAuthority('book_drift:update')")
     @PostMapping("/borrow")
     public Result borrowBook(@Valid
@@ -142,6 +150,7 @@ public class BookDriftController {
      * @param userId 用户id
      * @return
      */
+    @ApiOperation(value = "根据用户id获取他的共享和借阅记录")
     @PreAuthorize("hasAuthority('book_drift:query')")
     @GetMapping("/getShareBorrowBookList/{userId}")
     public Result getShareBorrowBookList(@Digits(integer = 3, fraction = 0)
@@ -157,6 +166,7 @@ public class BookDriftController {
      * @param bookId 用户id
      * @return
      */
+    @ApiOperation(value = "根据图书id获取其漂流记录（顺序连起来）")
     @PreAuthorize("hasAuthority('book_drift:query')")
     @GetMapping("/getBookDriftSeries/{bookId}")
     public Result getBookDriftSeries(@Digits(integer = 3, fraction = 0)
