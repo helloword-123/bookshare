@@ -62,15 +62,15 @@ public class IpUtils {
         return ipAddress;
     }
 
-    public Boolean redisIP(HttpServletRequest request, int seconds, int maxCount) {
+    public Boolean redisIP(HttpServletRequest request, int seconds, int maxCount, String methodName) {
         String ip = this.getIpAddr(request);
-        String key = "IP:" + ip;
+        String key = "IP_" + ip + "_" + methodName;
         if (stringRedisTemplate.hasKey(key)) {
             stringRedisTemplate.opsForValue().increment(key);
             int count = Integer.parseInt(stringRedisTemplate.opsForValue().get(key));
             if (count >= maxCount) {
                 //IP访问次数超过，防止洪水攻击
-                logger.error("IP: {}, 在{}秒内，访问次数为{}, 超过限制{}, 拒绝访问!", ip, seconds, count, maxCount);
+                logger.error("IP:【{}】, 在【{}】秒内访问接口【{}】次数过多，访问次数为【{}】, 超过限制【{}】, 拒绝访问!", ip, seconds, methodName, count, maxCount);
                 return false;
             }
         } else {

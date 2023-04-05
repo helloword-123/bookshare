@@ -16,6 +16,6 @@ public interface ResultCode {
     // 返回消息
     String MESSAGE_ERROR = "服务器出错啦！";
     String MESSAGE_TOKEN_EXPIRE = "token过期！";
-    String MESSAGE_ACCESS_LIMIT = "拒绝访问-访问次数过多！";
+    String MESSAGE_ACCESS_LIMIT = "访问次数过多！";
 }
 

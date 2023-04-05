@@ -27,7 +27,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
             if (accessLimit == null) {
                 return false;
             }
-            if(ipUtils.redisIP(request, accessLimit.seconds(), accessLimit.maxCount())){
+            if(ipUtils.redisIP(request, accessLimit.seconds(), accessLimit.maxCount(), hm.getMethod().getDeclaringClass() + ":" + hm.getMethod().getName())){
                 // 一切正常
                 return true;
             }else{

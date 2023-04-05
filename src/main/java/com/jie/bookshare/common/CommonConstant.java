@@ -1,7 +1,8 @@
 package com.jie.bookshare.common;
 
-public interface CommonConstant {
-    Integer REQUEST_SECONDS = 5;
+public class CommonConstant {
+    public static final int REQUEST_SECONDS = 5;
 
-    Integer REQUEST_MAX_COUNT = 5;
+    public static final int REQUEST_MAX_COUNT = 5;
+
 }
