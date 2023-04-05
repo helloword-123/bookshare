@@ -1,4 +1,4 @@
-package com.jie.bookshare.config;
+package com.jie.bookshare.exception;
 
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.common.ResultCode;
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
         }
         BindingResult result = ex.getBindingResult();
         FieldError error = result.getFieldError();
-        return Result.error().message(null == error ? ResultCode.ERROR_MESSAGE : error.getDefaultMessage());
+        return Result.error().message(null == error ? ResultCode.MESSAGE_ERROR : error.getDefaultMessage());
     }
 
     // 捕获器
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
         }
         BindingResult result = ex.getBindingResult();
         FieldError error = result.getFieldError();
-        return Result.error().message(null == error ? ResultCode.ERROR_MESSAGE : error.getDefaultMessage());
+        return Result.error().message(null == error ? ResultCode.MESSAGE_ERROR : error.getDefaultMessage());
     }
 
     // 捕获器: 传了值，但是不符合要求
@@ -62,14 +62,14 @@ public class GlobalExceptionHandler {
             log.error(ex.getMessage(), ex);
         }
         Optional<ConstraintViolation<?>> first = ex.getConstraintViolations().stream().findFirst();
-        return Result.error().message(first.isPresent() ? first.get().getMessage() : ResultCode.ERROR_MESSAGE);
+        return Result.error().message(first.isPresent() ? first.get().getMessage() : ResultCode.MESSAGE_ERROR);
     }
 
     // 其他所有异常捕获器
     @ExceptionHandler(Exception.class)
     public Result otherExceptionDispose(Exception e) {
         // 打印错误日志
-        log.error("错误代码({}),错误信息({})", ResultCode.ERROR, e.getMessage());
+        log.error("错误代码({}),错误信息({})", ResultCode.CODE_ERROR, e.getMessage());
         e.printStackTrace();
         return Result.error().message(e.getMessage());
     }

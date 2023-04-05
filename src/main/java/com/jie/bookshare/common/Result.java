@@ -47,7 +47,7 @@ public class Result implements Serializable {
     public static Result ok(){
         Result r = new Result();
         r.setSuccess(true);
-        r.setCode(com.jie.bookshare.common.ResultCode.SUCCESS);
+        r.setCode(com.jie.bookshare.common.ResultCode.CODE_SUCCESS);
         r.setMessage("成功");
         return r;
     }
@@ -56,7 +56,7 @@ public class Result implements Serializable {
     public static Result error(){
         Result r = new Result();
         r.setSuccess(false);
-        r.setCode(com.jie.bookshare.common.ResultCode.ERROR);
+        r.setCode(com.jie.bookshare.common.ResultCode.CODE_ERROR);
         r.setMessage("失败");
         return r;
     }

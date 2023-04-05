@@ -8,10 +8,12 @@ package com.jie.bookshare.common;
  */
 public interface ResultCode {
     // 返回码
-    Integer SUCCESS = 20000;    // 成功
-    Integer ERROR = 20001;      // 失败
+    Integer CODE_SUCCESS = 20000;    // 成功
+    Integer CODE_ERROR = 20001;      // 失败
+    Integer CODE_ERROR_TOKEN_EXPIRE = 20002;    // token过期
 
     // 返回消息
-    String ERROR_MESSAGE = "服务器出错啦！";
+    String MESSAGE_ERROR = "服务器出错啦！";
+    String MESSAGE_TOKEN_EXPIRE = "token过期";
 }
 
