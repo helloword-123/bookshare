@@ -4,7 +4,9 @@ package com.jie.bookshare.controller;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.dto.AdviceDTO;
 import com.jie.bookshare.service.AdviceService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +27,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequestMapping("/advice")
+@Api(tags = "评价相关")
 public class AdviceController {
 
     @Autowired
@@ -39,8 +42,10 @@ public class AdviceController {
     @ApiOperation(value = "添加建议")
     @PreAuthorize("hasAuthority('advice:add')")
     @PostMapping("/add")
-    public Result add(@Valid
-                      @RequestBody AdviceDTO adviceDTO) {
+    public Result add(
+            @ApiParam(value = "评价信息")
+            @Valid
+            @RequestBody AdviceDTO adviceDTO) {
         adviceService.add(adviceDTO);
         return Result.ok();
     }

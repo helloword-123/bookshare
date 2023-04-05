@@ -7,7 +7,9 @@ import com.jie.bookshare.entity.dto.AuthDTO;
 import com.jie.bookshare.entity.dto.CheckDTO;
 import com.jie.bookshare.service.AuthPictureService;
 import com.jie.bookshare.service.CampusStaffAuthService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +29,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/campus-staff-auth")
+@Api(tags = "认证相关")
 public class CampusStaffAuthController {
 
     @Autowired
@@ -44,8 +47,10 @@ public class CampusStaffAuthController {
     @ApiOperation(value = "根据authId查询所有认证图片")
     @PreAuthorize("hasAuthority('campus_staff_auth:query')")
     @GetMapping("/getAuthImgList/{authId}")
-    public Result getAuthImgListByAuthId(@Digits(integer = 3, fraction = 0)
-                                         @PathVariable Integer authId) {
+    public Result getAuthImgListByAuthId(
+            @ApiParam(value = "认证id", example = "0")
+            @Digits(integer = 3, fraction = 0)
+            @PathVariable Integer authId) {
         List<String> imgList = authPictureService.getAuthImgListByAuthId(authId);
         return Result.ok().data("imgList", imgList);
     }
@@ -59,8 +64,10 @@ public class CampusStaffAuthController {
     @ApiOperation(value = "添加校园认证记录")
     @PreAuthorize("hasAuthority('campus_staff_auth:add')")
     @PostMapping("/add")
-    public Result add(@Valid
-                      @RequestBody AuthDTO authDTO) {
+    public Result add(
+            @ApiParam(value = "认证信息")
+            @Valid
+            @RequestBody AuthDTO authDTO) {
         campusStaffAuthService.add(authDTO);
         return Result.ok();
     }
@@ -74,8 +81,10 @@ public class CampusStaffAuthController {
     @ApiOperation(value = "根据userId获取用户的认证信息")
     @PreAuthorize("hasAuthority('campus_staff_auth:query')")
     @GetMapping("/getAuthInfo/{userId}")
-    public Result getAuthInfo(@Digits(integer = 3, fraction = 0)
-                              @PathVariable Integer userId) {
+    public Result getAuthInfo(
+            @ApiParam(value = "用户id", example = "0")
+            @Digits(integer = 3, fraction = 0)
+            @PathVariable Integer userId) {
         CampusStaffAuth campusStaffAuth = campusStaffAuthService.getAuthInfo(userId);
         return Result.ok().data("campusStaffAuth", campusStaffAuth);
     }

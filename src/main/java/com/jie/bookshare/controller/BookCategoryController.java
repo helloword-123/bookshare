@@ -5,7 +5,9 @@ import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.BookCategory;
 import com.jie.bookshare.entity.dto.BookCategoryCascaderDTO;
 import com.jie.bookshare.service.BookCategoryService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +28,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/book-category")
+@Api(tags = "图书分类相关")
 public class BookCategoryController {
 
     @Autowired
@@ -67,7 +70,9 @@ public class BookCategoryController {
     @ApiOperation(value = "根据id获取分类全名")
     @PreAuthorize("hasAuthority('book_category:query')")
     @GetMapping("/getCategoryFullName/{categoryId}")
-    public Result getCategoryFullName(@Digits(integer = 3, fraction = 0)
+    public Result getCategoryFullName(
+            @ApiParam(value = "图书分类id", example = "0")
+            @Digits(integer = 3, fraction = 0)
                                       @PathVariable Integer categoryId) {
         String categoryFullName = bookCategoryService.getCategoryFullName(categoryId);
         return Result.ok().data("categoryFullName", categoryFullName);

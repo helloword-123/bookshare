@@ -4,6 +4,7 @@ import com.jie.bookshare.common.Result;
 import com.jie.bookshare.service.UserService;
 import com.jie.bookshare.service.impl.OssService;
 import com.jie.bookshare.utils.UploadCheckUtils;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/common")
+@Api(tags = "通用接口")
 public class CommonController {
     private Logger log = LoggerFactory.getLogger(getClass());
 

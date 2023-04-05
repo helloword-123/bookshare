@@ -4,7 +4,9 @@ package com.jie.bookshare.controller;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.mq.MQMessage;
 import com.jie.bookshare.service.MessageService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/message")
+@Api(tags = "消息相关")
 public class MessageController {
 
     @Resource
@@ -37,8 +40,10 @@ public class MessageController {
      */
     @ApiOperation(value = "获取未读消息长度")
     @GetMapping("/getUnReadMessagesSize/{userId}")
-    public Result getUnReadMessagesSize(@Digits(integer = 3, fraction = 0)
-                                        @PathVariable Integer userId) {
+    public Result getUnReadMessagesSize(
+            @ApiParam(value = "用户id", example = "0")
+            @Digits(integer = 3, fraction = 0)
+            @PathVariable Integer userId) {
         Integer msgSize = messageService.getUnReadMessagesSize(userId);
         return Result.ok().data("msgSize", msgSize);
     }
@@ -51,8 +56,10 @@ public class MessageController {
      */
     @ApiOperation(value = "根据userId获取其已读和未读消息")
     @GetMapping("/getAllMessages/{userId}")
-    public Result getAllMessages(@Digits(integer = 3, fraction = 0)
-                                 @PathVariable Integer userId) {
+    public Result getAllMessages(
+            @ApiParam(value = "用户id", example = "0")
+            @Digits(integer = 3, fraction = 0)
+            @PathVariable Integer userId) {
         List<List<MQMessage>> messageList = null;
         try {
             messageList = messageService.getAllMessages(userId);
@@ -71,10 +78,13 @@ public class MessageController {
      */
     @ApiOperation(value = "读取消息")
     @GetMapping("/readMessage/{userId}/{msgId}")
-    public Result readMessage(@Digits(integer = 3, fraction = 0)
-                              @PathVariable Integer userId,
-                              @Digits(integer = 3, fraction = 0)
-                              @PathVariable Integer msgId) {
+    public Result readMessage(
+            @ApiParam(value = "用户id", example = "0")
+            @Digits(integer = 3, fraction = 0)
+            @PathVariable Integer userId,
+            @ApiParam(value = "消息id", example = "0")
+            @Digits(integer = 3, fraction = 0)
+            @PathVariable Integer msgId) {
         messageService.readMessage(userId, msgId);
         return Result.ok();
     }

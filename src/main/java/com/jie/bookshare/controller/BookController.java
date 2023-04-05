@@ -5,6 +5,7 @@ import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.entity.dto.BookListWithCategoryDTO;
 import com.jie.bookshare.service.BookService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/book")
+@Api(tags = "图书相关")
 public class BookController {
 
     @Autowired
@@ -52,6 +54,7 @@ public class BookController {
     @PreAuthorize("hasAuthority('book:query')")
     @GetMapping("/isDrifting/{isbn}")
     public Result checkIsbnIsDrifting(
+            @ApiParam(value = "isbn号", example = "9787302511052")
             @Pattern(regexp = "^[0-9]{10}|[0-9]{13}$", message = "isbn码格式不符合要求")
             @PathVariable String isbn) {
         Boolean res = bookService.checkIsbnIsDrifting(isbn);
@@ -83,9 +86,9 @@ public class BookController {
             @RequestParam(required = false) String sortOrder,
             @ApiParam(value = "模糊查询关键字，非必需", example = "XXX")
             @RequestParam(required = false) String keyword,
-            @ApiParam(value = "用户当前定位纬度，非必需", example = "XXX")
+            @ApiParam(value = "用户当前定位纬度，非必需", example = "0")
             @RequestParam(required = false) Double latitude,
-            @ApiParam(value = "用户当前定位精度，非必需", example = "XXX")
+            @ApiParam(value = "用户当前定位精度，非必需", example = "0")
             @RequestParam(required = false) Double longitude) {
         // 校验
         if (sortColumn != null && !"distance".equals(sortColumn) && !"releaseTime".equals(sortColumn)) {

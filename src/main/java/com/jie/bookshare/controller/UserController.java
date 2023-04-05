@@ -10,6 +10,7 @@ import com.jie.bookshare.service.IRedisService;
 import com.jie.bookshare.service.UserService;
 import com.jie.bookshare.utils.JwtUtil;
 import com.jie.bookshare.utils.WxUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import java.util.Map;
 @Validated
 @RestController
 @RequestMapping("/user")
+@Api(tags = "用户相关")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -47,8 +49,10 @@ public class UserController {
     @ApiOperation(value = "获取用户角色")
     @PreAuthorize("hasAuthority('user:query')")
     @GetMapping("getUserRoles/{userId}")
-    public Result getUserRoles(@Digits(integer = 3, fraction = 0)
-                               @PathVariable Integer userId) {
+    public Result getUserRoles(
+            @ApiParam(value = "用户id", example = "0")
+            @Digits(integer = 3, fraction = 0)
+            @PathVariable Integer userId) {
         List<String> roles = new ArrayList<>();
         List<AclRole> aclRoles = userService.findRoleForAdmin(userId);
         for (AclRole role : aclRoles) {
@@ -80,8 +84,10 @@ public class UserController {
     @ApiOperation("管理员退出登录")
     @PreAuthorize("hasAuthority('user:update')")
     @GetMapping("/logout/{userId}")
-    public Result logout(@Digits(integer = 3, fraction = 0)
-                         @PathVariable Integer userId) {
+    public Result logout(
+            @ApiParam(value = "用户id", example = "0")
+            @Digits(integer = 3, fraction = 0)
+            @PathVariable Integer userId) {
         String key = IRedisService.concatKey(RedisKeys.USER_INFO, String.valueOf(userId));
         redisService.delete(key);
         return Result.ok();
@@ -155,7 +161,7 @@ public class UserController {
     )
     @GetMapping("/checkToken")
     public Result checkToken(
-            @ApiParam(value = "被验证的token", required = true)
+            @ApiParam(value = "被验证的token", required = true, example = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIxIiwiZXhwIjoxNjgwNzU5MTc5LCJqdGkiOiI2YjFmYzJjNC1jNGI1LTQzMjMtOWEzMi1kNTkzZDM5NjNmMDYifQ.I5zDOIt23PT19h-uUNkDG6NPtSq2k3DJywBwgACgO7E")
             @RequestHeader("token") String token) {
         String userId = JwtUtil.getUserId(token);
         if (userId == null)
