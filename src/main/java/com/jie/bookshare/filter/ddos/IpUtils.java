@@ -71,6 +71,7 @@ public class IpUtils {
             if (count >= maxCount) {
                 //IP访问次数超过，防止洪水攻击
                 logger.error("IP:【{}】, 在【{}】秒内访问接口【{}】次数过多，访问次数为【{}】, 超过限制【{}】, 拒绝访问!", ip, seconds, methodName, count, maxCount);
+
                 return false;
             }
         } else {

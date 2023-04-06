@@ -5,7 +5,7 @@ import com.jie.bookshare.common.ResultCode;
 import com.jie.bookshare.utils.JsonUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
 @Component
-public class AccessInterceptor extends HandlerInterceptorAdapter {
+public class AccessInterceptor implements HandlerInterceptor {
 
     @Resource
     IpUtils ipUtils;
@@ -25,12 +25,16 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
             //请求的方法是否带有accessLimit注解
             AccessLimit accessLimit = hm.getMethodAnnotation(AccessLimit.class);
             if (accessLimit == null) {
-                return false;
+                return true;
             }
-            if(ipUtils.redisIP(request, accessLimit.seconds(), accessLimit.maxCount(), hm.getMethod().getDeclaringClass() + ":" + hm.getMethod().getName())){
+            if (ipUtils.redisIP(
+                    request,
+                    accessLimit.seconds(),
+                    accessLimit.maxCount(),
+                    hm.getMethod().getDeclaringClass() + ":" + hm.getMethod().getName())) {
                 // 一切正常
                 return true;
-            }else{
+            } else {
                 // 返回
                 response.setCharacterEncoding("UTF-8");
                 response.setContentType("application/json; charset=utf-8");
@@ -42,6 +46,7 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
                 return false;
             }
         }
+
         return true;
     }
 }

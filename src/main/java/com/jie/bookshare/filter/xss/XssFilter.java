@@ -1,11 +1,12 @@
 package com.jie.bookshare.filter.xss;
 
+import org.springframework.stereotype.Component;
+
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "/*", filterName = "xssFilter")
+@Component
 public class XssFilter implements Filter {
     private FilterConfig filterConfig = null;
 

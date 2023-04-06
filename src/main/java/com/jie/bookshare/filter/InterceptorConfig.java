@@ -1,4 +1,4 @@
-package com.jie.bookshare.config;
+package com.jie.bookshare.filter;
 
 import com.jie.bookshare.filter.ddos.AccessInterceptor;
 import org.springframework.boot.SpringBootConfiguration;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @SpringBootConfiguration
 @EnableWebMvc
-public class WebConfig implements WebMvcConfigurer {
+public class InterceptorConfig implements WebMvcConfigurer {
 
     @Resource
     private AccessInterceptor accessInterceptor;

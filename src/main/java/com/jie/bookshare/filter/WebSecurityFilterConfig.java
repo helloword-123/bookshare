@@ -1,7 +1,8 @@
-package com.jie.bookshare.config;
+package com.jie.bookshare.filter;
 
-import com.jie.bookshare.filter.TokenFilter;
+import com.jie.bookshare.filter.token.TokenFilter;
 import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.core.Ordered;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -11,8 +12,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.annotation.Resource;
 
 @SpringBootConfiguration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableGlobalMethodSecurity(prePostEnabled = true, order = Ordered.HIGHEST_PRECEDENCE)
+public class WebSecurityFilterConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private TokenFilter tokenFilter;
 
@@ -27,13 +28,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/actuator/shutdown").permitAll()
                 .antMatchers("/user/wxLogin").anonymous()
                 .antMatchers("/user/login").anonymous()
-                .antMatchers("/actuator/shutdown").permitAll()
-                .antMatchers("/common/test").permitAll()
                 .antMatchers("/user/checkToken").permitAll()
-                .antMatchers("/swagger-resources/**").permitAll()
+
+                .antMatchers("/common/test").permitAll()
                 .antMatchers("/common/test/getToken").permitAll()
+
+                .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/v2/**").permitAll()
                 .antMatchers("/swagger-ui.html/**").permitAll()
