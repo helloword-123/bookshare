@@ -75,7 +75,7 @@ public class NoRepeatSubmitAspect {
             } catch (Throwable throwable) {
                 // 确保方法执行异常实时释放限时标记(异常后置通知)
                 redisTemplate.delete(redisKey);
-                throw new RuntimeException(throwable);
+                throw new CustomizeRuntimeException(throwable.getMessage());
             }
         } else {
             // 重复提交了抛出异常，如果是在项目中，根据具体情况处理。

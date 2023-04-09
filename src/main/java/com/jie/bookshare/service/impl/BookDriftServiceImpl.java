@@ -7,12 +7,14 @@ import com.jie.bookshare.entity.dto.BookBorrowDTO;
 import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.entity.dto.CheckBookDriftDTO;
 import com.jie.bookshare.entity.dto.DriftingBookDTO;
+import com.jie.bookshare.exception.CustomizeRuntimeException;
 import com.jie.bookshare.mapper.*;
 import com.jie.bookshare.mq.MQMessage;
 import com.jie.bookshare.mq.MessageProducer;
 import com.jie.bookshare.service.BookDriftService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
@@ -23,7 +25,7 @@ import java.util.*;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author wuhaojie
@@ -46,6 +48,8 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
     private MessageProducer messageProducer;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private RedisTemplate redisTemplate;
 
     @Resource
     private DataSourceTransactionManager dsManager;
@@ -95,7 +99,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
     public Integer changeBookStatus(Integer bookId, Integer status) {
         logger.info("Change book status. BookId is: {}, status: {}.", bookId, status);
         BookDrift bookDrift = getBookLastDrift(bookId);
-        if(bookDrift == null){
+        if (bookDrift == null) {
             logger.info("This bookId: {} does not has any drift record!", bookId);
             return 0;
         }
@@ -122,15 +126,15 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         TransactionStatus ts = null;
         try {
             //方式一：使用默认bean对象TransactionDefinition
-            ts =dsManager.getTransaction(definition);
+            ts = dsManager.getTransaction(definition);
 
             // 保存图书信息
             // 1.查询改ISBN号的图书是否已经存在于book中，不存在则插入新数据
             LambdaQueryWrapper<Book> con1 = new LambdaQueryWrapper<>();
-            String isbn = (String)reqBody.get("code");
+            String isbn = (String) reqBody.get("code");
             con1.eq(Book::getIsbn, isbn);
             Book book = bookMapper.selectOne(con1);
-            if(book == null){
+            if (book == null) {
                 // 插入信息
                 book = new Book();
                 book.setIsbn(isbn);
@@ -159,7 +163,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
             bookDrift.setStatus(0); // 发布审核
 
             BookDrift bookLastDrift = this.getBookLastDrift(book.getId());
-            if(bookLastDrift == null){
+            if (bookLastDrift == null) {
                 logger.info("The bookId: {} is first drift.", book.getId());
                 bookDrift.setDriftNum(1);   // 首次漂流
             } else {
@@ -183,7 +187,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
 
             // 提交
             dsManager.commit(ts);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             if (ts != null) {
                 dsManager.rollback(ts);
@@ -251,11 +255,31 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         logger.info("Borrow book, BookBorrowDTO is: {}.", dto);
         BookDrift bookDrift = new BookDrift();
         bookDrift.setId(dto.getDriftId());
+        BookDrift drift = bookDriftMapper.selectById(bookDrift);
+        if (drift.getStatus() != 1) {
+            throw new CustomizeRuntimeException("图书不在共享中！");
+        }
+
+        // redis获取锁
+        String key = "lock_bookDrift_" + dto.getDriftId();
+        boolean res = redisTemplate.opsForValue().setIfAbsent(key, 1);
+        if (!res) {
+            throw new CustomizeRuntimeException("他人正在共享此书！");
+        }
+
         bookDrift.setBorrowerId(dto.getBorrowId());
         bookDrift.setStatus(3);
         bookDrift.setDriftTime(new Date());
 
+        try {
+            Thread.sleep(500000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         bookDriftMapper.updateById(bookDrift);
+        // 释放锁
+        redisTemplate.delete(key);
     }
 
     /**
@@ -316,7 +340,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         List<BookDrift> bookDrifts = bookDriftMapper.selectList(con1);
         for (BookDrift bookDrift : bookDrifts) {
             BookListDTO bookListDTO = this.mergeBookAndBookDrift(book, bookDrift);
-            if(bookDrift.getBorrowerId() != null){
+            if (bookDrift.getBorrowerId() != null) {
                 User borrower = userMapper.selectById(bookDrift.getBorrowerId());
                 bookListDTO.setBorrowerName(borrower.getUserName());
             }
@@ -337,7 +361,7 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
     public Integer checkBookDrift(CheckBookDriftDTO dto) {
         logger.info("Check bookDrift record, CheckBookDriftDTO is: {}.", dto);
         BookDrift bookDrift = bookDriftMapper.selectById(dto.getId());
-        if(bookDrift == null){
+        if (bookDrift == null) {
             return 0;
         }
         bookDrift.setStatus(dto.getStatus());
