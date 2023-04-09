@@ -33,8 +33,7 @@ public class WebSecurityFilterConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/login").anonymous()
                 .antMatchers("/user/checkToken").permitAll()
 
-                .antMatchers("/common/test").permitAll()
-                .antMatchers("/common/test/getToken").permitAll()
+                .antMatchers("/common/**").permitAll()
 
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()

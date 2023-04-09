@@ -1,5 +1,6 @@
 package com.jie.bookshare.utils;
 
+import com.jie.bookshare.exception.CustomizeRuntimeException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
@@ -66,7 +67,7 @@ public class UploadCheckUtils {
 
         /*校验1: 没有文件时,报错提示*/
         if (multipartFile == null) {
-            throw new RuntimeException("文件不能为空！");
+            throw new CustomizeRuntimeException("文件不能为空！");
         }
 
         /*校验2: 上传文件的长度小于等于1 就一个直接校验*/
@@ -89,30 +90,30 @@ public class UploadCheckUtils {
     public static void uploadVerify(MultipartFile multipartFile) {
         // 校验文件是否为空
         if (multipartFile == null) {
-            throw new RuntimeException("文件不能为空！");
+            throw new CustomizeRuntimeException("文件不能为空！");
         }
 
         // 校验文件大小(统一校验),配置文件中添加
         long size = multipartFile.getSize();
         if(size > FILE_SIZE){
-            throw new RuntimeException("文件大小不能超过2MB！");
+            throw new CustomizeRuntimeException("文件大小不能超过2MB！");
         }
 
         // 校验文件名字
         String originalFilename = multipartFile.getOriginalFilename();
         if (originalFilename == null) {
-            throw new RuntimeException("文件名字不能为空！");
+            throw new CustomizeRuntimeException("文件名字不能为空！");
         }
 
         for (String realKey : FILE_NAME_EXCLUDE) {
             if (originalFilename.contains(realKey)) {
-                throw new RuntimeException("文件名字不允许出现' " + realKey + " ' 关键字!");
+                throw new CustomizeRuntimeException("文件名字不允许出现' " + realKey + " ' 关键字!");
             }
         }
 
         // 校验文件后缀
         if (!originalFilename.contains(".")) {
-            throw new RuntimeException("文件不能没有后缀!");
+            throw new CustomizeRuntimeException("文件不能没有后缀!");
         }
 
         String suffix = originalFilename.substring(originalFilename.lastIndexOf('.'));
@@ -120,7 +121,7 @@ public class UploadCheckUtils {
 
         /*校验: 文件格式是否符合要求*/
         if (!Arrays.asList(YES_IMAGE_SUPPORT).contains(suffix.toLowerCase(Locale.ROOT))) {
-            throw new RuntimeException("图片格式不支持,请更换后重试!");
+            throw new CustomizeRuntimeException("图片格式不支持,请更换后重试!");
         }
 
     }

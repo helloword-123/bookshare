@@ -1,13 +1,15 @@
 package com.jie.bookshare.exception;
 
-public class CustomizeException extends RuntimeException{
+public class CustomizeException extends Exception{
 
-    private Integer code;
-
-    public CustomizeException(Integer code, String message){
+    public CustomizeException(String message){
         super(message);
-        this.code = code;
     }
 
+    // 关键
+    @Override
+    public Throwable fillInStackTrace() {
+        return this;
+    }
 
 }

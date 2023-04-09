@@ -80,7 +80,7 @@ public class NoRepeatSubmitAspect {
         } else {
             // 重复提交了抛出异常，如果是在项目中，根据具体情况处理。
             // 注意，这是运行时异常！
-            throw new CustomizeRuntimeException(1, ResultCode.MESSAGE_REPEAT_SUBMIT);
+            throw new CustomizeRuntimeException(ResultCode.MESSAGE_REPEAT_SUBMIT);
         }
 
 

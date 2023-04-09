@@ -4,6 +4,7 @@ import com.jie.bookshare.common.CommonConstant;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.dto.AuthenticationDTO;
 import com.jie.bookshare.filter.ddos.AccessLimit;
+import com.jie.bookshare.filter.repeatsubmit.RepeatSubmit;
 import com.jie.bookshare.service.UserService;
 import com.jie.bookshare.service.impl.OssService;
 import com.jie.bookshare.utils.UploadCheckUtils;
@@ -76,6 +77,7 @@ public class CommonController {
         return Result.ok().data(CommonConstant.TOKEN, info.get(0)).data("rId", info.get(1));
     }
 
+    @RepeatSubmit(expireSeconds = 10, value = "111")
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @PostMapping("test")
     public String test(@RequestBody AuthenticationDTO auth){

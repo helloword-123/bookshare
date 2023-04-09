@@ -66,8 +66,8 @@ public class GlobalExceptionHandler {
     }
 
     // 自定义异常
-    @ExceptionHandler(value = {CustomizeRuntimeException.class})
-    public Result handleRepeatSubmitException(CustomizeRuntimeException e) {
+    @ExceptionHandler(value = {CustomizeRuntimeException.class, CustomizeException.class})
+    public Result handleCustomizeException(Exception e) {
         // 打印错误日志
         if (log.isErrorEnabled()) {
             log.error(e.getMessage(), e);
