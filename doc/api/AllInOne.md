@@ -1,7 +1,7 @@
 # bookshare接口文档
 Version |  Update Time  | Status | Author |  Description
 ---|---|---|---|---
-v2023-02-19 11:01:45|2023-02-19 11:01:45|auto|@yang|Created by smart-doc
+v2023-04-09 21:17:15|2023-04-09 21:17:15|auto|@yang|Created by smart-doc
 
 
 
@@ -21,27 +21,27 @@ v2023-02-19 11:01:45|2023-02-19 11:01:45|auto|@yang|Created by smart-doc
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-authId|int32|No comments found.|true|-
+authId|int32|认证记录id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/campus-staff-auth/getAuthImgList/927
+curl -X GET -i http://120.77.76.39:8090/campus-staff-auth/getAuthImgList/724
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 913,
+  "code": 634,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -64,23 +64,23 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-userId|int32|No comments found.|false|-
-number|string|No comments found.|false|-
-realName|string|No comments found.|false|-
-phone|string|No comments found.|false|-
-email|string|No comments found.|false|-
+userId|int32|No comments found.|true|-
+number|string|No comments found.|true|-
+realName|string|No comments found.|true|-
+phone|string|No comments found.|true|-
+email|string|No comments found.|true|-
 fileList|array|No comments found.|false|-
 
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i http://120.77.76.39:8090/campus-staff-auth/add --data '{
-  "userId": 311,
-  "number": "wpm923",
-  "realName": "otto.bergstrom",
-  "phone": "313-616-1384",
-  "email": "elfreda.langworth@yahoo.com",
+  "userId": 101,
+  "number": "l9k8rz",
+  "realName": "tatum.pollich",
+  "phone": "559.620.0375",
+  "email": "duncan.goodwin@yahoo.com",
   "fileList": [
-    "w3f34c"
+    "l7s8zy"
   ]
 }'
 ```
@@ -88,17 +88,17 @@ curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i http://120.77
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 685,
+  "code": 128,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -121,27 +121,27 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-userId|int32|No comments found.|true|-
+userId|int32|用户id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/campus-staff-auth/getAuthInfo/790
+curl -X GET -i http://120.77.76.39:8090/campus-staff-auth/getAuthInfo/595
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 147,
+  "code": 671,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -168,17 +168,17 @@ curl -X GET -i http://120.77.76.39:8090/campus-staff-auth/getAuthList
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 960,
+  "code": 720,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -201,35 +201,35 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-id|int32|No comments found.|false|-
-checkerId|int32|No comments found.|false|-
+id|int32|No comments found.|true|-
+checkerId|int32|No comments found.|true|-
 description|string|No comments found.|false|-
-status|int32|No comments found.|false|-
+status|int32|No comments found.|true|-
 
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i http://120.77.76.39:8090/campus-staff-auth/check --data '{
-  "id": 769,
-  "checkerId": 227,
-  "description": "gvlihl",
-  "status": 869
+  "id": 873,
+  "checkerId": 447,
+  "description": "d2x6ma",
+  "status": 47
 }'
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 53,
+  "code": 330,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -257,17 +257,17 @@ curl -X GET -i http://120.77.76.39:8090/book-category/getTopCategories
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 825,
+  "code": 843,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -294,17 +294,17 @@ curl -X GET -i http://120.77.76.39:8090/book-category/getCategoryCascader
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 773,
+  "code": 366,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -327,27 +327,27 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-categoryId|int32|No comments found.|true|-
+categoryId|int32|目录id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/book-category/getCategoryFullName/353
+curl -X GET -i http://120.77.76.39:8090/book-category/getCategoryFullName/335
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 573,
+  "code": 424,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -371,7 +371,7 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-file|file|No comments found.|true|-
+file|file|上传的图片文件|true|-
 
 **Request-example:**
 ```
@@ -381,17 +381,17 @@ curl -X POST -H 'Content-Type: multipart/form-data' -i http://120.77.76.39:8090/
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 196,
+  "code": 770,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -418,22 +418,53 @@ curl -X GET -i http://120.77.76.39:8090/common/test/getToken
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 626,
+  "code": 913,
   "message": "success",
   "data": {
     "mapKey": {}
   }
 }
+```
+
+### 
+**URL:** http://120.77.76.39:8090/common/test
+
+**Type:** POST
+
+**Author:** wuhaojie
+
+**Content-Type:** application/json; charset=utf-8
+
+**Description:** 
+
+**Body-parameters:**
+
+Parameter | Type|Description|Required|Since
+---|---|---|---|---
+username|string|No comments found.|true|-
+password|string|No comments found.|true|-
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i http://120.77.76.39:8090/common/test --data '{
+  "username": "tatum.pollich",
+  "password": "lmh9bk"
+}'
+```
+
+**Response-example:**
+```
+string
 ```
 
 ## 消息Controller
@@ -452,27 +483,27 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-userId|int32|No comments found.|true|-
+userId|int32|用户id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/message/getUnReadMessagesSize/156
+curl -X GET -i http://120.77.76.39:8090/message/getUnReadMessagesSize/485
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 714,
+  "code": 978,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -495,27 +526,27 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-userId|int32|No comments found.|true|-
+userId|int32|用户id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/message/getAllMessages/94
+curl -X GET -i http://120.77.76.39:8090/message/getAllMessages/186
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 786,
+  "code": 751,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -538,28 +569,28 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-userId|int32|No comments found.|true|-
-msgId|int32|No comments found.|true|-
+userId|int32|用户id|true|-
+msgId|int32| 消息id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/message/readMessage/391/966
+curl -X GET -i http://120.77.76.39:8090/message/readMessage/362/125
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 535,
+  "code": 448,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -587,17 +618,17 @@ curl -X GET -i http://120.77.76.39:8090/book/getListWithCategory
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 737,
+  "code": 806,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -620,27 +651,27 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-isbn|string|No comments found.|true|-
+isbn|string|图书ISBN码|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/book/isDrifting/i5gmxc
+curl -X GET -i http://120.77.76.39:8090/book/isDrifting/g7xm9r
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 449,
+  "code": 183,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -663,32 +694,32 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-categoryId|int32|No comments found.|false|-
-sortColumn|string|No comments found.|false|-
-sortOrder|string|No comments found.|false|-
-keyword|string|No comments found.|false|-
+categoryId|int32|图书分类id|false|-
+sortColumn|string|排序字段|false|-
+sortOrder|string| 升序/降序|false|-
+keyword|string|   模糊查询关键词|false|-
 latitude|double|No comments found.|false|-
 longitude|double|No comments found.|false|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/book/getListWithCondition?sortColumn=u0fkar&longitude=83.88&categoryId=929&latitude=25.67&sortOrder=shai9w&keyword=qn7edm
+curl -X GET -i http://120.77.76.39:8090/book/getListWithCondition?sortColumn=jzofo3&latitude=27.42&categoryId=252&keyword=y9g093&sortOrder=lyk5ru&longitude=13.89
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 916,
+  "code": 524,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -712,39 +743,39 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-userId|int32|No comments found.|false|-
-content|string|No comments found.|false|-
-contact|string|No comments found.|false|-
+userId|int32|No comments found.|true|-
+content|string|No comments found.|true|-
+contact|string|No comments found.|true|-
 fileList|array|No comments found.|false|-
-star|double|No comments found.|false|-
+star|double|No comments found.|true|-
 
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i http://120.77.76.39:8090/advice/add --data '{
-  "userId": 682,
-  "content": "x4wmc0",
-  "contact": "eoe830",
+  "userId": 455,
+  "content": "ft3nnd",
+  "contact": "9cqe4w",
   "fileList": [
-    "dg2rrg"
+    "r7kzre"
   ],
-  "star": 75.62
+  "star": 79.04
 }'
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 814,
+  "code": 243,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -772,17 +803,17 @@ curl -X GET -i http://120.77.76.39:8090/book-drift/getNotCheckedBooks
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 316,
+  "code": 700,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -805,35 +836,35 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-id|int32|No comments found.|false|-
-checkerId|int32|No comments found.|false|-
+id|int32|No comments found.|true|-
+checkerId|int32|No comments found.|true|-
 checkerReply|string|No comments found.|false|-
-status|int32|No comments found.|false|-
+status|int32|No comments found.|true|-
 
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i http://120.77.76.39:8090/book-drift/checkBook --data '{
-  "id": 221,
-  "checkerId": 187,
-  "checkerReply": "hti9xp",
-  "status": 77
+  "id": 946,
+  "checkerId": 627,
+  "checkerReply": "fadxh7",
+  "status": 272
 }'
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 919,
+  "code": 144,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -856,28 +887,28 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-bookId|int32|No comments found.|true|-
-status|int32|No comments found.|true|-
+bookId|int32|图书id|true|-
+status|int32|修改状态|true|-
 
 **Request-example:**
 ```
-curl -X PUT -i http://120.77.76.39:8090/book-drift/checkBook/664/211
+curl -X PUT -i http://120.77.76.39:8090/book-drift/checkBook/463/436
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 825,
+  "code": 280,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -914,17 +945,17 @@ curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i http://120.77
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 908,
+  "code": 502,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -951,17 +982,17 @@ curl -X GET -i http://120.77.76.39:8090/book-drift/getDriftingBooks
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 70,
+  "code": 731,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -984,27 +1015,27 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-id|int32|No comments found.|true|-
+id|int32|图书漂流id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/book-drift/getDriftingById/631
+curl -X GET -i http://120.77.76.39:8090/book-drift/getDriftingById/461
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 98,
+  "code": 742,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -1027,31 +1058,31 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-borrowId|int32|No comments found.|false|-
-driftId|int32|No comments found.|false|-
+borrowId|int32|No comments found.|true|-
+driftId|int32|No comments found.|true|-
 
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i http://120.77.76.39:8090/book-drift/borrow --data '{
-  "borrowId": 176,
-  "driftId": 95
+  "borrowId": 263,
+  "driftId": 760
 }'
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 978,
+  "code": 969,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -1074,27 +1105,27 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-userId|int32|No comments found.|true|-
+userId|int32|用户id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/book-drift/getShareBorrowBookList/698
+curl -X GET -i http://120.77.76.39:8090/book-drift/getShareBorrowBookList/144
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 271,
+  "code": 622,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -1117,27 +1148,27 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-bookId|int32|No comments found.|true|-
+bookId|int32|用户id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/book-drift/getBookDriftSeries/940
+curl -X GET -i http://120.77.76.39:8090/book-drift/getBookDriftSeries/543
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 718,
+  "code": 92,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -1161,28 +1192,28 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-bookId|int32|No comments found.|true|-
-userId|int32|No comments found.|true|-
+bookId|int32|图书id|true|-
+userId|int32|用户id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/book-collect/update/674/276
+curl -X GET -i http://120.77.76.39:8090/book-collect/update/872/223
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 838,
+  "code": 861,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -1205,28 +1236,28 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-bookId|int32|No comments found.|true|-
-userId|int32|No comments found.|true|-
+bookId|int32|图书id|true|-
+userId|int32|用户id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/book-collect/getBookCollectByIds/404/676
+curl -X GET -i http://120.77.76.39:8090/book-collect/getBookCollectByIds/818/301
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 357,
+  "code": 341,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -1249,27 +1280,27 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-userId|int32|No comments found.|true|-
+userId|int32|用户id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/book-collect/getCollectedBooks/763
+curl -X GET -i http://120.77.76.39:8090/book-collect/getCollectedBooks/377
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 170,
+  "code": 522,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -1293,27 +1324,27 @@ data|map|No comments found.|-
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-userId|int32|No comments found.|true|-
+userId|int32|用户id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/user/getUserRoles/570
+curl -X GET -i http://120.77.76.39:8090/user/getUserRoles/949
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 29,
+  "code": 986,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -1321,7 +1352,7 @@ data|map|No comments found.|-
 }
 ```
 
-### 
+### 微信登录后，修改用户头像和昵称
 **URL:** http://120.77.76.39:8090/user/updateUserInfo
 
 **Type:** POST
@@ -1330,16 +1361,16 @@ data|map|No comments found.|-
 
 **Content-Type:** application/json; charset=utf-8
 
-**Description:** 
+**Description:** 微信登录后，修改用户头像和昵称
 
 **Body-parameters:**
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-id|int32|No comments found.|false|-
-nickName|string|No comments found.|false|-
+id|int32|No comments found.|true|-
+nickName|string|No comments found.|true|-
+phone|string|No comments found.|true|-
 avatarUrl|string|No comments found.|false|-
-phone|string|No comments found.|false|-
 authId|int32|No comments found.|false|-
 roles|array|No comments found.|false|-
 isAuth|boolean|No comments found.|false|-
@@ -1347,13 +1378,13 @@ isAuth|boolean|No comments found.|false|-
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i http://120.77.76.39:8090/user/updateUserInfo --data '{
-  "id": 72,
-  "nickName": "julius.lubowitz",
-  "avatarUrl": "www.celina-hessel.us",
-  "phone": "313-616-1384",
-  "authId": 616,
+  "id": 283,
+  "nickName": "clyde.nicolas",
+  "phone": "559.620.0375",
+  "avatarUrl": "www.mitchell-koelpin.net",
+  "authId": 90,
   "roles": [
-    "mimwar"
+    "kxrgtt"
   ],
   "isAuth": true
 }'
@@ -1362,17 +1393,17 @@ curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i http://120.77
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 379,
+  "code": 555,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -1380,7 +1411,7 @@ data|map|No comments found.|-
 }
 ```
 
-### 
+### 管理员退出登录
 **URL:** http://120.77.76.39:8090/user/logout/{userId}
 
 **Type:** GET
@@ -1389,33 +1420,33 @@ data|map|No comments found.|-
 
 **Content-Type:** application/x-www-form-urlencoded;charset=utf-8
 
-**Description:** 
+**Description:** 管理员退出登录
 
 **Path-parameters:**
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-userId|int32|No comments found.|true|-
+userId|int32|用户id|true|-
 
 **Request-example:**
 ```
-curl -X GET -i http://120.77.76.39:8090/user/logout/179
+curl -X GET -i http://120.77.76.39:8090/user/logout/330
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 945,
+  "code": 666,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -1423,7 +1454,7 @@ data|map|No comments found.|-
 }
 ```
 
-### 
+### ~~后台账号登录~~
 **URL:** http://120.77.76.39:8090/user/login
 
 **Type:** POST
@@ -1432,37 +1463,37 @@ data|map|No comments found.|-
 
 **Content-Type:** application/json; charset=utf-8
 
-**Description:** 
+**Description:** 后台账号登录
 
 **Body-parameters:**
 
 Parameter | Type|Description|Required|Since
 ---|---|---|---|---
-username|string|No comments found.|false|-
-password|string|No comments found.|false|-
+username|string|No comments found.|true|-
+password|string|No comments found.|true|-
 
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i http://120.77.76.39:8090/user/login --data '{
-  "username": "otto.bergstrom",
-  "password": "m30jal"
+  "username": "tatum.pollich",
+  "password": "7mkhlh"
 }'
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 101,
+  "code": 284,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -1470,7 +1501,7 @@ data|map|No comments found.|-
 }
 ```
 
-### 
+### 小程序登录根据code获取token，并且请求openid与本地账号系统绑定，最后返回用户信息和token
 **URL:** http://120.77.76.39:8090/user/wxLogin
 
 **Type:** POST
@@ -1479,7 +1510,7 @@ data|map|No comments found.|-
 
 **Content-Type:** application/json; charset=utf-8
 
-**Description:** 
+**Description:** 小程序登录根据code获取token，并且请求openid与本地账号系统绑定，最后返回用户信息和token
 
 **Body-parameters:**
 
@@ -1499,17 +1530,17 @@ curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i http://120.77
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 477,
+  "code": 794,
   "message": "success",
   "data": {
     "mapKey": {}
@@ -1517,7 +1548,7 @@ data|map|No comments found.|-
 }
 ```
 
-### 
+### 验证token有效性
 **URL:** http://120.77.76.39:8090/user/checkToken
 
 **Type:** GET
@@ -1526,34 +1557,34 @@ data|map|No comments found.|-
 
 **Content-Type:** application/x-www-form-urlencoded;charset=utf-8
 
-**Description:** 
+**Description:** 验证token有效性
 
 **Request-headers:**
 
 Header | Type|Description|Required|Since
 ---|---|---|---|----
-token|string|null|true|-
+CommonConstant.TOKEN|string|token值|true|-
 
 
 **Request-example:**
 ```
-curl -X GET -H 'token' -i http://120.77.76.39:8090/user/checkToken
+curl -X GET -H 'CommonConstant.TOKEN' -i http://120.77.76.39:8090/user/checkToken
 ```
 **Response-fields:**
 
 Field | Type|Description|Since
 ---|---|---|---
-success|boolean|No comments found.|-
-code|int32|No comments found.|-
-message|string|No comments found.|-
-data|map|No comments found.|-
+success|boolean|是否成功|-
+code|int32|返回码|-
+message|string|返回消息|-
+data|map|返回数据|-
 └─any object|object|any object.|-
 
 **Response-example:**
 ```
 {
   "success": true,
-  "code": 18,
+  "code": 578,
   "message": "success",
   "data": {
     "mapKey": {}

@@ -297,11 +297,11 @@
 |  4   | password |   varchar   | 255 |   0    |    Y     |  N   |       | 密码，密文存储  |
 |  5   | phone |   varchar   | 255 |   0    |    Y     |  N   |       | 手机号  |
 |  6   | sex |   int   | 10 |   0    |    Y     |  N   |       | 性别  |
-|  7   | point |   int   | 10 |   0    |    Y     |  N   |       | 积分  |
-|  8   | total_share_num |   int   | 10 |   0    |    Y     |  N   |       | 总分享次数  |
-|  9   | total_use_num |   int   | 10 |   0    |    Y     |  N   |       | 总借阅次数  |
-|  10   | avatar_url |   varchar   | 255 |   0    |    Y     |  N   |       | 头像url  |
-|  11   | openid |   varchar   | 255 |   0    |    Y     |  N   |       | 微信小程序openid号  |
-|  12   | create_time |   datetime   | 19 |   0    |    Y     |  N   |       | 创建时间  |
-|  13   | update_time |   datetime   | 19 |   0    |    Y     |  N   |       | 更新时间  |
-|  14   | auth_id |   int   | 10 |   0    |    Y     |  N   |       | 管理的认证记录id  |
+|  7   | total_share_num |   int   | 10 |   0    |    Y     |  N   |       | 总分享次数  |
+|  8   | total_use_num |   int   | 10 |   0    |    Y     |  N   |       | 总借阅次数  |
+|  9   | avatar_url |   varchar   | 255 |   0    |    Y     |  N   |       | 头像url  |
+|  10   | openid |   varchar   | 255 |   0    |    Y     |  N   |       | 微信小程序openid号  |
+|  11   | create_time |   datetime   | 19 |   0    |    Y     |  N   |       | 创建时间  |
+|  12   | update_time |   datetime   | 19 |   0    |    Y     |  N   |       | 更新时间  |
+|  13   | auth_id |   int   | 10 |   0    |    Y     |  N   |       | 管理的认证记录id  |
+|  14   | point |   int   | 10 |   0    |    Y     |  N   |       |   |
