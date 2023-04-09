@@ -8,6 +8,7 @@ import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.entity.dto.CheckBookDriftDTO;
 import com.jie.bookshare.entity.dto.DriftingBookDTO;
 import com.jie.bookshare.filter.ddos.AccessLimit;
+import com.jie.bookshare.filter.repeatsubmit.RepeatSubmit;
 import com.jie.bookshare.service.BookDriftService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -59,6 +60,7 @@ public class BookDriftController {
      * @param checkBookDriftDTO 前端审核传输的dto
      * @return
      */
+    @RepeatSubmit(expireSeconds = CommonConstant.EXPIRE_SECONDS, value = CommonConstant.AUTH)
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "审核")
     @PreAuthorize("hasAuthority('book_drift:admin')")
@@ -82,6 +84,7 @@ public class BookDriftController {
      * @param status 修改状态
      * @return
      */
+    @RepeatSubmit(expireSeconds = CommonConstant.EXPIRE_SECONDS, value = CommonConstant.AUTH)
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "修改图书漂流状态")
     @PreAuthorize("hasAuthority('book_drift:admin')")
@@ -106,6 +109,7 @@ public class BookDriftController {
      * @param reqBody 前端共享图书传输的对象
      * @return
      */
+    @RepeatSubmit(expireSeconds = CommonConstant.EXPIRE_SECONDS, value = CommonConstant.AUTH)
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "图书共享")
     @PreAuthorize("hasAuthority('book_drift:add')")
@@ -158,6 +162,7 @@ public class BookDriftController {
      * @param dto 前端借阅图书传输的dto
      * @return
      */
+    @RepeatSubmit(expireSeconds = CommonConstant.EXPIRE_SECONDS, value = CommonConstant.AUTH)
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "借书")
     @PreAuthorize("hasAuthority('book_drift:update')")

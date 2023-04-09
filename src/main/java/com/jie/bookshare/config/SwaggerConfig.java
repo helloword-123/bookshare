@@ -1,5 +1,6 @@
 package com.jie.bookshare.config;
 
+import com.jie.bookshare.common.CommonConstant;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -55,12 +56,12 @@ public class SwaggerConfig {
     public SecurityReference securityReference() {
         AuthorizationScope authorizationScope =
                 new AuthorizationScope("global", "accessEverything");
-        return new SecurityReference("token",
+        return new SecurityReference(CommonConstant.TOKEN,
                 new AuthorizationScope[]{authorizationScope});
     }
 
     @Bean
     public SecurityScheme securityScheme() {
-        return new ApiKey("token", "token", "header");
+        return new ApiKey(CommonConstant.TOKEN, CommonConstant.TOKEN, "header");
     }
 }

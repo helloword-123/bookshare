@@ -5,6 +5,7 @@ import com.jie.bookshare.common.CommonConstant;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.entity.dto.AdviceDTO;
 import com.jie.bookshare.filter.ddos.AccessLimit;
+import com.jie.bookshare.filter.repeatsubmit.RepeatSubmit;
 import com.jie.bookshare.service.AdviceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +41,7 @@ public class AdviceController {
      * @param adviceDTO 前端提交的评价dto
      * @return
      */
+    @RepeatSubmit(expireSeconds = CommonConstant.EXPIRE_SECONDS, value = CommonConstant.AUTH)
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "添加建议")
     @PreAuthorize("hasAuthority('advice:add')")

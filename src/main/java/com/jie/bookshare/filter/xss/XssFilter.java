@@ -8,11 +8,9 @@ import java.io.IOException;
 
 @Component
 public class XssFilter implements Filter {
-    private FilterConfig filterConfig = null;
 
     @Override
     public void init(FilterConfig filterConfig) {
-        this.filterConfig = filterConfig;
     }
 
     @Override
@@ -22,6 +20,5 @@ public class XssFilter implements Filter {
 
     @Override
     public void destroy() {
-        this.filterConfig = null;
     }
 }

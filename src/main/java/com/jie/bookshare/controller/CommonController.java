@@ -73,7 +73,7 @@ public class CommonController {
         if (info == null) {
             return Result.error().message("账号密码不匹配！");
         }
-        return Result.ok().data("token", info.get(0)).data("rId", info.get(1));
+        return Result.ok().data(CommonConstant.TOKEN, info.get(0)).data("rId", info.get(1));
     }
 
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)

@@ -7,6 +7,7 @@ import com.jie.bookshare.entity.CampusStaffAuth;
 import com.jie.bookshare.entity.dto.AuthDTO;
 import com.jie.bookshare.entity.dto.CheckDTO;
 import com.jie.bookshare.filter.ddos.AccessLimit;
+import com.jie.bookshare.filter.repeatsubmit.RepeatSubmit;
 import com.jie.bookshare.service.AuthPictureService;
 import com.jie.bookshare.service.CampusStaffAuthService;
 import io.swagger.annotations.Api;
@@ -63,6 +64,7 @@ public class CampusStaffAuthController {
      * @param authDTO 前端添加校园认证记录传输的dto
      * @return
      */
+    @RepeatSubmit(expireSeconds = CommonConstant.EXPIRE_SECONDS, value = CommonConstant.AUTH)
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "添加校园认证记录")
     @PreAuthorize("hasAuthority('campus_staff_auth:add')")

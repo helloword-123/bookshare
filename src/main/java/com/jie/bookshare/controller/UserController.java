@@ -8,6 +8,7 @@ import com.jie.bookshare.entity.AclRole;
 import com.jie.bookshare.entity.dto.AuthenticationDTO;
 import com.jie.bookshare.entity.dto.UserDTO;
 import com.jie.bookshare.filter.ddos.AccessLimit;
+import com.jie.bookshare.filter.repeatsubmit.RepeatSubmit;
 import com.jie.bookshare.service.IRedisService;
 import com.jie.bookshare.service.UserService;
 import com.jie.bookshare.utils.JwtUtil;
@@ -70,6 +71,7 @@ public class UserController {
      * @param userDTO 用户头像和昵称（暂时不校验参数）
      * @return
      */
+    @RepeatSubmit(expireSeconds = CommonConstant.EXPIRE_SECONDS, value = CommonConstant.AUTH)
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "微信登录后，修改用户头像和昵称")
     @PreAuthorize("hasAuthority('user:update')")
@@ -104,6 +106,7 @@ public class UserController {
      * @param authenticationDTO 前端后台登录传输的dto
      * @return
      */
+    @RepeatSubmit(expireSeconds = CommonConstant.EXPIRE_SECONDS, value = CommonConstant.AUTH)
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @Deprecated
     @ApiOperation(value = "后台登录")
@@ -118,7 +121,7 @@ public class UserController {
         if (info == null) {
             return Result.error().message("账号密码不匹配！");
         }
-        return Result.ok().data("token", info.get(0)).data("id", info.get(1));
+        return Result.ok().data(CommonConstant.TOKEN, info.get(0)).data("id", info.get(1));
     }
 
 
@@ -128,6 +131,7 @@ public class UserController {
      * @param reqBody 前端微信登录传输的dto
      * @return
      */
+    @RepeatSubmit(expireSeconds = CommonConstant.EXPIRE_SECONDS, value = CommonConstant.AUTH)
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "微信小程序登录")
     @PostMapping("/wxLogin")
@@ -147,7 +151,7 @@ public class UserController {
                 UserDTO userDTO = userService.getUserInfoByOpenid(openid);
                 String token = userService.saveUserAuthorityByUserId(userDTO.getId());
 
-                return Result.ok().data("token", token).data("openid", openid).data("userinfo", userDTO);
+                return Result.ok().data(CommonConstant.TOKEN, token).data("openid", openid).data("userinfo", userDTO);
             } else {
                 return Result.error().message((String) map.get("errmsg"));
             }
@@ -170,13 +174,13 @@ public class UserController {
     @GetMapping("/checkToken")
     public Result checkToken(
             @ApiParam(value = "被验证的token", required = true, example = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIxIiwiZXhwIjoxNjgwNzU5MTc5LCJqdGkiOiI2YjFmYzJjNC1jNGI1LTQzMjMtOWEzMi1kNTkzZDM5NjNmMDYifQ.I5zDOIt23PT19h-uUNkDG6NPtSq2k3DJywBwgACgO7E")
-            @RequestHeader("token") String token) {
+            @RequestHeader(CommonConstant.TOKEN) String token) {
         String userId = JwtUtil.getUserId(token);
         if (userId == null)
             return Result.ok().data("isValid", false);
         //检查token跟Redis中保存的登录状态中的token是否一致
         String key = IRedisService.concatKey(RedisKeys.USER_INFO, userId);
-        String validToken = redisService.get(key, "token");
+        String validToken = redisService.get(key, CommonConstant.TOKEN);
         return Result.ok().data("isValid", token.equals(validToken));
     }
 }

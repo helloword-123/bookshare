@@ -65,12 +65,22 @@ public class GlobalExceptionHandler {
         return Result.error().message(first.isPresent() ? first.get().getMessage() : ResultCode.MESSAGE_ERROR);
     }
 
+    // 自定义异常
+    @ExceptionHandler(value = {CustomizeRuntimeException.class})
+    public Result handleRepeatSubmitException(CustomizeRuntimeException e) {
+        // 打印错误日志
+        if (log.isErrorEnabled()) {
+            log.error(e.getMessage(), e);
+        }
+        return Result.error().message(e.getMessage());
+    }
+
     // 其他所有异常捕获器
     @ExceptionHandler(Exception.class)
     public Result otherExceptionDispose(Exception e) {
         // 打印错误日志
         log.error("错误代码({}),错误信息({})", ResultCode.CODE_ERROR, e.getMessage());
         e.printStackTrace();
-        return Result.error().message(e.getMessage());
+        return Result.error().message(ResultCode.MESSAGE_ERROR);
     }
 }

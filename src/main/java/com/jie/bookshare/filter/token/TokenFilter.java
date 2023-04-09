@@ -1,6 +1,7 @@
 package com.jie.bookshare.filter.token;
 
 
+import com.jie.bookshare.common.CommonConstant;
 import com.jie.bookshare.common.RedisKeys;
 import com.jie.bookshare.common.Result;
 import com.jie.bookshare.common.ResultCode;
@@ -34,7 +35,7 @@ public class TokenFilter implements Filter {
                             FilterChain filterChain) throws ServletException, IOException {
         // 解析token
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String token = httpServletRequest.getHeader("token");
+        String token = httpServletRequest.getHeader(CommonConstant.TOKEN);
         String userId = JwtUtil.getUserId(token);
         // 若token无效，则跳过
         if (userId == null) {
@@ -44,7 +45,7 @@ public class TokenFilter implements Filter {
 
         // 从Redis中获取相应的登陆状态
         String key = IRedisService.concatKey(RedisKeys.USER_INFO, userId);
-        String validToken = redisService.get(key, "token");
+        String validToken = redisService.get(key, CommonConstant.TOKEN);
         // 若在Redis中不存在相应的登陆状态，或者该token已经无效，则拒绝请求
         if (!token.equals(validToken)) {
             logger.error("Redis does not has this token: {}!", token);
