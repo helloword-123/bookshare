@@ -1,8 +1,7 @@
 package com.jie.bookshare.mapper;
 
-import com.jie.bookshare.entity.BookCollect;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jie.bookshare.entity.BookDrift;
+import com.jie.bookshare.entity.BookCollect;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,5 +17,5 @@ import java.util.List;
 @Component
 public interface BookCollectMapper extends BaseMapper<BookCollect> {
 
-    List<BookDrift> getCollectedBooks(Integer userId);
+    List<Integer> getCollectedBooks(Integer userId);
 }

@@ -271,12 +271,6 @@ public class BookDriftServiceImpl extends ServiceImpl<BookDriftMapper, BookDrift
         bookDrift.setStatus(3);
         bookDrift.setDriftTime(new Date());
 
-        try {
-            Thread.sleep(500000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         bookDriftMapper.updateById(bookDrift);
         // 释放锁
         redisTemplate.delete(key);

@@ -7,6 +7,7 @@ import com.jie.bookshare.entity.BookCollect;
 import com.jie.bookshare.entity.BookDrift;
 import com.jie.bookshare.entity.dto.BookListDTO;
 import com.jie.bookshare.mapper.BookCollectMapper;
+import com.jie.bookshare.mapper.BookDriftMapper;
 import com.jie.bookshare.mapper.BookMapper;
 import com.jie.bookshare.service.BookCollectService;
 import com.jie.bookshare.service.BookDriftService;
@@ -40,6 +41,9 @@ public class BookCollectServiceImpl extends ServiceImpl<BookCollectMapper, BookC
     @Resource
     private BookDriftService bookDriftService;
 
+    @Resource
+    private BookDriftMapper bookDriftMapper;
+
     /**
      * @param userId
      * @return
@@ -49,8 +53,10 @@ public class BookCollectServiceImpl extends ServiceImpl<BookCollectMapper, BookC
         logger.info("Get collected books by userId: {}.", userId);
         List<BookListDTO> res = new ArrayList<>();
 
-        List<BookDrift> bookDrifts = bookCollectMapper.getCollectedBooks(userId);
-        for (BookDrift bookDrift : bookDrifts) {
+        List<Integer> collectBookIds = bookCollectMapper.getCollectedBooks(userId);
+
+        for (Integer bookId : collectBookIds) {
+            BookDrift bookDrift = bookDriftMapper.getBookLastDrift(bookId);
             Book book = bookMapper.selectById(bookDrift.getBookId());
             BookListDTO bookListDTO = bookDriftService.mergeBookAndBookDrift(book, bookDrift);
             res.add(bookListDTO);

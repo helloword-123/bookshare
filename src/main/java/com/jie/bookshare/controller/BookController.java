@@ -64,7 +64,7 @@ public class BookController {
         Boolean res = bookService.checkIsbnIsDrifting(isbn);
         // 图书漂流正在进行中，无法重复漂流
         if (!res) {
-            return Result.ok().code(20002);
+            return Result.error().message("该图书正在共享中，无法重复共享！");
         }
         return Result.ok();
     }

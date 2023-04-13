@@ -43,6 +43,26 @@ public class UserController {
     @Resource
     private IRedisService redisService;
 
+
+    /**
+     * 获取用户信息
+     *
+     * @return
+     */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
+    @ApiOperation(value = "获取用户信息")
+    @PreAuthorize("hasAuthority('user:query')")
+    @GetMapping("/getUserInfoByToken")
+    public Result getUserInfoByUserId(
+            @RequestHeader String token){
+        String userId = JwtUtil.getUserId(token);
+        if (userId == null) {
+            return Result.error().message("用户id不存在！");
+        }
+        UserDTO userDTO = userService.getUserInfoByUserId(userId);
+        return Result.ok().data("userinfo", userDTO);
+    }
+
     /**
      * 获取用户角色
      *

@@ -77,8 +77,9 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
         }
 
         // 2.有bookid的而且status < 4的漂流记录，说明此书正在共享中
+
         LambdaQueryWrapper<BookDrift> con2 = new LambdaQueryWrapper<>();
-        con2.eq(BookDrift::getBookId, book.getId()).lt(BookDrift::getStatus, 4);
+        con2.eq(BookDrift::getBookId, book.getId()).lt(BookDrift::getStatus, 3);
         List<BookDrift> bookDrifts = bookDriftMapper.selectList(con2);
         if(bookDrifts.size() == 0){
             logger.info("The book is not drifting!");

@@ -10,6 +10,7 @@ import com.jie.bookshare.entity.dto.UserDTO;
 import com.jie.bookshare.entity.security.AppGrantedAuthority;
 import com.jie.bookshare.entity.security.AppUserDetails;
 import com.jie.bookshare.entity.security.UserType;
+import com.jie.bookshare.exception.CustomizeRuntimeException;
 import com.jie.bookshare.mapper.*;
 import com.jie.bookshare.service.CampusStaffAuthService;
 import com.jie.bookshare.service.IRedisService;
@@ -247,5 +248,40 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setAvatarUrl(userDTO.getAvatarUrl());
         user.setPhone(userDTO.getPhone());
         baseMapper.updateById(user);
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @Override
+    public UserDTO getUserInfoByUserId(String userId) {
+        if(userId == null){
+            throw new CustomizeRuntimeException("用户id不能为空！");
+        }
+        //先根据用户名判断该用户存不存在
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", userId);
+        User user1 = baseMapper.selectOne(wrapper);
+        if(user1 == null) {
+            throw new CustomizeRuntimeException("用户不存在！");
+        }
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user1.getId());
+        userDTO.setNickName(user1.getUserName());
+        userDTO.setAvatarUrl(user1.getAvatarUrl());
+        userDTO.setPhone(user1.getPhone());
+        userDTO.setAuthId(user1.getAuthId());
+        userDTO.setIsAuth(campusStaffAuthService.getUserIsAuth(user1.getId()));
+
+        List<AclRole> roleForAdmin = this.findRoleForAdmin(user1.getId());
+        List<String> roles = new ArrayList<>();
+        for (AclRole aclRole : roleForAdmin) {
+            roles.add(aclRole.getKey());
+        }
+        userDTO.setRoles(roles);
+
+        return userDTO;
     }
 }

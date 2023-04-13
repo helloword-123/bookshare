@@ -77,4 +77,5 @@ public interface UserService extends IService<User> {
      */
     void updateUserInfo(UserDTO userDTO);
 
+    UserDTO getUserInfoByUserId(String userId);
 }
