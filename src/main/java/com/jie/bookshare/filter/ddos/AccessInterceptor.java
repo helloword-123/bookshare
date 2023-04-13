@@ -39,7 +39,7 @@ public class AccessInterceptor implements HandlerInterceptor {
                 response.setCharacterEncoding("UTF-8");
                 response.setContentType("application/json; charset=utf-8");
                 PrintWriter writer = response.getWriter();
-                writer.print(JsonUtil.toJson(Result.error().code(ResultCode.CODE_ACCESS_LIMIT).message(ResultCode.MESSAGE_ACCESS_LIMIT)));
+                writer.print(JsonUtil.toJson(Result.error().message(ResultCode.MESSAGE_ACCESS_LIMIT)));
                 writer.flush();
                 writer.close();
 

@@ -43,7 +43,6 @@ public class BookCollectController {
      * @param userId 用户id
      * @return
      */
-    @RepeatSubmit(expireSeconds = CommonConstant.EXPIRE_SECONDS, value = CommonConstant.AUTH)
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @ApiOperation(value = "更新收藏信息")
     @PreAuthorize("hasAuthority('book_collect:update')")
