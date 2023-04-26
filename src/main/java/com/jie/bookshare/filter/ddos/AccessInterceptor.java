@@ -31,7 +31,7 @@ public class AccessInterceptor implements HandlerInterceptor {
                     request,
                     accessLimit.seconds(),
                     accessLimit.maxCount(),
-                    hm.getMethod().getDeclaringClass() + ":" + hm.getMethod().getName())) {
+                    (hm.getMethod().getDeclaringClass()).toString().split(" ")[1] + ":" + hm.getMethod().getName())) {
                 // 一切正常
                 return true;
             } else {

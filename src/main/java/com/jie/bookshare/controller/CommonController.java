@@ -81,7 +81,6 @@ public class CommonController {
     @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
     @PostMapping("test")
     public String test(@RequestBody AuthenticationDTO auth){
-
         return auth.getUsername();
     }
 

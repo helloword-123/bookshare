@@ -4,7 +4,9 @@ package com.jie.bookshare.controller;
 import com.jie.bookshare.common.CommonConstant;
 import com.jie.bookshare.common.RedisKeys;
 import com.jie.bookshare.common.Result;
+import com.jie.bookshare.common.ResultCode;
 import com.jie.bookshare.entity.AclRole;
+import com.jie.bookshare.entity.User;
 import com.jie.bookshare.entity.dto.AuthenticationDTO;
 import com.jie.bookshare.entity.dto.UserDTO;
 import com.jie.bookshare.filter.ddos.AccessLimit;
@@ -12,10 +14,14 @@ import com.jie.bookshare.filter.repeatsubmit.RepeatSubmit;
 import com.jie.bookshare.service.IRedisService;
 import com.jie.bookshare.service.UserService;
 import com.jie.bookshare.utils.JwtUtil;
+import com.jie.bookshare.utils.SmsUtils;
 import com.jie.bookshare.utils.WxUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +32,7 @@ import javax.validation.constraints.Digits;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * 用户Controller
@@ -38,10 +45,74 @@ import java.util.Map;
 @RequestMapping("/user")
 @Api(tags = "用户相关")
 public class UserController {
+    private final static Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Resource
     private UserService userService;
     @Resource
     private IRedisService redisService;
+    @Resource
+    private SmsUtils smsUtils;
+    @Resource
+    private RedisTemplate redisTemplate;
+
+
+    /**
+     * 发送验证码
+     * @param phone
+     * @return
+     */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
+    @ApiOperation(value = "发送验证码")
+    @PreAuthorize("hasAuthority('user:query')")
+    @GetMapping("/sendSmsCode/{phone}")
+    public Result sendSmsCode(@PathVariable String phone) {
+        // 随机生成4位验证码
+        Random random = new Random();
+        StringBuilder verificationCode = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            verificationCode.append(random.nextInt(10));
+        }
+        try {
+            smsUtils.send(phone, String.valueOf(verificationCode));
+        } catch (Exception e) {
+            logger.error("error in send sms code! message is: {}.", e.getMessage());
+            return Result.error().message(ResultCode.MESSAGE_ERROR);
+        }
+        return Result.ok();
+    }
+
+    /**
+     * 发送验证码
+     * @param reqBody
+     * @return
+     */
+    @AccessLimit(seconds = CommonConstant.REQUEST_SECONDS, maxCount = CommonConstant.REQUEST_MAX_COUNT)
+    @ApiOperation(value = "验证手机号验证码")
+    @PreAuthorize("hasAuthority('user:query')")
+    @PostMapping("/verifySmsCode")
+    public Result verifySmsCode(@RequestBody Map<String, Object> reqBody) {
+        Integer userId = (Integer) reqBody.get("userId");
+        String phone = (String) reqBody.get("phone");
+        String code = (String) reqBody.get("code");
+        // 验证
+        int res = smsUtils.verify(phone, code);
+        if(res == 2){
+            logger.error("验证码不一致！");
+            return Result.error().message("验证码不一致！");
+        }
+        if(res == 1){
+            logger.error("验证码已过期！");
+            return Result.error().message("验证码已过期！");
+        }
+        // 绑定手机号
+        User user = new User();
+        user.setId(userId);
+        user.setPhone(phone);
+        userService.update(user, null);
+
+        return Result.ok();
+    }
 
 
     /**
@@ -54,7 +125,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('user:query')")
     @GetMapping("/getUserInfoByToken")
     public Result getUserInfoByUserId(
-            @RequestHeader String token){
+            @RequestHeader String token) {
         String userId = JwtUtil.getUserId(token);
         if (userId == null) {
             return Result.error().message("用户id不存在！");
@@ -171,7 +242,7 @@ public class UserController {
                 UserDTO userDTO = userService.getUserInfoByOpenid(openid);
                 String token = userService.saveUserAuthorityByUserId(userDTO.getId());
 
-                return Result.ok().data(CommonConstant.TOKEN, token).data("openid", openid).data("userinfo", userDTO);
+                return Result.ok().data(CommonConstant.TOKEN, token).data("userinfo", userDTO);
             } else {
                 return Result.error().message((String) map.get("errmsg"));
             }

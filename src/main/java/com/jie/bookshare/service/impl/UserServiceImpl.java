@@ -195,44 +195,42 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user1 = baseMapper.selectOne(wrapper);
         if(user1 == null) {
             // openid不存在时新建用户
-            User user2 = new User();
-            user2.setOpenid(openid);
-            user2.setTotalShareNum(0);
-            user2.setTotalUseNum(0);
-            user2.setAuthId(-1);
-            user2.setUserName("快乐小青蛙");
-            user2.setAvatarUrl("https://edu-wuhaojie.oss-cn-shenzhen.aliyuncs.com/bookshare/2023/01/01/14557b6d05f940949138367ebee89090f8S9a6ph8Rz9d997e5b2fa33d4fe0296c25fb672d07e.jpeg");
-            baseMapper.insert(user2);
-            userDTO.setId(user2.getId());
+            user1 = new User();
+            user1.setOpenid(openid);
+            user1.setTotalShareNum(0);
+            user1.setTotalUseNum(0);
+            user1.setAuthId(-1);
+            user1.setUserName("快乐小青蛙");
+            user1.setAvatarUrl("https://edu-wuhaojie.oss-cn-shenzhen.aliyuncs.com/bookshare/2023/01/01/14557b6d05f940949138367ebee89090f8S9a6ph8Rz9d997e5b2fa33d4fe0296c25fb672d07e.jpeg");
+            baseMapper.insert(user1);
 
             // 添加user角色
             LambdaQueryWrapper<AclRole> con1 = new LambdaQueryWrapper<>();
             con1.eq(AclRole::getKey, "user");
             AclRole aclRole = aclRoleMapper.selectOne(con1);
             AclRoleUser aclRoleUser = new AclRoleUser();
-            aclRoleUser.setUserId(user2.getId());
+            aclRoleUser.setUserId(user1.getId());
             aclRoleUser.setRoleId(aclRole.getId());
             aclRoleUserMapper.insert(aclRoleUser);
 
             logger.info("This openid doesn't match any user in database. Create a new user with this openid");
-        } else {
-            userDTO.setId(user1.getId());
-            userDTO.setNickName(user1.getUserName());
-            userDTO.setAvatarUrl(user1.getAvatarUrl());
-            userDTO.setPhone(user1.getPhone());
-
-            userDTO.setAuthId(user1.getAuthId());
-            userDTO.setIsAuth(campusStaffAuthService.getUserIsAuth(user1.getId()));
-
-            List<AclRole> roleForAdmin = this.findRoleForAdmin(user1.getId());
-            List<String> roles = new ArrayList<>();
-            for (AclRole aclRole : roleForAdmin) {
-                roles.add(aclRole.getKey());
-            }
-            userDTO.setRoles(roles);
-
-            logger.info("Query userid:{}, username:{}, avatarurl:{}", user1.getId(),user1.getUserName(),user1.getAvatarUrl());
         }
+
+        // 设置返回值
+        userDTO.setId(user1.getId());
+        userDTO.setNickName(user1.getUserName());
+        userDTO.setAvatarUrl(user1.getAvatarUrl());
+        userDTO.setPhone(user1.getPhone());
+        userDTO.setAuthId(user1.getAuthId());
+        userDTO.setIsAuth(campusStaffAuthService.getUserIsAuth(user1.getId()));
+        userDTO.setIsBindingPhone(user1.getPhone() != null);
+
+        List<AclRole> roleForAdmin = this.findRoleForAdmin(user1.getId());
+        List<String> roles = new ArrayList<>();
+        for (AclRole aclRole : roleForAdmin) {
+            roles.add(aclRole.getKey());
+        }
+        userDTO.setRoles(roles);
 
         return userDTO;
 
@@ -274,6 +272,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userDTO.setPhone(user1.getPhone());
         userDTO.setAuthId(user1.getAuthId());
         userDTO.setIsAuth(campusStaffAuthService.getUserIsAuth(user1.getId()));
+        userDTO.setIsBindingPhone(user1.getPhone() != null);
 
         List<AclRole> roleForAdmin = this.findRoleForAdmin(user1.getId());
         List<String> roles = new ArrayList<>();

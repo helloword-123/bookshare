@@ -29,9 +29,15 @@ public class UserDTO implements Serializable {
     private String phone;
 
     private String avatarUrl;
+
     @ApiModelProperty(value = "认证id，-1-未审核")
     private Integer authId;
+
     private List<String> roles;
+
     // 是否认证通过
     private Boolean isAuth;
+
+    // 是否已绑定手机号
+    private Boolean isBindingPhone;
 }
