@@ -5,6 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.jie.bookshare.common.CommonConstant;
 import com.jie.bookshare.common.ResultCode;
 import com.jie.bookshare.exception.CustomizeRuntimeException;
+import com.jie.bookshare.filter.ddos.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -54,11 +55,18 @@ public class NoRepeatSubmitAspect {
         // 获取方法标记，生成redisKey和redisValue
         String url = request.getRequestURI();
 
+        // 获取请求ip
+        IpUtils ipUtils = new IpUtils();
+        String ip = ipUtils.getIpAddr(request);
+
         /*
          *  通过前缀 + url + 函数参数签名 来生成redis上的 key
          */
         String redisKey = CommonConstant.PREVENT_DUPLICATION_PREFIX
+                .concat(ip)
+                .concat("_")
                 .concat(url)
+                .concat("_")
                 .concat(getMethodSign(method, joinPoint.getArgs()));
         // 这个值只是为了标记，不重要
         String redisValue = redisKey.concat(annotation.value());
